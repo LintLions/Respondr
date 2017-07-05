@@ -20,25 +20,25 @@ Once the project moves into development, the press release can be used as a touc
   > Name the product in a way the reader (i.e. your target customers) will understand.
 
 ## Sub-Heading ##
-  > Describe who the market for the product is and what benefit they get. One sentence only underneath the title.
+  > This app connects concerned citizens to antidote carrying first responders to help prevent overdose.
 
 ## Summary ##
-  > Give a summary of the product and the benefit. Assume the reader will not read anything else so make this paragraph good.
+  > There are 52,000 overdose deaths in the US per year. It is the leading cause of death for people under age 50. There is an existing network of people who have the antidote and the training to administer them. Our app aims to empower these first respondents allowing them to respond real time to overdoses in their communities and save lives.
 
 ## Problem ##
-  > Describe the problem your product solves.
+  > the increase of overdoes rescue need is not matched with the existing resources of trained first responders network.
 
 ## Solution ##
-  > Describe how your product elegantly solves the problem.
+  > we create hyper localization and real time connect between people with the resources to help and the people in need
 
 ## Quote from You ##
-  > A quote from a spokesperson in your company.
+  > As the overdose epidemic worsens citizen first responders will need to step up to help already overburdened emergency services.
 
 ## How to Get Started ##
-  > Describe how easy it is to get started.
+  >  Join the app as the first responder and optionally turn on your location beacon to people in need around you. Concerned citizens see the responder network in their local community and can reach out to them to retrieve the antidotes in real time.
 
 ## Customer Quote ##
-  > Provide a quote from a hypothetical customer that describes how they experienced the benefit.
+  > Without _blank_ I wouldn't have known my neighbor was overdosing. I made it to her in time and saved her life.
 
 ## Closing and Call to Action ##
-  > Wrap it up and give pointers where the reader should go next.
+  > Be part of the overdose rescue network to be someone’s angel. Join now.
