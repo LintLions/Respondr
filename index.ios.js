@@ -13,7 +13,7 @@ import {
   Text,
   View
 } from 'react-native';
-import LoginPage from './LoginPage';
+import HelpRequest from './HelpRequest';
 
 export default class Hello extends Component {
   render() {
@@ -40,7 +40,7 @@ class iosBeacon extends React.Component {
         style={styles.container}
         initialRoute={{
           title: 'Beacon',
-          component: LoginPage,
+          component: HelpRequest,
         }}/>
     );
   }
@@ -70,7 +70,7 @@ const styles = StyleSheet.create({
     margin: 80
   },
   container: {
-    flex: 1
+    flex: 1,
   }
 });
 
