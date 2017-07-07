@@ -21,5 +21,10 @@
 	},
 	"jest": {
 		"preset": "react-native"
-	}
+	}.
+	"config": {
+          "commitizen": {
+            "path": "cz-conventional-changelog"
+          }
+        }
 }
