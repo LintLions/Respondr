@@ -17,9 +17,11 @@ class BottomBarAngel extends Component {
     super(props);
     this.state = {
       helpRequestStatus: 'default',
+      helpRequestCancel: false
     };
-    this.handleHelpRequest = this.handleHelpRequestYes.bind(this);
-    this.handleHelpRequest = this.handleHelpRequestNo.bind(this);
+    this.handleHelpRequestYes = this.handleHelpRequestYes.bind(this);
+    this.handleHelpRequestNo = this.handleHelpRequestNo.bind(this);
+    this.handleHelpRequestCancel = this.handleHelpRequestCancel.bind(this);
   }
 
   handleHelpRequestYes = (e) => {
@@ -36,6 +38,12 @@ class BottomBarAngel extends Component {
     })
   }
 
+  handleHelpRequestCancel = (e) => {
+    e.preventDefault;
+    this.setState ({
+      helpRequestCancel: true
+    })
+  }
   render() {
     console.log('+++BottomBarAngel.js');
     // console.log('+++helpRequestStatus: ', this.state.helpRequestStatus);
@@ -44,7 +52,11 @@ class BottomBarAngel extends Component {
     if(this.state.helpRequestStatus === 'default') {
       Page = <HelpRequest username={this.props.username} beaconLocation={this.props.beaconLocation} handleHelpRequestYes={this.handleHelpRequestYes} handleHelpRequestNo={this.handleHelpRequestNo}/>
     } else if(this.state.helpRequestStatus === 'yes') {
-      Page = <HelpRequestAccepted />
+      if(this.state.helpRequestCancel === false) {
+        Page = <HelpRequestAccepted username={this.props.username} handleHelpRequestCancel={this.handleHelpRequestCancel} />
+      } else {
+        // Page = <OnCallStatus />  
+      }
     } else if (this.state.helpRequestStatus === 'no') {
       // Page = <OnCallStatus />
     }

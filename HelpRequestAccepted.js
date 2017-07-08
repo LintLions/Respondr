@@ -22,17 +22,19 @@ class HelpRequest extends Component {
 
   render() {
     console.log('+++HelpRequestAccepted.js');
+
     return (
       <View style={styles.container}>
         <View style={styles.box2}></View>
         <View style={styles.box1}>
           <Text style={styles.prompt}>
-            `You're an angel $(this.props.username) !`
+            You're an angel {this.props.username} !
           </Text>
           <View style={styles.buttonDirection}>
             <TouchableHighlight
               style={styles.button}
               underlayColor='#99d9f4'
+              onPress={this.props.handleHelpRequestCancel}
             >
               <Text>I can't make it anymore</Text>
             </TouchableHighlight>
