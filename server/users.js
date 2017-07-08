@@ -1,7 +1,7 @@
-const express = require('express')
-const router = express.Router()
-const _ = require('lodash'),
-const config = require('./config'),
+const express = require('express');
+const router = express.Router();
+const _ = require('lodash');
+const config = require('./config');
 const jwt = require('jsonwebtoken');
 const auth = require('./auth');
 
@@ -59,16 +59,14 @@ function getUserScheme(req) {
     userSearch: userSearch
   }
 }
-// define the home page route
 router.get('/', function (req, res) {
   res.send('users route')
 })
-// define the about route
-router.get('/all', function (req, res) {
+router.get('/all', auth.check, auth.scope('full_access'), function (req, res) {
   res.send('ALL USERS')
 })
 
-router.post('/users', function(req, res) {
+router.post('', function(req, res) {
   
   var userScheme = getUserScheme(req);  
 
