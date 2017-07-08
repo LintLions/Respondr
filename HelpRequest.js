@@ -28,7 +28,7 @@ class HelpRequest extends Component {
     
     return (
       <View style={styles.container}>
-        <View style={styles.box2}></View>
+        
         <View style={styles.box1}>
           <Text style={styles.prompt}>
             Hi {this.props.username}, there's a beacon at {this.props.beaconLocation}, would you be able to assist?
@@ -61,6 +61,7 @@ var styles = StyleSheet.create({
   },
   box1: {
     flex: 1,
+    height: 222,
     padding: 20,
     justifyContent: 'center',
     borderWidth: 1,
@@ -69,6 +70,9 @@ var styles = StyleSheet.create({
   },
   box2: {
     flex: 2
+  },
+  bottomBox: {
+    position: 'absolute'
   },
   map: {
     ...StyleSheet.absoluteFillObject,

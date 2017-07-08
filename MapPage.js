@@ -8,7 +8,7 @@ import {
   TouchableHighlight,
   ActivityIndicator,
   ListView,
-  Text
+  Text,
 } from 'react-native';
 import MapView from 'react-native-maps';
 
@@ -37,12 +37,16 @@ class MapPage extends Component {
   }
   render() {
     return (
-      <View style={styles.map}>
+      <View style={styles.container}>
         <MapView style={styles.map}
           showsUserLocation={true}
           followsUserLocation={true}
         />
-        <BottomBarAngel username={this.props.username} beaconLocation={this.state.beaconLocation}/>
+        
+        <View style={styles.bottomBar}>
+          <BottomBarAngel style={styles.bottomBar} username={this.props.username} beaconLocation={this.state.beaconLocation}/>
+        </View>
+        
       </View>
     );
   }
@@ -64,7 +68,25 @@ var styles = StyleSheet.create({
     flex: 2
   },
   map: {
-    ...StyleSheet.absoluteFillObject,
+    // flex: 2,
+    // ...StyleSheet.absoluteFillObject
+    // below is equivalent to absoluteFillObject
+    position: 'absolute',
+    top: 0,
+    right: 0,
+    bottom: 0,
+    left: 0,
+  },
+  bottomBar: {
+    position: 'absolute',
+    bottom: 0,
+    width: 375,
+    // height: 222,
+    // backgroundColor: 'rgba(0,0,0,0.5)'
+    // justifyContent: 'flex-end'
+    // flex: 1,
+    // position: 'absolute',
+    // bottom: 0
   },
   prompt: {
     fontSize: 18,
@@ -96,3 +118,6 @@ var styles = StyleSheet.create({
 });
 
 module.exports = MapPage;
+
+// <BottomBarAngel style={styles.bottomBar} username={this.props.username} beaconLocation={this.state.beaconLocation}/>
+// <TouchableHighlight style={styles.button}><Text>Hello World</Text></TouchableHighlight>

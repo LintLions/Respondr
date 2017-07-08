@@ -25,7 +25,7 @@ class HelpRequest extends Component {
 
     return (
       <View style={styles.container}>
-        <View style={styles.box2}></View>
+      
         <View style={styles.box1}>
           <Text style={styles.prompt}>
             You're an angel {this.props.username} !
@@ -51,6 +51,7 @@ var styles = StyleSheet.create({
   },
   box1: {
     flex: 1,
+    height: 222,
     padding: 20,
     justifyContent: 'center',
     borderWidth: 1,
@@ -93,3 +94,4 @@ var styles = StyleSheet.create({
 });
 
 module.exports = HelpRequest;
+
