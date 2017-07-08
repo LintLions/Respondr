@@ -9,47 +9,49 @@ import {
 } from 'react-native';
 import MapView from 'react-native-maps';
 
+import HelpRequest from './HelpRequest';
 import HelpRequestAccepted from './HelpRequestAccepted';
 
-// props received: username, beaconLocation
-// props to pass down: yes/no to help request 
-
-class HelpRequest extends Component {
+class BottomBarAngel extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      
+      helpRequestStatus: 'default',
     };
-    
+    this.handleHelpRequest = this.handleHelpRequestYes.bind(this);
+    this.handleHelpRequest = this.handleHelpRequestNo.bind(this);
+  }
+
+  handleHelpRequestYes = (e) => {
+    e.preventDefault;
+    this.setState ({
+      helpRequestStatus: 'yes'
+    })
+  }
+
+  handleHelpRequestNo = (e) => {
+    e.preventDefault;
+    this.setState ({
+      helpRequestStatus: 'no'
+    })
   }
 
   render() {
-    console.log('+++HelpRequest.js');
-    
+    console.log('+++BottomBarAngel.js');
+    // console.log('+++helpRequestStatus: ', this.state.helpRequestStatus);
+
+    let Page = null;
+    if(this.state.helpRequestStatus === 'default') {
+      Page = <HelpRequest username={this.props.username} beaconLocation={this.props.beaconLocation} handleHelpRequestYes={this.handleHelpRequestYes} handleHelpRequestNo={this.handleHelpRequestNo}/>
+    } else if(this.state.helpRequestStatus === 'yes') {
+      Page = <HelpRequestAccepted />
+    } else if (this.state.helpRequestStatus === 'no') {
+      // Page = <OnCallStatus />
+    }
+
     return (
       <View style={styles.container}>
-        <View style={styles.box2}></View>
-        <View style={styles.box1}>
-          <Text style={styles.prompt}>
-            Hi {this.props.username}, there's a beacon at {this.props.beaconLocation}, would you be able to assist?
-          </Text>
-          <View style={styles.buttonDirection}>
-            <TouchableHighlight 
-              style={styles.button}
-              underlayColor='#99d9f4'
-              onPress={this.props.handleHelpRequestYes}
-              >
-              <Text style={styles.buttonText}>Yes</Text>
-            </TouchableHighlight>
-            <TouchableHighlight 
-              style={styles.button}
-              underlayColor='#99d9f4'
-              onPress={this.props.handleHelpRequestNo}
-              >
-              <Text style={styles.buttonText}>No</Text>
-            </TouchableHighlight>
-          </View>
-        </View>
+        {Page}
       </View>
     );
   }
@@ -102,4 +104,4 @@ var styles = StyleSheet.create({
   }
 });
 
-module.exports = HelpRequest;
+module.exports = BottomBarAngel;

@@ -12,11 +12,13 @@ import {
 } from 'react-native';
 import MapView from 'react-native-maps';
 
+import BottomBarAngel from './BottomBarAngel';
+
 class MapPage extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      isLoading: true,
+      beaconLocation: ''
     };
     this.onLocationPressed = () => {
     navigator.geolocation.getCurrentPosition(
@@ -34,73 +36,62 @@ class MapPage extends Component {
 }
   }
   render() {
-    var spinner = this.state.isLoading
-      ? ( <ActivityIndicator size='large'/> )
-      : ( <View/>);
     return (
       <View style={styles.map}>
         <MapView style={styles.map}
           showsUserLocation={true}
           followsUserLocation={true}
         />
-        <View style={styles.container}>
-          <Text style={styles.description}>
-            {this.props.propStuff}
-          </Text>
-          {spinner} 
-        </View>
+        <BottomBarAngel username={this.props.username} beaconLocation={this.state.beaconLocation}/>
       </View>
     );
   }
 }
 
 var styles = StyleSheet.create({
-  description: {
-    marginBottom: 20,
-    fontSize: 18,
-    textAlign: 'center',
-    color: '#656565'
-  },
   container: {
-    padding: 30,
-    marginTop: 65,
-    alignItems: 'center'
+    flex: 1
   },
-   map: {
+  box1: {
+    flex: 1,
+    padding: 20,
+    justifyContent: 'center',
+    borderWidth: 1,
+    borderColor: '#999999',
+    backgroundColor: 'rgba(255, 255, 255, 0.8)'
+  },
+  box2: {
+    flex: 2
+  },
+  map: {
     ...StyleSheet.absoluteFillObject,
   },
-  flowRight: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    alignSelf: 'stretch'
-  },
-  buttonText: {
+  prompt: {
     fontSize: 18,
-    color: 'white',
-    alignSelf: 'center'
+    padding: 5,
+    textAlign: 'center',
+    color: '#656565',
+    marginBottom: 20
+  },
+  buttonDirection: {
+    flexDirection: 'row',
   },
   button: {
-    height: 36,
     flex: 1,
-    flexDirection: 'row',
+    justifyContent: 'center',
+    alignItems: 'center',
+    
+    height: 36,
+    margin: 10,
+
     backgroundColor: '#48BBEC',
     borderColor: '#48BBEC',
     borderWidth: 1,
     borderRadius: 8,
-    margin: 10,
-    alignSelf: 'stretch',
-    justifyContent: 'center'
   },
-  searchInput: {
-    height: 36,
-    padding: 4,
-    marginRight: 5,
-    flex: 4,
+  buttonText: {
     fontSize: 18,
-    borderWidth: 1,
-    borderColor: '#48BBEC',
-    borderRadius: 8,
-    color: '#48BBEC'
+    color: 'white',
   }
 });
 

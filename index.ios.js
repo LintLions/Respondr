@@ -13,26 +13,8 @@ import {
   Text,
   View
 } from 'react-native';
-import HelpRequest from './HelpRequest';
+import LoginPage from './LoginPage';
 
-export default class Hello extends Component {
-  render() {
-    return (
-      <View style={styles.container}>
-        <Text style={styles.welcome}>
-          You did it!!
-        </Text>
-        <Text style={styles.instructions}>
-          To get started, edit index.ios.js
-        </Text>
-        <Text style={styles.instructions}>
-          Press Cmd+R to reload,{'\n'}
-          Cmd+D or shake for dev menu
-        </Text>
-      </View>
-    );
-  }
-}
 class iosBeacon extends React.Component {
   render() {
     return (
@@ -40,7 +22,7 @@ class iosBeacon extends React.Component {
         style={styles.container}
         initialRoute={{
           title: 'Beacon',
-          component: HelpRequest,
+          component: LoginPage,
         }}/>
     );
   }
