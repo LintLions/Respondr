@@ -16,25 +16,29 @@ class HelpRequest extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      loginStatus: ''
+      acceptRequest: ''
     };
-    this.handlePress = this.handlePress.bind(this);
+    this.handleYesPress = this.handleYesPress.bind(this);
+    this.handleNoPress = this.handleNoPress.bind(this);
   }
 
-  handlePress = (e) => {
+  handleYesPress = () => {
     this.setState ({
-      loginStatus: {e}
+      acceptRequest: 'yes'
     })
-    console.log('+++e from handlPress:', e);
+  }
+
+  handleNoPress = () => {
+    this.setState ({
+      acceptRequest: 'no'
+    })
   }
 
   render() {
+    console.log('+++handlPress:', this.state.acceptRequest);
     return (
       <View style={styles.container}>
-        <MapView style={styles.box2}
-          showsUserLocation={true}
-          followsUserLocation={true}
-        />
+        <View style={styles.box2}></View>
         <View style={styles.box1}>
           <Text style={styles.prompt}>
             Hi {this.props.userName}, there's a beacon at {this.props.beaconLocation}, would you be able to assist?
@@ -43,14 +47,14 @@ class HelpRequest extends Component {
             <TouchableHighlight 
               style={styles.button}
               underlayColor='#99d9f4'
-              onPress={this.handlePress}
+              onPress={this.handleYesPress}
               >
               <Text style={styles.buttonText}>Yes</Text>
             </TouchableHighlight>
             <TouchableHighlight 
               style={styles.button}
               underlayColor='#99d9f4'
-              onPress={this.handlePress}
+              onPress={this.handleNoPress}
               >
               <Text style={styles.buttonText}>No</Text>
             </TouchableHighlight>
@@ -68,7 +72,9 @@ var styles = StyleSheet.create({
   box1: {
     flex: 1,
     padding: 20,
-    justifyContent: 'center'
+    justifyContent: 'center',
+    borderWidth: 1,
+    borderColor: '#999999'
   },
   box2: {
     flex: 2
