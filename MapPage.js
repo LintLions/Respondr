@@ -11,6 +11,7 @@ import {
   Text
 } from 'react-native';
 import MapView from 'react-native-maps';
+import TopBar from './components/topBar';
 
 class MapPage extends Component {
   constructor(props) {
@@ -43,12 +44,7 @@ class MapPage extends Component {
           showsUserLocation={true}
           followsUserLocation={true}
         />
-        <View style={styles.container}>
-          <Text style={styles.description}>
-            {this.props.propStuff}
-          </Text>
-          {spinner} 
-        </View>
+      <TopBar />  
       </View>
     );
   }
@@ -62,9 +58,10 @@ var styles = StyleSheet.create({
     color: '#656565'
   },
   container: {
-    padding: 30,
+    backgroundColor: 'white',
     marginTop: 65,
-    alignItems: 'center'
+    alignItems: 'center',
+    justifyContent: 'space-around'
   },
    map: {
     ...StyleSheet.absoluteFillObject,
@@ -80,7 +77,6 @@ var styles = StyleSheet.create({
     alignSelf: 'center'
   },
   button: {
-    height: 36,
     flex: 1,
     flexDirection: 'row',
     backgroundColor: '#48BBEC',
@@ -88,8 +84,6 @@ var styles = StyleSheet.create({
     borderWidth: 1,
     borderRadius: 8,
     margin: 10,
-    alignSelf: 'stretch',
-    justifyContent: 'center'
   },
   searchInput: {
     height: 36,

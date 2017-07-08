@@ -52,5 +52,9 @@
 			</dict>
 		</dict>
 	</dict>
+	<key>UIAppFonts</key>
+		<array>	
+			<string>Entypo.ttf</string>
+		</array>
 </dict>
 </plist>
