@@ -11,7 +11,7 @@ import {
   Text
 } from 'react-native';
 import MapView from 'react-native-maps';
-import TopBar from './components/topBar';
+import TopBar from './topBar';
 
 class MapPage extends Component {
   constructor(props) {

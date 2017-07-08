@@ -110,10 +110,10 @@ var styles = StyleSheet.create({
     justifyContent: 'center'
   },
   loginModal:{
-          flex: 1,
-          flexDirection: 'column',
-          marginTop:65,
-          alignItems: 'center'
+    flex: 1,
+    flexDirection: 'column',
+    marginTop:65,
+    alignItems: 'center'
   },
   header:{
     fontSize:24,
