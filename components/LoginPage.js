@@ -11,6 +11,7 @@ import {
 } from 'react-native';
 import MapPage from './MapPage';
 
+
 class LoginPage extends Component {
   constructor(props) {
     super(props);

@@ -36,7 +36,7 @@ class HelpRequest extends Component {
               underlayColor='#99d9f4'
               onPress={this.props.handleHelpRequestCancel}
             >
-              <Text>I can't make it anymore</Text>
+              <Text style={styles.buttonText}>I can't make it anymore</Text>
             </TouchableHighlight>
           </View>
         </View>

@@ -13,7 +13,7 @@ import {
   Text,
   View
 } from 'react-native';
-import LoginPage from './LoginPage';
+import LoginPage from './components/LoginPage';
 
 class iosBeacon extends React.Component {
   render() {

@@ -11,6 +11,7 @@ import {
   Text,
 } from 'react-native';
 import MapView from 'react-native-maps';
+import TopBar from './topBar';
 
 import BottomBarAngel from './BottomBarAngel';
 
@@ -47,6 +48,7 @@ class MapPage extends Component {
           <BottomBarAngel style={styles.bottomBar} username={this.props.username} beaconLocation={this.state.beaconLocation}/>
         </View>
         
+      <TopBar />  
       </View>
     );
   }
@@ -54,7 +56,11 @@ class MapPage extends Component {
 
 var styles = StyleSheet.create({
   container: {
-    flex: 1
+    flex: 1,
+    // backgroundColor: 'white',
+    // marginTop: 65,
+    // alignItems: 'center',
+    // justifyContent: 'space-around'
   },
   box1: {
     flex: 1,
