@@ -13,7 +13,7 @@ import {
   Text,
   View
 } from 'react-native';
-import LoginPage from './LoginPage';
+import LoginPage from './components/LoginPage';
 
 export default class Hello extends Component {
   render() {
