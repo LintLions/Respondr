@@ -36,14 +36,13 @@
 		2D02E4C81E0B4AEC006451C7 /* libRCTWebSocket-tvOS.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 3DAD3E991DF850E9000B6D8A /* libRCTWebSocket-tvOS.a */; };
 		2D02E4C91E0B4AEC006451C7 /* libReact.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 3DAD3EA31DF850E9000B6D8A /* libReact.a */; };
 		2DCD954D1E0B4F2C00145EB5 /* iosBeaconTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 00E356F21AD99517003FC87E /* iosBeaconTests.m */; };
-		30BE2DE0B94B4559B492AECD /* libAirMaps.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 51F0A17AA4E647B2B2EC023D /* libAirMaps.a */; };
 		549760F4DCA244EFB582612C /* MaterialCommunityIcons.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 164A18E7F5304B0EA61D7806 /* MaterialCommunityIcons.ttf */; };
 		5E9157361DD0AC6A00FF2AA8 /* libRCTAnimation.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 5E9157331DD0AC6500FF2AA8 /* libRCTAnimation.a */; };
 		77D97A4B22FF47C6B139AC05 /* Octicons.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 75963EBE858F40F397205546 /* Octicons.ttf */; };
 		832341BD1AAA6AB300B99B32 /* libRCTText.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 832341B51AAA6A8300B99B32 /* libRCTText.a */; };
-		AAD2A1167BCA4477902FA31F /* libRNVectorIcons.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 4B737FF5669148C3A93ACDD5 /* libRNVectorIcons.a */; };
 		ADB5D46DD39A479583EC5FD3 /* Entypo.ttf in Resources */ = {isa = PBXBuildFile; fileRef = EE1EC4B8369649B68D17E0EB /* Entypo.ttf */; };
 		B8322ADA1F0F5847008B45D4 /* libAirMaps.a in Frameworks */ = {isa = PBXBuildFile; fileRef = B8322AB31F0F5758008B45D4 /* libAirMaps.a */; };
+		B87CACE41F11569400E34CCD /* libRNKeychain.a in Frameworks */ = {isa = PBXBuildFile; fileRef = B87CACE31F11567600E34CCD /* libRNKeychain.a */; };
 		B8B156A91F1143570011061D /* Entypo.ttf in Resources */ = {isa = PBXBuildFile; fileRef = B8B1569F1F1143570011061D /* Entypo.ttf */; };
 		B8B156AA1F1143570011061D /* EvilIcons.ttf in Resources */ = {isa = PBXBuildFile; fileRef = B8B156A01F1143570011061D /* EvilIcons.ttf */; };
 		B8B156AB1F1143570011061D /* FontAwesome.ttf in Resources */ = {isa = PBXBuildFile; fileRef = B8B156A11F1143570011061D /* FontAwesome.ttf */; };
@@ -286,6 +285,13 @@
 			remoteGlobalIDString = 3D383D621EBD27B9005632C8;
 			remoteInfo = "double-conversion-tvOS";
 		};
+		B87CACE21F11567600E34CCD /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = B87CACDE1F11567600E34CCD /* RNKeychain.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 5D82366F1B0CE05B005A9EF3;
+			remoteInfo = RNKeychain;
+		};
 		B8B156951F1142850011061D /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = D6FEB66094B445D2B2447315 /* RNVectorIcons.xcodeproj */;
@@ -328,16 +334,16 @@
 		2D02E47B1E0B4A5D006451C7 /* iosBeacon-tvOS.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "iosBeacon-tvOS.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		2D02E4901E0B4A5D006451C7 /* iosBeacon-tvOSTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "iosBeacon-tvOSTests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
 		2DEB10FCE602481EBB492EA4 /* MaterialIcons.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = MaterialIcons.ttf; path = "../node_modules/react-native-vector-icons/Fonts/MaterialIcons.ttf"; sourceTree = "<group>"; };
-		4B737FF5669148C3A93ACDD5 /* libRNVectorIcons.a */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = archive.ar; path = libRNVectorIcons.a; sourceTree = "<group>"; };
 		4CDFCCB1A6F545C5BB824F64 /* Foundation.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = Foundation.ttf; path = "../node_modules/react-native-vector-icons/Fonts/Foundation.ttf"; sourceTree = "<group>"; };
 		4DA5679BD6CA4FCCA1670918 /* EvilIcons.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = EvilIcons.ttf; path = "../node_modules/react-native-vector-icons/Fonts/EvilIcons.ttf"; sourceTree = "<group>"; };
-		51F0A17AA4E647B2B2EC023D /* libAirMaps.a */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = archive.ar; path = libAirMaps.a; sourceTree = "<group>"; };
 		5E91572D1DD0AC6500FF2AA8 /* RCTAnimation.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = RCTAnimation.xcodeproj; path = "../node_modules/react-native/Libraries/NativeAnimation/RCTAnimation.xcodeproj"; sourceTree = "<group>"; };
 		75963EBE858F40F397205546 /* Octicons.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = Octicons.ttf; path = "../node_modules/react-native-vector-icons/Fonts/Octicons.ttf"; sourceTree = "<group>"; };
 		78C398B01ACF4ADC00677621 /* RCTLinking.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = RCTLinking.xcodeproj; path = "../node_modules/react-native/Libraries/LinkingIOS/RCTLinking.xcodeproj"; sourceTree = "<group>"; };
 		832341B01AAA6A8300B99B32 /* RCTText.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = RCTText.xcodeproj; path = "../node_modules/react-native/Libraries/Text/RCTText.xcodeproj"; sourceTree = "<group>"; };
 		95741DA00CED443F922E93FF /* AirMaps.xcodeproj */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = "wrapper.pb-project"; name = AirMaps.xcodeproj; path = "../node_modules/react-native-maps/lib/ios/AirMaps.xcodeproj"; sourceTree = "<group>"; };
 		B8322AAE1F0F5758008B45D4 /* AirMaps.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = AirMaps.xcodeproj; path = "../node_modules/react-native-maps/lib/ios/AirMaps.xcodeproj"; sourceTree = "<group>"; };
+		B87CACDD1F1155C000E34CCD /* iosBeacon.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; name = iosBeacon.entitlements; path = iosBeacon/iosBeacon.entitlements; sourceTree = "<group>"; };
+		B87CACDE1F11567600E34CCD /* RNKeychain.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = RNKeychain.xcodeproj; path = "../node_modules/react-native-keychain/RNKeychain.xcodeproj"; sourceTree = "<group>"; };
 		B8B1569F1F1143570011061D /* Entypo.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = Entypo.ttf; sourceTree = "<group>"; };
 		B8B156A01F1143570011061D /* EvilIcons.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = EvilIcons.ttf; sourceTree = "<group>"; };
 		B8B156A11F1143570011061D /* FontAwesome.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = FontAwesome.ttf; sourceTree = "<group>"; };
@@ -367,6 +373,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				B87CACE41F11569400E34CCD /* libRNKeychain.a in Frameworks */,
 				146834051AC3E58100842450 /* libReact.a in Frameworks */,
 				5E9157361DD0AC6A00FF2AA8 /* libRCTAnimation.a in Frameworks */,
 				00C302E51ABCBA2D00DB3ED1 /* libRCTActionSheet.a in Frameworks */,
@@ -379,8 +386,6 @@
 				00C302EA1ABCBA2D00DB3ED1 /* libRCTVibration.a in Frameworks */,
 				139FDEF61B0652A700C62182 /* libRCTWebSocket.a in Frameworks */,
 				B8322ADA1F0F5847008B45D4 /* libAirMaps.a in Frameworks */,
-				30BE2DE0B94B4559B492AECD /* libAirMaps.a in Frameworks */,
-				AAD2A1167BCA4477902FA31F /* libRNVectorIcons.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -489,6 +494,7 @@
 		13B07FAE1A68108700A75B9A /* iosBeacon */ = {
 			isa = PBXGroup;
 			children = (
+				B87CACDD1F1155C000E34CCD /* iosBeacon.entitlements */,
 				008F07F21AC5B25A0029DE68 /* main.jsbundle */,
 				13B07FAF1A68108700A75B9A /* AppDelegate.h */,
 				13B07FB01A68108700A75B9A /* AppDelegate.m */,
@@ -569,6 +575,7 @@
 		83CBB9F61A601CBA00E9B192 = {
 			isa = PBXGroup;
 			children = (
+				B87CACDE1F11567600E34CCD /* RNKeychain.xcodeproj */,
 				B8322AAE1F0F5758008B45D4 /* AirMaps.xcodeproj */,
 				13B07FAE1A68108700A75B9A /* iosBeacon */,
 				832341AE1AAA6A7D00B99B32 /* Libraries */,
@@ -595,6 +602,14 @@
 			isa = PBXGroup;
 			children = (
 				B8322AB31F0F5758008B45D4 /* libAirMaps.a */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		B87CACDF1F11567600E34CCD /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				B87CACE31F11567600E34CCD /* libRNKeychain.a */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -741,6 +756,11 @@
 					};
 					13B07F861A680F5B00A75B9A = {
 						DevelopmentTeam = 6Q43L2FS4N;
+						SystemCapabilities = {
+							com.apple.Keychain = {
+								enabled = 1;
+							};
+						};
 					};
 					2D02E47A1E0B4A5D006451C7 = {
 						CreatedOnToolsVersion = 8.2.1;
@@ -816,6 +836,10 @@
 				{
 					ProductGroup = 146834001AC3E56700842450 /* Products */;
 					ProjectRef = 146833FF1AC3E56700842450 /* React.xcodeproj */;
+				},
+				{
+					ProductGroup = B87CACDF1F11567600E34CCD /* Products */;
+					ProjectRef = B87CACDE1F11567600E34CCD /* RNKeychain.xcodeproj */;
 				},
 				{
 					ProductGroup = B8B156741F1142850011061D /* Products */;
@@ -1041,6 +1065,13 @@
 			fileType = archive.ar;
 			path = "libdouble-conversion.a";
 			remoteRef = B8322AD71F0F5758008B45D4 /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		B87CACE31F11567600E34CCD /* libRNKeychain.a */ = {
+			isa = PBXReferenceProxy;
+			fileType = archive.ar;
+			path = libRNKeychain.a;
+			remoteRef = B87CACE21F11567600E34CCD /* PBXContainerItemProxy */;
 			sourceTree = BUILT_PRODUCTS_DIR;
 		};
 		B8B156961F1142850011061D /* libRNVectorIcons.a */ = {
@@ -1270,6 +1301,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_ENTITLEMENTS = iosBeacon/iosBeacon.entitlements;
 				CURRENT_PROJECT_VERSION = 1;
 				DEAD_CODE_STRIPPING = NO;
 				DEVELOPMENT_TEAM = 6Q43L2FS4N;
@@ -1295,6 +1327,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_ENTITLEMENTS = iosBeacon/iosBeacon.entitlements;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = 6Q43L2FS4N;
 				HEADER_SEARCH_PATHS = (

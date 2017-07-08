@@ -29,20 +29,7 @@ if (process.env.NODE_ENV === 'development') {
 }
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
-// app.use(session({
-//   store: new RedisStore({
-//     url: config.redisStore.url
-//   }),
-//   secret: 'MrButtonPHDnotMDmaybeDRnotSure',
-//   saveUninitialized: false,
-//   resave: false,
-//   proxy: undefined,
-// }));
-// app.use(passport.initialize());
-// app.use(passport.session());
-// app.use(controller.publicRoutes, express.static(path.join(__dirname, '/public')));
-// require('./server/routes.js')(app, passport);
-app.use('/users', users)
+// app.use('/users', users)
 app.get('', (req, res, next) => {
   res.send('HEY');
   next();

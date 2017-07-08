@@ -23,6 +23,7 @@
 		"path": "^0.12.7",
 		"react": "16.0.0-alpha.12",
 		"react-native": "0.46.0",
+		"react-native-keychain": "^2.0.0-rc",
 		"react-native-maps": "^0.15.3",
 		"react-native-vector-icons": "^4.2.0"
 	},
