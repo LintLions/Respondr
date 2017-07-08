@@ -43,7 +43,7 @@ class HelpRequest extends Component {
           <Text style={styles.prompt}>
             Hi {this.props.userName}, there's a beacon at {this.props.beaconLocation}, would you be able to assist?
           </Text>
-          <View style={styles.flowRight}>
+          <View style={styles.buttonDirection}>
             <TouchableHighlight 
               style={styles.button}
               underlayColor='#99d9f4'
@@ -89,9 +89,11 @@ var styles = StyleSheet.create({
     color: '#656565',
     marginBottom: 20
   },
+  buttonDirection: {
+    flexDirection: 'row',
+  },
   button: {
     flex: 1,
-    // flexDirection: 'row',
     justifyContent: 'center',
     alignItems: 'center',
     
@@ -106,10 +108,6 @@ var styles = StyleSheet.create({
   buttonText: {
     fontSize: 18,
     color: 'white',
-  },
-  flowRight: {
-    flexDirection: 'row',
-    // alignItems: 'center',
   }
 });
 
