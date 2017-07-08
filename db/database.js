@@ -1,5 +1,3 @@
-const config = require('../private/dbconfig.js');
- 
-let sequelizeConfig = { url: config.databaseUrl, dialect: 'postgres', protocol: 'TCP'};
+ let sequelizeConfig = { url: process.env.databaseURL, dialect: 'postgres', protocol: 'TCP'};
  
  module.exports = sequelizeConfig;

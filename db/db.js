@@ -1,8 +1,15 @@
 const Sequelize = require('sequelize');
-const config = require('../private/dbconfig');
 
-const url = process.env.databaseURL || config.databaseUrl;
-const options = process.env.databaseOptions || config.databaseOptions;
+const url = process.env.databaseURL;
+const options = {
+  dialect: 'postgres',
+  logging: false,
+  pool: {
+    max: 5,
+    min: 0,
+    idle: 10000,
+  },
+};
 
 const db = new Sequelize(url, options);
 
