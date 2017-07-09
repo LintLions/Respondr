@@ -8,10 +8,11 @@ import {
   TouchableHighlight,
   ActivityIndicator,
   ListView,
-  Text
+  Text,
 } from 'react-native';
 import MapView from 'react-native-maps';
-import TopBar from './components/topBar';
+import TopBar from './topbar/topBar';
+import SignUpPage from './signup/signUpPage';
 
 class MapPage extends Component {
   constructor(props) {
@@ -44,7 +45,7 @@ class MapPage extends Component {
           showsUserLocation={true}
           followsUserLocation={true}
         />
-      <TopBar />  
+        <TopBar location={this.props.location} navigation={this.props.navigation} /> 
       </View>
     );
   }

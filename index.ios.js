@@ -8,70 +8,21 @@
 import React, { Component } from 'react';
 import {
   AppRegistry,
-  NavigatorIOS,
   StyleSheet,
   Text,
-  View
+  View,
+  TouchableHighlight
 } from 'react-native';
-import LoginPage from './LoginPage';
+import {StackNavigator} from 'react-navigation';
+import MapPage from './MapPage';
+import SignUpPage from './signup/signUpPage'
 
-export default class Hello extends Component {
-  render() {
-    return (
-      <View style={styles.container}>
-        <Text style={styles.welcome}>
-          You did it!!
-        </Text>
-        <Text style={styles.instructions}>
-          To get started, edit index.ios.js
-        </Text>
-        <Text style={styles.instructions}>
-          Press Cmd+R to reload,{'\n'}
-          Cmd+D or shake for dev menu
-        </Text>
-      </View>
-    );
-  }
-}
-class iosBeacon extends React.Component {
-  render() {
-    return (
-      <NavigatorIOS
-        style={styles.container}
-        initialRoute={{
-          title: 'Beacon',
-          component: LoginPage,
-        }}/>
-    );
-  }
-}
+const iosBeacon = StackNavigator({
+  Home: { screen: MapPage},
+  Signup: {screen: SignUpPage }
+})
 
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-    backgroundColor: '#F5FCFF',
-  },
-  welcome: {
-    fontSize: 20,
-    textAlign: 'center',
-    margin: 10,
-  },
-  instructions: {
-    textAlign: 'center',
-    color: '#333333',
-    marginBottom: 5,
-  },
-  text: {
-    color: 'black',
-    backgroundColor: 'white',
-    fontSize: 30,
-    margin: 80
-  },
-  container: {
-    flex: 1
-  }
-});
+
+
 
 AppRegistry.registerComponent('iosBeacon', () => iosBeacon);
