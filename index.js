@@ -17,7 +17,7 @@ const users = require('./server/users');
 // const extendDefaultFields = (defaults, session) => ({ // config for holding session in db
 //   userId: session.userId,
 // });
-const port = process.env.PORT || 8080;
+const port = process.env.PORT || 3000;
 const app = express();
 module.exports = app;
 
@@ -29,7 +29,7 @@ if (process.env.NODE_ENV === 'development') {
 }
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
-// app.use('/users', users)
+app.use('/users', users)
 app.get('', (req, res, next) => {
   res.send('HEY');
   next();

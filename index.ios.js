@@ -4,22 +4,7 @@
  * @flow
  */
 'use strict';
+import { AppRegistry } from 'react-native';
+import App from './components/App';
 
-import React, { Component } from 'react';
-import {
-  AppRegistry,
-  StyleSheet,
-  Text,
-  View,
-  TouchableHighlight
-} from 'react-native';
-import {StackNavigator} from 'react-navigation';
-import MapPage from './MapPage';
-import SignUpPage from './signup/signUpPage'
-
-const iosBeacon = StackNavigator({
-  Home: { screen: MapPage},
-  Signup: {screen: SignUpPage }
-});
-
-AppRegistry.registerComponent('iosBeacon', () => iosBeacon);
+AppRegistry.registerComponent('iosBeacon', () => App);
