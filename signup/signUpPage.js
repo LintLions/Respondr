@@ -37,7 +37,7 @@ class SignUpPage extends Component {
     });
 
   }
-  onEmailChange(event)  => {
+  onEmailChange(event) {
     this.setState({ email: event.nativeEvent.text });
   };
   
