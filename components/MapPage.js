@@ -23,30 +23,38 @@ class MapPage extends Component {
       beaconLocation: ''
     };
     this.onLocationPressed = () => {
-    navigator.geolocation.getCurrentPosition(
-    location => {
-      var search = location.coords.latitude + ',' + location.coords.longitude;
-      this.setState({ searchString: search });
-      var query = urlForQueryAndPage('centre_point', search, 1);
-      this._executeQuery(query);
-    },
-    error => {
-      this.setState({
-        message: 'There was a problem with obtaining your location: ' + error
+      navigator.geolocation.getCurrentPosition(
+      location => {
+        var search = location.coords.latitude + ',' + location.coords.longitude;
+        this.setState({ searchString: search });
+        var query = urlForQueryAndPage('centre_point', search, 1);
+        this._executeQuery(query);
+      },
+      error => {
+        this.setState({
+          message: 'There was a problem with obtaining your location: ' + error
+        });
       });
-    });
-}
+    }
   }
   render() {
     return (
       <View style={styles.map}>
-        <MapView style={styles.map}
+        <MapView
+          style={styles.map}
           showsUserLocation={true}
           followsUserLocation={true}
         />
-        <TopBar location={this.props.location} navigation={this.props.navigation} />
+        <TopBar
+          screenProps={this.props.screenProps}
+          location={this.props.location}
+          navigation={this.props.navigation}
+        />
         <View style={styles.bottomBar}>
-          <BottomBarAngel style={styles.bottomBar} username={this.props.username} beaconLocation={this.state.beaconLocation}/>
+          <BottomBarAngel
+            style={styles.bottomBar}
+            username={this.props.screenProps.user.username}
+            beaconLocation={this.state.beaconLocation}/>
         </View>
       </View>
     );

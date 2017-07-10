@@ -1,7 +1,8 @@
 import React, { Component } from 'react';
-import { Text, TextInput, View, TouchableHighlight} from 'react-native';
+import { Text, TextInput, View, TouchableHighlight, AlertIOS} from 'react-native';
 import styles from './styles';
 import Icon from 'react-native-vector-icons/Entypo';
+import config from '../config.js';
 class Login extends Component {
   constructor(props) {
     super(props);
@@ -15,6 +16,32 @@ class Login extends Component {
     this.onPasswordChange = (event)  => {
       this.setState({ password: event.nativeEvent.text });
     };
+    this.onLoginPressed = (event) => {
+      this.login();
+    }
+    this.login = () => {
+      fetch(`${config.url}/users/sessions/create`, {
+        method: "POST",
+        headers: {
+          'Accept': 'application/json',
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+          email: this.state.email,
+          password: this.state.password,
+        })
+      })
+        .then((response) => response.json())
+        .then((responseData) => {
+          this.props.screenProps.methods.updateToken(responseData.id_token);
+          console.log(JSON.stringify(responseData));
+          AlertIOS.alert(
+            "Login Success!",
+            JSON.stringify(responseData)
+          )
+        })
+        .done();
+    }
   }
 
   render() {

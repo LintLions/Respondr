@@ -8,6 +8,7 @@ const auth = require('./auth');
 const users = [{
   id: 1,
   username: 'gonto',
+  email: 'gonto',
   password: 'gonto'
 }];
 
@@ -62,7 +63,7 @@ function getUserScheme(req) {
 router.get('/', function (req, res) {
   res.send('users route')
 })
-router.get('/all', auth.check, auth.scope('full_access'), function (req, res) {
+router.get('/all', auth.check, auth.restrict('full_access'), function (req, res) {
   res.send('ALL USERS')
 })
 
@@ -100,11 +101,11 @@ router.post('/sessions/create', function(req, res) {
   var user = _.find(users, userScheme.userSearch);
   
   if (!user) {
-    return res.status(401).send("The username or password don't match");
+    return res.status(401).send({error: "The username is incorrect"});
   }
 
   if (user.password !== req.body.password) {
-    return res.status(401).send("The username or password don't match");
+    return res.status(401).send({error: "The username and password don't match"});
   }
 
   res.status(201).send({

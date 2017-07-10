@@ -9,11 +9,13 @@ import {
   View,
   TouchableHighlight,
   ActivityIndicator,
-  Image
+  Image,
+  AlertIOS
 } from 'react-native';
 import MapPage from '../MapPage';
 import styles from './signupStyles';
 import Icon from 'react-native-vector-icons/Entypo';
+import config from '../config.js';
 
 class SignUpPage extends Component {
   static navigationOptions = ({ navigation }) => ({
@@ -23,9 +25,31 @@ class SignUpPage extends Component {
     super(props);
     this.state = {
      email:this.props.navigation.state.params.email
-    };
+   };
     this.onSignupChange = this.onSignupChange.bind(this);
     this.onEmailChange = this.onEmailChange.bind(this);
+    this.signup = () => {
+      fetch(`${config.url}/users`, {
+        method: "POST",
+        headers: {
+          'Accept': 'application/json',
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+          email: this.state.email,
+          password: this.state.password,
+        })
+      })
+        .then((response) => response.json())
+        .then((responseData) => {
+          this.props.screenProps.methods.updateToken(responseData.id_token),
+          AlertIOS.alert(
+            "Signup Success!",
+            JSON.stringify(responseData)
+          )
+        })
+        .done();
+    }
   }  
 
   onSignupChange(p, event) {
@@ -33,7 +57,7 @@ class SignUpPage extends Component {
     const key = p;
     
      this.setState({
-      key : value
+      [key] : value
     });
 
   }
@@ -150,7 +174,13 @@ class SignUpPage extends Component {
               placeholder='Zip Code'/>
             </View>  
          </View>  
-         } 
+         }
+         <TouchableHighlight 
+            style={styles.button}
+            underlayColor='#99d9f4'
+            onPress={this.signup}>
+            <Text style={styles.buttonText}>Signup</Text>
+          </TouchableHighlight> 
        </View>  
       )
     }

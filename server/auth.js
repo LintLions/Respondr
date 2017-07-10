@@ -5,17 +5,15 @@ const config = require('./config');
 // Validate access_token
 exports.check = jwt({
   secret: config.secret,
-  audience: config.audience,
-  issuer: config.issuer
+  aud: config.audience,
+  iss: config.issuer
 });
 
 // Check for scope
-exports.scope = (scope) => {
+exports.restrict = (scope) => {
   return function (req, res, next) {
     console.log(req.user);
-    var has_scopes = req.user.scope === scope;
-    console.log(has_scopes);
-    if (!has_scopes) { 
+    if (!req.user) { 
         res.sendStatus(401); 
         return;
     }

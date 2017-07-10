@@ -5,12 +5,14 @@ import {
   View,
   Text,
   TouchableHighlight,
-  StyleSheet
+  StyleSheet,
+  AsyncStorage,
+  AlertIOS
 } from 'react-native';
 import MapView from 'react-native-maps';
-
 import HelpRequest from './HelpRequest';
 import HelpRequestAccepted from './HelpRequestAccepted';
+import config from './config.js';
 
 class BottomBarAngel extends Component {
   constructor(props) {
@@ -31,11 +33,11 @@ class BottomBarAngel extends Component {
     })
   }
 
-  handleHelpRequestNo = (e) => {
+  handleHelpRequestNo = async (e) => {
     e.preventDefault;
     this.setState ({
       helpRequestStatus: 'no'
-    })
+    });
   }
 
   handleHelpRequestCancel = (e) => {
