@@ -11,9 +11,10 @@ import {
   Text,
 } from 'react-native';
 import MapView from 'react-native-maps';
-import TopBar from './topBar';
-
+import TopBar from './topbar/topBar';
+import SignUpPage from './signup/signUpPage';
 import BottomBarAngel from './BottomBarAngel';
+
 
 class MapPage extends Component {
   constructor(props) {
@@ -38,50 +39,65 @@ class MapPage extends Component {
   }
   render() {
     return (
-      <View style={styles.container}>
+      <View style={styles.map}>
         <MapView style={styles.map}
           showsUserLocation={true}
           followsUserLocation={true}
         />
-        
+        <TopBar location={this.props.location} navigation={this.props.navigation} />
         <View style={styles.bottomBar}>
           <BottomBarAngel style={styles.bottomBar} username={this.props.username} beaconLocation={this.state.beaconLocation}/>
         </View>
-        
-      <TopBar />  
       </View>
     );
   }
 }
 
 var styles = StyleSheet.create({
+  description: {
+    marginBottom: 20,
+    fontSize: 18,
+    textAlign: 'center',
+    color: '#656565'
+  },
   container: {
-    flex: 1,
-    // backgroundColor: 'white',
-    // marginTop: 65,
-    // alignItems: 'center',
-    // justifyContent: 'space-around'
+    backgroundColor: 'white',
+    marginTop: 65,
+    alignItems: 'center',
+    justifyContent: 'space-around'
   },
-  box1: {
+   map: {
+    ...StyleSheet.absoluteFillObject,
+  },
+  flowRight: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    alignSelf: 'stretch'
+  },
+  buttonText: {
+    fontSize: 18,
+    color: 'white',
+    alignSelf: 'center'
+  },
+  button: {
     flex: 1,
-    padding: 20,
-    justifyContent: 'center',
+    flexDirection: 'row',
+    backgroundColor: '#48BBEC',
+    borderColor: '#48BBEC',
     borderWidth: 1,
-    borderColor: '#999999',
-    backgroundColor: 'rgba(255, 255, 255, 0.8)'
+    borderRadius: 8,
+    margin: 10,
   },
-  box2: {
-    flex: 2
-  },
-  map: {
-    // flex: 2,
-    // ...StyleSheet.absoluteFillObject
-    // below is equivalent to absoluteFillObject
-    position: 'absolute',
-    top: 0,
-    right: 0,
-    bottom: 0,
-    left: 0,
+  searchInput: {
+    height: 36,
+    padding: 4,
+    marginRight: 5,
+    flex: 4,
+    fontSize: 18,
+    borderWidth: 1,
+    borderColor: '#48BBEC',
+    borderRadius: 8,
+    color: '#48BBEC'
   },
   bottomBar: {
     position: 'absolute',
@@ -94,36 +110,6 @@ var styles = StyleSheet.create({
     // position: 'absolute',
     // bottom: 0
   },
-  prompt: {
-    fontSize: 18,
-    padding: 5,
-    textAlign: 'center',
-    color: '#656565',
-    marginBottom: 20
-  },
-  buttonDirection: {
-    flexDirection: 'row',
-  },
-  button: {
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-    
-    height: 36,
-    margin: 10,
-
-    backgroundColor: '#48BBEC',
-    borderColor: '#48BBEC',
-    borderWidth: 1,
-    borderRadius: 8,
-  },
-  buttonText: {
-    fontSize: 18,
-    color: 'white',
-  }
 });
 
 module.exports = MapPage;
-
-// <BottomBarAngel style={styles.bottomBar} username={this.props.username} beaconLocation={this.state.beaconLocation}/>
-// <TouchableHighlight style={styles.button}><Text>Hello World</Text></TouchableHighlight>

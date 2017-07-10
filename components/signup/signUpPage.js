@@ -45,7 +45,7 @@ class SignUpPage extends Component {
     return ( 
      <View style={styles.container}>
       <View style={styles.flowRightImage}>
-      <Image source={require('../bigwing.png')}/>
+      <Image source={require('../../assets/bigwing.png')}/>
         </View>
       <View style={styles.flowRight}>
         <TextInput

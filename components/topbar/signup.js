@@ -23,9 +23,9 @@ class Signup extends Component {
       <View style ={styles.signUp}>
       
         <View style={styles.flowRight}>
-          <Image source={require('../wings.png')} />
+          <Image source={require('../../assets/wings.png')} />
           <Text>-------------------------------</Text>
-          <Image source={require('../heart.png')} />
+          <Image source={require('../../assets/heart.png')} />
         </View>  
         <View style={styles.flowRight}>  
           <Icon style={styles.searchIcon} name="mail" size={20} color="#000"/>
