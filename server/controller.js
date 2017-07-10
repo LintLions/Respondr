@@ -1,4 +1,7 @@
 const dynamicAngel = require('../db/models/dynamicAngels.js');
+const _ = require('lodash');
+const config = require('./config');
+const jwt = require('jsonwebtoken');
 
 function createIdToken(user) {
   return jwt.sign(_.omit(user, 'password'), config.secret, { expiresIn: 60*60*5 });
@@ -64,17 +67,18 @@ exports.addUser = function(req, res) { //add user
     } else{
 //no static users plz
       dynamicAngel.create({
-        fname: req.body.fName,
+        firstName: req.body.fName,
+        lastName: req.body.lName,
         phone: req.body.phone,
         organization: req.body.organization,
         email: req.body.email,
         password: dynamicAngel.generateHash(req.body.password),
         public: req.body.public,
         static: req.body.static,
-        fullName: `${req.body.firstName} ${req.body.lastName}`
-      }).then((profile)=>{
+        fullName: `${req.body.fName} ${req.body.lName}`
+      }).then(({email})=>{
         res.status(201).send({
-          id_token: createIdToken(profile),
+          id_token: createIdToken(email),
           access_token: createAccessToken()
         });
       }).catch((err)=>{
