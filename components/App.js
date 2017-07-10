@@ -14,7 +14,7 @@ import MapPage from './MapPage';
 import SignUpPage from './signup/signUpPage'
 
 const Navigator = StackNavigator({
-  Home: { screen: MapPage},
+  Home: { screen: MapPage}, // MapPage
   Signup: {screen: SignUpPage }
 });
 

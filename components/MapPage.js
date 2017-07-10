@@ -16,13 +16,17 @@ import SignUpPage from './signup/signUpPage';
 import BottomBarAngel from './BottomBarAngel';
 import HelpButton from './helpButton';
 import config from './config.js';
+import helpers from './helpers';
 
+const { googleMapsDirectionsApiKey } = require('./config.js');
+const APIKEY = googleMapsDirectionsApiKey;
 
 class MapPage extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      coordinate: null
+      coordinate: null,
+      coords: []
     };
 
     this.getHelp = () => {
@@ -58,6 +62,45 @@ class MapPage extends Component {
 
       navigator.geolocation.getCurrentPosition(success.bind(this), error, options)
     } 
+
+    this.drawRoute = (dest) => { // dest needs to be a string of coordinates (without space)
+      const mode = 'walking'; 
+      const origin = `${this.state.coordinate.latitude},${this.state.coordinate.longitude}`;
+      const url = `https://maps.googleapis.com/maps/api/directions/json?origin=${origin}&destination=${dest}&key=${APIKEY}&mode=${mode}`;
+
+      fetch(url)
+        .then(response => response.json())
+        .then(responseJson => {
+          if(responseJson.routes.length) {
+            this.setState({
+              coords: helpers.decode(responseJson.routes[0].overview_polyline.points)
+            });
+          }
+        }).catch(e => {console.warn(e)});
+      
+      console.log('url: ', url)
+    }
+  }
+
+  componentWillMount() {
+    var options = {
+      enableHighAccuracy: true,
+      timeout: 5000,
+      maximumAge: 0
+    };
+    function success(pos) {
+      var crd = pos.coords;
+      this.setState({
+        coordinate:{
+          latitude: crd.latitude,
+          longitude: crd.longitude
+        }
+      })        
+    }
+    function error(err) {
+      console.warn(`ERROR(${err.code}): ${err.message}`);
+    };
+    navigator.geolocation.getCurrentPosition(success.bind(this), error, options)
   }
 
   render() {
@@ -68,10 +111,13 @@ class MapPage extends Component {
           showsUserLocation={true}
           followsUserLocation={true}
         >
-        
           <MapView.Marker
             coordinate={this.state.coordinate}/>
-        
+          <MapView.Polyline 
+            coordinates={this.state.coords}
+            strokeWidth={4}
+            strokeColor='black'
+          />
         </MapView>
         <TopBar
           screenProps={this.props.screenProps}
