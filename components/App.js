@@ -13,10 +13,8 @@ import {StackNavigator} from 'react-navigation';
 import MapPage from './MapPage';
 import SignUpPage from './signup/signUpPage'
 
-import BeaconDirection from './BeaconDirection';
-
 const Navigator = StackNavigator({
-  Home: { screen: BeaconDirection}, // MapPage
+  Home: { screen: MapPage}, // MapPage
   Signup: {screen: SignUpPage }
 });
 
