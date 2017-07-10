@@ -3,9 +3,10 @@
 	"version": "0.0.1",
 	"private": true,
 	"scripts": {
-		"dev": "node node_modules/react-native/local-cli/cli.js start",
+		"ios": "react-native run-ios",
+    "server": "nodemon index.js",
 		"test": "jest",
-		"start": "nodemon index.js"
+    "start": "node node_modules/react-native/local-cli/cli.js start"
 	},
 	"dependencies": {
 		"babel-runtime": "^6.23.0",
@@ -28,6 +29,7 @@
 		"react-native-keychain": "^2.0.0-rc",
 		"react-native-maps": "^0.15.3",
 		"react-native-vector-icons": "^4.2.0",
+    "react-navigation": "^1.0.0-beta.11",
     "sequelize": "^4.2.1"
 	},
 	"devDependencies": {
