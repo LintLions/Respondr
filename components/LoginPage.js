@@ -33,7 +33,7 @@ class LoginPage extends Component {
       this.props.navigator.push({
         title: 'Map',
         component: MapPage,
-        passProps: {propStuff: 'I got props and stuff!!'}
+        passProps: {username: this.state.username}
       });
     };
     this.getLocation = () => {
