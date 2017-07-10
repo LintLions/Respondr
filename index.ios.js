@@ -8,30 +8,18 @@
 import React, { Component } from 'react';
 import {
   AppRegistry,
-  NavigatorIOS,
   StyleSheet,
   Text,
-  View
+  View,
+  TouchableHighlight
 } from 'react-native';
-import LoginPage from './components/LoginPage';
+import {StackNavigator} from 'react-navigation';
+import MapPage from './MapPage';
+import SignUpPage from './signup/signUpPage'
 
-class iosBeacon extends React.Component {
-  render() {
-    return (
-      <NavigatorIOS
-        style={styles.container}
-        initialRoute={{
-          title: 'Beacon',
-          component: LoginPage,
-        }}/>
-    );
-  }
-}
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-  }
+const iosBeacon = StackNavigator({
+  Home: { screen: MapPage},
+  Signup: {screen: SignUpPage }
 });
 
 AppRegistry.registerComponent('iosBeacon', () => iosBeacon);
