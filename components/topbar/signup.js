@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import {Picker, Image, Text, TextInput, View, TouchableHighlight, SegmentedControlIOS} from 'react-native';
 import Icon from 'react-native-vector-icons/Entypo';
 import styles from './styles';
-import SignUpPage from '../signup/signUpPage'
+import SignUpPage from '../signup/signUpPage';
 
 class Signup extends Component { 
   constructor(props) {
