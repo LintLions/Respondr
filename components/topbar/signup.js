@@ -24,7 +24,7 @@ class Signup extends Component {
       
         <View style={styles.flowRight}>
           <Image source={require('../../assets/wings.png')} />
-          <Text>-------------------------------</Text>
+          <Text>---------------------</Text>
           <Image source={require('../../assets/heart.png')} />
         </View>  
         <View style={styles.flowRight}>  
