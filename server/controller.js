@@ -2,6 +2,7 @@ const dynamicAngel = require('../db/models/dynamicAngels.js');
 const _ = require('lodash');
 const config = require('./config');
 const jwt = require('jsonwebtoken');
+const bcrypt = require('bcrypt-nodejs');
 
 function createIdToken(user) {
   return jwt.sign(_.omit(user, 'password'), config.secret, { expiresIn: 60*60*5 });
@@ -107,15 +108,20 @@ exports.addSession =  function(req, res) { //add session
       return res.status(401).send({error: "The username and password don't match"});
     } else {   
       res.status(201).send({
-        id_token: createIdToken(user),
+        id_token: createIdToken(user.email),
         access_token: createAccessToken()
       });
     }
-  }) .catch(err => res.sendStatus(500));
+  }) .catch(err => {
+    console.log(err);
+    res.sendStatus(500);
+  });
 }
 
 exports.getUsers = function(req, res) {
-  dynamicAngel.findAll({}).then((results) => {
+  dynamicAngel.findAll({})
+  .then((results) => {
+    console.log(results);
     res.send(results);
   }).catch((err) => {
     console.error( err + " on line 116")
