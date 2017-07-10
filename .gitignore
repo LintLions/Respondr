@@ -5,7 +5,9 @@ bower_components/
 build/
 dist/
 
+# PRIVATES
 .env
+**/components/config.js
 
 # Xcode
 !**/*.xcodeproj
