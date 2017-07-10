@@ -1,51 +1,52 @@
 {
-	"name": "iosBeacon",
-	"version": "0.0.1",
-	"private": true,
-	"scripts": {
-		"ios": "react-native run-ios",
-		"server": "nodemon index.js",
-		"test": "jest",
-		"start": "node node_modules/react-native/local-cli/cli.js start"
-	},
-	"dependencies": {
-		"babel-runtime": "^6.23.0",
-		"bcrypt-nodejs": "0.0.3",
-		"body-parser": "^1.17.2",
-		"connect-redis": "^3.3.0",
-		"express": "^4.15.3",
-		"express-jwt": "^5.3.0",
-		"express-session": "^1.15.3",
-		"jsonwebtoken": "^7.4.1",
-		"lodash": "^4.17.4",
-		"morgan": "^1.8.2",
-		"node-env-file": "^0.1.8",
-		"passport": "^0.3.2",
-		"passport-local": "^1.0.0",
-		"path": "^0.12.7",
-		"pg": "^6.4.0",
-		"react": "16.0.0-alpha.12",
-		"react-native": "0.46.0",
-		"react-native-keychain": "^2.0.0-rc",
-		"react-native-maps": "^0.15.3",
-		"react-native-vector-icons": "^4.2.0",
-		"react-navigation": "^1.0.0-beta.11",
-		"sequelize": "^4.3.0"
-	},
-	"devDependencies": {
-		"babel-jest": "20.0.3",
-		"babel-plugin-transform-runtime": "^6.23.0",
-		"babel-preset-react-native": "2.1.0",
-		"errorhandler": "^1.5.0",
-		"jest": "20.0.4",
-		"react-test-renderer": "16.0.0-alpha.12"
-	},
-	"jest": {
-		"preset": "react-native"
-	},
-	"config": {
-		"commitizen": {
-			"path": "cz-conventional-changelog"
-		}
-	}
+  "name": "iosBeacon",
+  "version": "0.0.1",
+  "private": true,
+  "scripts": {
+    "ios": "react-native run-ios",
+    "server": "nodemon index.js",
+    "test": "jest",
+    "start": "node node_modules/react-native/local-cli/cli.js start"
+  },
+  "dependencies": {
+    "babel-runtime": "^6.23.0",
+    "bcrypt-nodejs": "0.0.3",
+    "body-parser": "^1.17.2",
+    "connect-redis": "^3.3.0",
+    "express": "^4.15.3",
+    "express-jwt": "^5.3.0",
+    "express-session": "^1.15.3",
+    "jsonwebtoken": "^7.4.1",
+    "lodash": "^4.17.4",
+    "morgan": "^1.8.2",
+    "node-env-file": "^0.1.8",
+    "nodemon": "^1.11.0",
+    "passport": "^0.3.2",
+    "passport-local": "^1.0.0",
+    "path": "^0.12.7",
+    "pg": "^6.4.0",
+    "react": "16.0.0-alpha.12",
+    "react-native": "0.46.0",
+    "react-native-keychain": "^2.0.0-rc",
+    "react-native-maps": "^0.15.3",
+    "react-native-vector-icons": "^4.2.0",
+    "react-navigation": "^1.0.0-beta.11",
+    "sequelize": "^4.3.0"
+  },
+  "devDependencies": {
+    "babel-jest": "20.0.3",
+    "babel-plugin-transform-runtime": "^6.23.0",
+    "babel-preset-react-native": "2.1.0",
+    "errorhandler": "^1.5.0",
+    "jest": "20.0.4",
+    "react-test-renderer": "16.0.0-alpha.12"
+  },
+  "jest": {
+    "preset": "react-native"
+  },
+  "config": {
+    "commitizen": {
+      "path": "cz-conventional-changelog"
+    }
+  }
 }

@@ -14,29 +14,40 @@ import MapView from 'react-native-maps';
 import TopBar from './topbar/topBar';
 import SignUpPage from './signup/signUpPage';
 import BottomBarAngel from './BottomBarAngel';
+import HelpButton from './helpButton';
 
 
 class MapPage extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      beaconLocation: ''
+      coordinate: null
     };
-    this.onLocationPressed = () => {
-      navigator.geolocation.getCurrentPosition(
-      location => {
-        var search = location.coords.latitude + ',' + location.coords.longitude;
-        this.setState({ searchString: search });
-        var query = urlForQueryAndPage('centre_point', search, 1);
-        this._executeQuery(query);
-      },
-      error => {
+
+    this.getHelp = () => {
+      var options = {
+        enableHighAccuracy: true,
+        timeout: 5000,
+        maximumAge: 0
+      };
+      function success(pos) {
+        var crd = pos.coords;
         this.setState({
-          message: 'There was a problem with obtaining your location: ' + error
-        });
-      });
-    }
+          coordinate:{
+            latitude: crd.latitude,
+            longitude: crd.longitude
+          }
+        })        
+      }
+
+      function error(err) {
+        console.warn(`ERROR(${err.code}): ${err.message}`);
+      };
+
+      navigator.geolocation.getCurrentPosition(success.bind(this), error, options)
+    } 
   }
+
   render() {
     return (
       <View style={styles.map}>
@@ -44,12 +55,23 @@ class MapPage extends Component {
           style={styles.map}
           showsUserLocation={true}
           followsUserLocation={true}
-        />
+        >
+        
+          <MapView.Marker
+            coordinate={this.state.coordinate}/>
+        
+        </MapView>
         <TopBar
           screenProps={this.props.screenProps}
           location={this.props.location}
           navigation={this.props.navigation}
         />
+        <View>
+          <HelpButton
+            getHelp={this.getHelp.bind(this)}
+          >
+          </HelpButton>
+        </View>
         <View style={styles.bottomBar}>
           <BottomBarAngel
             style={styles.bottomBar}
