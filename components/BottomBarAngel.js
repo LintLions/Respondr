@@ -59,10 +59,11 @@ class BottomBarAngel extends Component {
         if(this.state.helpRequestCancel === false) {
           Page = <HelpRequestAccepted switchIsOn={this.props.switchIsOn} handleSwitchIsOn={this.props.handleSwitchIsOn} username={this.props.username} handleHelpRequestCancel={this.handleHelpRequestCancel} />
         } else {
-          <AngelStatusPage switchIsOn={this.props.switchIsOn} handleSwitchIsOn={this.props.handleSwitchIsOn} username={this.props.username} />
+          Page = <AngelStatusPage switchIsOn={this.props.switchIsOn} handleSwitchIsOn={this.props.handleSwitchIsOn} username={this.props.username} />
+          // should be notified whne the next beacon shows up still 
         }
       } else if (this.state.helpRequestStatus === 'no') {
-        <AngelStatusPage switchIsOn={this.props.switchIsOn} handleSwitchIsOn={this.props.handleSwitchIsOn} username={this.props.username} />
+        Page = <AngelStatusPage switchIsOn={this.props.switchIsOn} handleSwitchIsOn={this.props.handleSwitchIsOn} username={this.props.username} />
       }
     }
     
