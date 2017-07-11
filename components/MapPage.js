@@ -155,7 +155,9 @@ class MapPage extends Component {
             location={this.props.location}
             navigation={this.props.navigation}
           />
-          <AngelStatusIcon switchIsOn={this.state.switchIsOn} handleSwitchIsOn={this.handleSwitchIsOn} />
+          {this.props.isLoggedIn && 
+            <AngelStatusIcon switchIsOn={this.state.switchIsOn} handleSwitchIsOn={this.handleSwitchIsOn} />
+          }
         </View>
         <View>
           <HelpButton
