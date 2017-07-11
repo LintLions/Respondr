@@ -26,7 +26,9 @@ class MapPage extends Component {
     super(props);
     this.state = {
       coordinate: null,
-      coords: []
+      beaconCoordinate: null,
+      coords: [],
+      helpButtonVisible: true
     };
 
     this.getHelp = () => {
@@ -38,10 +40,11 @@ class MapPage extends Component {
       function success(pos) {
         var crd = pos.coords;
         this.setState({
-          coordinate:{
+          beaconCoordinate:{
             latitude: crd.latitude,
             longitude: crd.longitude
-          }
+          },
+          helpButtonVisible: false,
         }, function saveBeacon() { 
             fetch(`${config.url}/beacons`, {
               method: "POST",
@@ -49,7 +52,7 @@ class MapPage extends Component {
                 'Accept': 'application/json',
                 'Content-Type': 'application/json'
               },
-              body: JSON.stringify(this.state.coordinate)
+              body: JSON.stringify(this.state.beaconCoordinate)
             })
             .then((response) => response.json())
           }
@@ -61,6 +64,24 @@ class MapPage extends Component {
       };
 
       navigator.geolocation.getCurrentPosition(success.bind(this), error, options)
+    }
+
+    this.cancelHelp = () => {
+      let oldBeaconCoordinate = this.state.beaconCoordinate;
+       this.setState({
+        helpButtonVisible: true,
+        beaconCoordinate: null,
+      }, function cancelBeacon() { 
+            fetch(`${config.url}/beacons`, {
+              method: "PUT",
+              headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json'
+              },
+              body: JSON.stringify(oldBeaconCoordinate)
+            })
+            .then((response) => response.json())
+          })
     } 
 
     this.drawRoute = (dest) => { // dest needs to be a string of coordinates (without space)
@@ -112,7 +133,7 @@ class MapPage extends Component {
           followsUserLocation={true}
         >
           <MapView.Marker
-            coordinate={this.state.coordinate}/>
+            coordinate={this.state.beaconCoordinate}/>
           <MapView.Polyline 
             coordinates={this.state.coords}
             strokeWidth={4}
@@ -126,7 +147,9 @@ class MapPage extends Component {
         />
         <View>
           <HelpButton
+            helpButtonVisible={this.state.helpButtonVisible}
             getHelp={this.getHelp.bind(this)}
+            cancelHelp={this.cancelHelp.bind(this)}
           >
           </HelpButton>
         </View>
