@@ -28,7 +28,6 @@ class MapPage extends Component {
     this.state = {
       coordinate: null,
       coords: [],
-      beaconExist: true,
       switchIsOn: false, 
       beaconCoordinate: null,
       helpButtonVisible: true
@@ -159,7 +158,9 @@ class MapPage extends Component {
             location={this.props.location}
             navigation={this.props.navigation}
           />
-          <AngelStatusIcon switchIsOn={this.state.switchIsOn} handleSwitchIsOn={this.handleSwitchIsOn} />
+          {this.props.screenProps.isLoggedIn && 
+            <AngelStatusIcon switchIsOn={this.state.switchIsOn} handleSwitchIsOn={this.handleSwitchIsOn} />
+          }
         </View>
         <View>
           <HelpButton
@@ -169,15 +170,17 @@ class MapPage extends Component {
           >
           </HelpButton>
         </View>
-        <View style={styles.bottomBar}>
-          <BottomBarAngel
-            style={styles.bottomBar}
-            username={this.props.screenProps.user.username}
-            beaconLocation={this.state.beaconLocation}
-            beaconExist={this.state.beaconExist}
-            switchIsOn={this.state.switchIsOn}
-            handleSwitchIsOn={this.handleSwitchIsOn}/>
-        </View>
+        {this.props.screenProps.isLoggedIn &&
+          <View style={styles.bottomBar}>
+            <BottomBarAngel
+              style={styles.bottomBar}
+              username={this.props.screenProps.user.username}
+              beaconLocation={this.state.beaconLocation}
+              beaconExists={this.props.screenProps.beaconExists}
+              switchIsOn={this.state.switchIsOn}
+              handleSwitchIsOn={this.handleSwitchIsOn}/>
+          </View>
+        }
       </View>
     );
   }

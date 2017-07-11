@@ -50,7 +50,7 @@ class BottomBarAngel extends Component {
   }
   render() {
     let Page = null;
-    if(this.props.switchIsOn === false || this.props.beaconExist === false ) {
+    if(this.props.switchIsOn === false || this.props.beaconExists === false ) {
       Page = <AngelStatusPage switchIsOn={this.props.switchIsOn} handleSwitchIsOn={this.props.handleSwitchIsOn} username={this.props.username} />
     } else {
       if(this.state.helpRequestStatus === 'default') {

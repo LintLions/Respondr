@@ -25,6 +25,7 @@ class App extends React.Component {
     this.state = {
       user: {},
       isLoggedIn: false,
+      beaconExists: false,
       methods: {
         updateToken: async (value) => {
           try {
@@ -62,7 +63,7 @@ class App extends React.Component {
     }
   }   
   render() {
-    const props = {user: this.state.user, methods: this.state.methods, isLoggedIn:this.state.isLoggedIn};
+    const props = {user: this.state.user, methods: this.state.methods, beaconExists: this.state.beaconExists, isLoggedIn:this.state.isLoggedIn};
     // StackNavigator **only** accepts a screenProps prop so we're passing
     // initialProps through that.
     return <Navigator screenProps={props} />; 
