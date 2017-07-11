@@ -74,10 +74,10 @@ var styles = StyleSheet.create({
     backgroundColor: '#fff'
   },
   loginModal:{
-          flex: 1,
-          flexDirection: 'column',
-          marginTop:65,
-          alignItems: 'center'
+    flex: 1,
+    flexDirection: 'column',
+    marginTop:65,
+    alignItems: 'center'
   },
   nav:{
     alignContent: 'space-between',

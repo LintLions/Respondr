@@ -75,13 +75,14 @@ class StaticScreen extends Component {
               </Text>
             </View>
          }
-
+        <View style={styles.navArrow}>
          <TouchableHighlight 
             style={styles.signUpButton}
             underlayColor='#99d9f4'
             onPress={this.props.screenProps.signup}>
-            <Text style={styles.buttonText}>Signup</Text>
+            <Text style={styles.header}>Signup</Text>
           </TouchableHighlight>  
+        </View>  
 
           <View style={styles.nav}>
         <View style={styles.flowRight}>
