@@ -7,9 +7,11 @@ import {
   TouchableHighlight,
   StyleSheet,
   AsyncStorage,
-  AlertIOS
+  AlertIOS,
+  Switch
 } from 'react-native';
 import MapView from 'react-native-maps';
+import AngelStatusPage from './AngelStatusPage';
 import HelpRequest from './HelpRequest';
 import HelpRequestAccepted from './HelpRequestAccepted';
 import config from './config.js';
@@ -47,22 +49,24 @@ class BottomBarAngel extends Component {
     })
   }
   render() {
-    console.log('+++BottomBarAngel.js');
-    // console.log('+++helpRequestStatus: ', this.state.helpRequestStatus);
-
     let Page = null;
-    if(this.state.helpRequestStatus === 'default') {
-      Page = <HelpRequest username={this.props.username} beaconLocation={this.props.beaconLocation} handleHelpRequestYes={this.handleHelpRequestYes} handleHelpRequestNo={this.handleHelpRequestNo}/>
-    } else if(this.state.helpRequestStatus === 'yes') {
-      if(this.state.helpRequestCancel === false) {
-        Page = <HelpRequestAccepted username={this.props.username} handleHelpRequestCancel={this.handleHelpRequestCancel} />
-      } else {
-        // Page = <OnCallStatus />  
+    if(this.props.switchIsOn === false || this.props.beaconExist === false ) {
+      Page = <AngelStatusPage switchIsOn={this.props.switchIsOn} handleSwitchIsOn={this.props.handleSwitchIsOn} username={this.props.username} />
+    } else {
+      if(this.state.helpRequestStatus === 'default') {
+        Page = <HelpRequest switchIsOn={this.props.switchIsOn} handleSwitchIsOn={this.props.handleSwitchIsOn} username={this.props.username} beaconLocation={this.props.beaconLocation} handleHelpRequestYes={this.handleHelpRequestYes} handleHelpRequestNo={this.handleHelpRequestNo}/>
+      } else if(this.state.helpRequestStatus === 'yes') {
+        if(this.state.helpRequestCancel === false) {
+          Page = <HelpRequestAccepted switchIsOn={this.props.switchIsOn} handleSwitchIsOn={this.props.handleSwitchIsOn} username={this.props.username} handleHelpRequestCancel={this.handleHelpRequestCancel} />
+        } else {
+          Page = <AngelStatusPage switchIsOn={this.props.switchIsOn} handleSwitchIsOn={this.props.handleSwitchIsOn} username={this.props.username} />
+          // should be notified whne the next beacon shows up still 
+        }
+      } else if (this.state.helpRequestStatus === 'no') {
+        Page = <AngelStatusPage switchIsOn={this.props.switchIsOn} handleSwitchIsOn={this.props.handleSwitchIsOn} username={this.props.username} />
       }
-    } else if (this.state.helpRequestStatus === 'no') {
-      // Page = <OnCallStatus />
     }
-
+    
     return (
       <View style={styles.container}>
         {Page}
