@@ -2,7 +2,7 @@ const Sequelize = require('sequelize');
 const db = require('../db.js');
 const bcrypt = require('bcrypt-nodejs');
 
-const dynamicAngel = db.define('dynamicAngel', {
+const dynamicResponder = db.define('dynamicResponder', {
   image: {
     type: Sequelize.STRING,
   },
@@ -39,15 +39,26 @@ const dynamicAngel = db.define('dynamicAngel', {
   public: {
     type: Sequelize.BOOLEAN,
   },
-
+  OS: {
+    type: Sequelize.STRING,
+  },
+  token: {
+    type: Sequelize.STRING,
+  },
+  lastNotification: {
+    type: Sequelize.DATE,
+  },
+  device: {
+    type: Sequelize.STRING,
+  }
 });
-dynamicAngel.generateHash = password => bcrypt.hashSync(
+dynamicResponder.generateHash = password => bcrypt.hashSync(
   password,
   bcrypt.genSaltSync(8),
   null);
-dynamicAngel.validPassword = password => bcrypt.compareSync(
+dynamicResponder.validPassword = password => bcrypt.compareSync(
   password,
   this.password);
 
 
-module.exports = dynamicAngel;
+module.exports = dynamicResponder;

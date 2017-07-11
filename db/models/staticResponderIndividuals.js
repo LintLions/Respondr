@@ -2,7 +2,7 @@ const Sequelize = require('sequelize');
 const db = require('../db.js');
 const bcrypt = require('bcrypt-nodejs');
 
-const staticAngelIndividual = db.define('staticAngelIndividual', {
+const staticResponderIndividual = db.define('staticResponderIndividual', {
   image: {
     type: Sequelize.STRING,
   },
@@ -50,15 +50,27 @@ const staticAngelIndividual = db.define('staticAngelIndividual', {
   },
   hours: {
     type: Sequelize.RANGE(Sequelize.DATE)
+  },
+  OS: {
+    type: Sequelize.STRING,
+  },
+  token: {
+    type: Sequelize.STRING,
+  },
+  lastNotification: {
+    type: Sequelize.DATE,
+  },
+  device: {
+    type: Sequelize.STRING,
   }
 });
-staticAngelIndividual.generateHash = password => bcrypt.hashSync(
+staticResponderIndividual.generateHash = password => bcrypt.hashSync(
   password,
   bcrypt.genSaltSync(8),
   null);
-staticAngelIndividual.validPassword = password => bcrypt.compareSync(
+staticResponderIndividual.validPassword = password => bcrypt.compareSync(
   password,
   this.password);
 
 
-module.exports = staticAngelIndividual;
+module.exports = staticResponderIndividual;

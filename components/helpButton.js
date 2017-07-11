@@ -5,9 +5,12 @@ import {
   View,
   Text,
   TouchableHighlight,
+  Modal,
+  SegmentedControlIOS,
   StyleSheet
 } from 'react-native';
 import MapView from 'react-native-maps';
+import styles from './topbar/styles'
 
 class HelpButton extends Component {
   constructor(props) {
@@ -17,18 +20,31 @@ class HelpButton extends Component {
     };
   }
   render() {
+    const btnOrModal = this.props.helpButtonVisible ?
+      (<TouchableHighlight 
+          style={Styles.button}
+          underlayColor='#b22222'
+          onPress={this.props.getHelp}>
+          <Text style={styles.buttonText}>Get Help</Text>
+        </TouchableHighlight>) :
+        (<View style={Styles.button}>
+          <Text>Help is on the way</Text>
+          <TouchableHighlight 
+            style={Styles.button}
+            underlayColor='#b22222'
+            onPress={this.props.cancelHelp}>
+            <Text style={styles.buttonText}>Cancel Help Request</Text>
+          </TouchableHighlight>
+        </View>);
     return (
-      <TouchableHighlight 
-        style={styles.button}
-        underlayColor='#b22222'
-        onPress={this.props.getHelp}>
-        <Text style={styles.buttonText}>Get Help</Text>
-      </TouchableHighlight> 
-    )
-  }
+      <View >
+        {btnOrModal}
+      </View>
+    )    
+  }    
 }
 
-var styles = StyleSheet.create({
+var Styles = StyleSheet.create({
 
   button: {  
     flex: 1,
@@ -38,7 +54,7 @@ var styles = StyleSheet.create({
     borderWidth: 1,
     borderRadius: 8,
     margin: 10,
-  } 
+  },  
 }); 
 
 module.exports = HelpButton
