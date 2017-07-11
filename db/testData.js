@@ -1,4 +1,4 @@
-exports.dynamicAngels = [
+exports.dynamicResponders = [
   {
     image: 'https://upload.wikimedia.org/wikipedia/commons/thumb/8/8d/President_Barack_Obama.jpg/220px-President_Barack_Obama.jpg',
     firstName: 'Barack',
@@ -23,7 +23,7 @@ exports.dynamicAngels = [
   },
 ];
 
-exports.staticAngelIndividuals = [
+exports.staticResponderIndividuals = [
   {
     firstName: 'Matthew',
     lastName: 'Smith',
@@ -38,7 +38,7 @@ exports.staticAngelIndividuals = [
   },
 ];
 
-exports.staticAngelStorefronts = [
+exports.staticResponderStorefronts = [
   {
     fullName: 'Duane Reade',
     phone: '2128084743',

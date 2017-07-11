@@ -2,7 +2,6 @@ const express = require('express');
 const router = express.Router();
 const auth = require('./auth');
 const controller = require('./controller');
-const dynamicAngels = require('../db/models/dynamicAngels.js');
 
 const users = [{
   id: 1,
