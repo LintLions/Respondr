@@ -1,13 +1,16 @@
-const dynamicAngel = require('../db/models/dynamicAngels.js');
-const staticAngelIndividual = require('../db/models/staticAngelIndividuals.js');
-const staticAngelStorefront = require('../db/models/staticAngelStorefronts.js');
+require('node-env-file')('../.env');
+const dynamicResponder = require('./models/dynamicResponders.js');
+const staticResponderIndividual = require('./models/staticResponderIndividuals.js');
+const staticResponderStorefront = require('./models/staticResponderStorefronts.js');
+const beacon = require('./models/beacons.js')
 const test = require('./testData.js');
 
 
-dynamicAngel.sync({ force: true })
-  .then(() => staticAngelIndividual.sync({ force: true}))
-  .then(() => staticAngelStorefront.sync({ force: true}))
-  .then(() => staticAngelIndividual.bulkCreate(test.staticAngelIndividuals))
-  .then(() => staticAngelStorefront.bulkCreate(test.staticAngelStorefronts))
-  .then(() => dynamicAngel.bulkCreate(test.dynamicAngels))
+dynamicResponder.sync({ force: true })
+  .then(() => staticResponderIndividual.sync({ force: true}))
+  .then(() => staticResponderStorefront.sync({ force: true}))
+  .then(() => beacon.sync({ force: true}))
+  .then(() => staticResponderIndividual.bulkCreate(test.staticResponderIndividuals))
+  .then(() => staticResponderStorefront.bulkCreate(test.staticResponderStorefronts))
+  .then(() => dynamicResponder.bulkCreate(test.dynamicResponders))
   .then(msg => console.log(msg));
