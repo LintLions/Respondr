@@ -2,7 +2,7 @@ const Sequelize = require('sequelize');
 const db = require('../db.js');
 const bcrypt = require('bcrypt-nodejs');
 
-const staticAngelStorefront = db.define('staticAngelStorefront', {
+const staticResponderStorefront = db.define('staticResponderStorefront', {
   image: {
     type: Sequelize.STRING,
   },
@@ -33,15 +33,26 @@ const staticAngelStorefront = db.define('staticAngelStorefront', {
   public: {
     type: Sequelize.BOOLEAN,
   },
-
+  OS: {
+    type: Sequelize.STRING,
+  },
+  token: {
+    type: Sequelize.STRING,
+  },
+  lastNotification: {
+    type: Sequelize.DATE,
+  },
+  device: {
+    type: Sequelize.STRING,
+  }
 });
-staticAngelStorefront.generateHash = password => bcrypt.hashSync(
+staticResponderStorefront.generateHash = password => bcrypt.hashSync(
   password,
   bcrypt.genSaltSync(8),
   null);
-staticAngelStorefront.validPassword = password => bcrypt.compareSync(
+staticResponderStorefront.validPassword = password => bcrypt.compareSync(
   password,
   this.password);
 
 
-module.exports = staticAngelStorefront;
+module.exports = staticResponderStorefront;

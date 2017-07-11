@@ -1,4 +1,4 @@
-const dynamicAngel = require('../db/models/dynamicAngels.js');
+const dynamicResponder = require('../db/models/dynamicResponders.js');
 const beacon = require('../db/models/beacons.js');
 const _ = require('lodash');
 const config = require('./config');
@@ -63,18 +63,18 @@ exports.addUser = function(req, res) { //add user
     return res.status(400).send({error: "You must send the username and the password"});
   }
 
-  dynamicAngel.findOne({where: userScheme.userSearch}).then((user) => {
+  dynamicResponder.findOne({where: userScheme.userSearch}).then((user) => {
     if (user){
       return res.status(400).send({error: "A user with that username already exists"});
     } else{
 //no static users plz
-      dynamicAngel.create({
+      dynamicResponder.create({
         firstName: req.body.fName,
         lastName: req.body.lName,
         phone: req.body.phone,
         organization: req.body.organization,
         email: req.body.email,
-        password: dynamicAngel.generateHash(req.body.password),
+        password: dynamicResponder.generateHash(req.body.password),
         public: req.body.public,
         static: req.body.static,
         fullName: `${req.body.fName} ${req.body.lName}`
@@ -102,7 +102,7 @@ exports.addSession =  function(req, res) { //add session
     return res.status(400).send({error: "You must send the username and the password"});
   }
 
-  dynamicAngel.findOne({where: userScheme.userSearch}).then((user) => {
+  dynamicResponder.findOne({where: userScheme.userSearch}).then((user) => {
     if (!user) {
       return res.status(401).send({error: "The username is incorrect"});
     } else if (!bcrypt.compareSync(req.body.password, user.password)) {
@@ -120,7 +120,7 @@ exports.addSession =  function(req, res) { //add session
 }
 
 exports.getUsers = function(req, res) {
-  dynamicAngel.findAll({})
+  dynamicResponder.findAll({})
   .then((results) => {
     console.log(results);
     res.send(results);
