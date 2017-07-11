@@ -28,7 +28,6 @@ class MapPage extends Component {
     this.state = {
       coordinate: null,
       coords: [],
-      beaconExist: true,
       switchIsOn: false, 
       beaconCoordinate: null,
       helpButtonVisible: true
@@ -173,7 +172,7 @@ class MapPage extends Component {
               style={styles.bottomBar}
               username={this.props.screenProps.user.username}
               beaconLocation={this.state.beaconLocation}
-              beaconExist={this.state.beaconExist}
+              beaconExists={this.props.screenProps.beaconExists}
               switchIsOn={this.state.switchIsOn}
               handleSwitchIsOn={this.handleSwitchIsOn}/>
           </View>
