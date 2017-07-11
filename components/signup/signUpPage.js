@@ -1,34 +1,93 @@
 'use strict';
 
 import React, { Component } from 'react'
+import { TabNavigator } from "react-navigation";
 import {
-  StyleSheet,
-  SegmentedControlIOS,
-  Text,
-  TextInput,
-  View,
-  TouchableHighlight,
-  ActivityIndicator,
-  Image,
-  AlertIOS
+  AlertIOS,
 } from 'react-native';
-import MapPage from '../MapPage';
-import styles from './signupStyles';
-import Icon from 'react-native-vector-icons/Entypo';
+import PersonalInfoScreen from "./PersonalInfo";
+import PublicScreen from "./Public";
+import StaticScreen from "./Static";
 import config from '../config.js';
+
+const SignUpNavigator = TabNavigator ({
+    Personal: { screen: PersonalInfoScreen },
+    Privacy: { screen: PublicScreen },
+    Location: { screen: StaticScreen }
+  }, {
+    tabBarPosition:'top',
+    swipeEnabled: true,
+    animationEnabled: true,
+    tabBarOptions: {
+      labelStyle: {
+        fontSize: 18,
+      },
+      style: {
+        backgroundColor: 'gainsboro',
+      }
+    }  
+  });
 
 class SignUpPage extends Component {
   static navigationOptions = ({ navigation }) => ({
     title: `Signup for ${navigation.state.params.email}`,
   });
- constructor(props) {
+  
+  constructor(props) {
     super(props);
     this.state = {
-     email:this.props.navigation.state.params.email
+     email:this.props.navigation.state.params.email,
+     fName:'',
+     lName:'',
+     password: '',
+     phone: '',
+     organization: '',
+     privacy: '',
+     mobility: '',
+     city: '',
+     state: '',
+     zip: '',
+     address: ''
    };
-    this.onSignupChange = this.onSignupChange.bind(this);
-    this.onEmailChange = this.onEmailChange.bind(this);
+
+    this.onEmailChange = (e) => {
+      let email = e.nativeEvent.text
+      this.setState({email:email});
+    }
+    this.onFNameChange = (e) => {
+      console.log(e.nativeEvent)
+      let fName = e.nativeEvent.text
+      this.setState( {fName:fName} );
+    }
+    this.onLNameChange = (e) => {
+      let lName = e.nativeEvent.text
+      this.setState( {lName:lName} );
+    }
+    this.onPasswordChange = (e) => {
+      let password = e.nativeEvent.text
+      this.setState( {password: password});
+    }
+    this.onPhoneChange = (e) => {
+      let phone = e.nativeEvent.text
+      this.setState( {phone:phone} );
+    }
+    this.onOrganizationChange = (e) => {
+      let organization = e.nativeEvent.text
+      this.setState({organization:organization});
+    }
+    this.onPrivacyChange = (e) => {
+      let privacy = e.nativeEvent.selectedSegmentIndex
+      console.log("privacy is ", privacy);
+      this.setState({privacy:privacy});
+    }
+    this.onMobilityChange = (e) => {
+      let mobility = e.nativeEvent.selectedSegmentIndex
+      console.log("mobility is ", mobility);
+      this.setState({mobility:mobility} )
+    }
+
     this.signup = () => {
+      console.log(this.state)
       fetch(`${config.url}/users`, {
         method: "POST",
         headers: {
@@ -46,140 +105,43 @@ class SignUpPage extends Component {
           )
         })
         .done();
-    }
-  }  
-
-  onSignupChange(p, event) {
-    const value = event.nativeEvent.text;
-    const key = p;
     
-     this.setState({
-      [key] : value
-    });
-
-  }
-  onEmailChange(event) {
-    this.setState({ email: event.nativeEvent.text });
-  };
-  
-  render() {
-    return ( 
-     <View style={styles.container}>
-      <View style={styles.flowRightImage}>
-      <Image source={require('../../assets/bigwing.png')}/>
-        </View>
-      <View style={styles.flowRight}>
-        <TextInput
-          value={this.state.fName}
-          style={styles.searchInput}
-          onChange={this.onSignupChange.bind(this, 'fName')}
-          placeholder='first name'
-        />
-        <TextInput
-          value={this.state.lName}
-          style={styles.searchInput}
-          onChange={this.onSignupChange.bind(this, 'lName')}
-          placeholder='last name'
-        />
-        </View>
-        <View style={styles.flowRight}>
-         <Icon style={styles.searchIcon} name="mail" size={20} color="#000"/>
-          <TextInput
-            value={this.state.email}
-            style={styles.searchInput}
-            onChange={this.onEmailChange}
-            placeholder='email address'/>
-        </View>
-        <View style={styles.flowRight}>
-          <Icon style={styles.searchIcon} name="key" size={20} color="#000"/>
-          <TextInput
-            style={styles.searchInput}
-            secureTextEntry={true} 
-            value={this.state.password}
-            onChange={this.onSignupChange.bind(this, 'password')}
-            placeholder='password'/>
-        </View>
-        <View style={styles.flowRight}>
-         <Icon style={styles.searchIcon} name="phone" size={20} color="#000"/>
-          <TextInput
-            name='phone'
-            style={styles.searchInput}
-            value={this.state.phone}
-            onChange={this.onSignupChange.bind(this, 'phone')}
-            placeholder='phone #'/>
-        </View>
-         <View style={styles.flowRight}>
-           <Icon style={styles.searchIcon} name="flag" size={20} color="#000"/>
-          <TextInput
-            name='organization'
-            style={styles.searchInput}
-            value={this.state.organization}
-            onChange={this.onSignupChange.bind(this, 'organization')}
-            placeholder='organization (optional)'/>
-        </View>
-        <View style={styles.toggle}>
-         <SegmentedControlIOS
-            style-={styles.header}
-            values={['Public', 'Private']}
-            selectedIndex={this.state.public}
-            onChange={(event) => {
-            this.setState({public: event.nativeEvent.selectedSegmentIndex});
-            }}
-          />
-         </View>
-          <View style={styles.toggle}> 
-           <SegmentedControlIOS
-            style-={styles.header}
-            values={['Dynamic', 'Static']}
-            selectedIndex={this.state.static}
-            onChange={(event) => {
-            this.setState({static: event.nativeEvent.selectedSegmentIndex});
-            }}
-          />
-         </View> 
-         {this.state.static === 1 && 
-         <View> 
-           <View style={styles.flowRight}>
-           <Icon style={styles.searchIcon} name="home" size={20} color="#000"/>
-            <TextInput
-              name='Street Address'
-              style={styles.searchInput}
-              value={this.state.address}
-              onChange={this.onSignupChange.bind(this, 'address')}
-              placeholder='Street Address'/>
-          </View>
-          <View style={styles.flowRight}>
-            <TextInput
-              name='City'
-              style={styles.searchInput}
-              value={this.state.city}
-              onChange={this.onSignupChange.bind(this, 'city')}
-              placeholder='City'/>
-            <TextInput
-              name='State'
-              style={styles.searchInput}
-              value={this.state.state}
-              onChange={this.onSignupChange.bind(this, 'state')}
-              placeholder='State'/>
-          </View>
-           <View style={styles.flowRight}>
-           <TextInput
-              name='Zip Code'
-              style={styles.searchInput}
-              value={this.state.zip}
-              onChange={this.onSignupChange.bind(this, 'zip')}
-              placeholder='Zip Code'/>
-            </View>  
-         </View>  
-         }
-         <TouchableHighlight 
-            style={styles.button}
-            underlayColor='#99d9f4'
-            onPress={this.signup}>
-            <Text style={styles.buttonText}>Signup</Text>
-          </TouchableHighlight> 
-       </View>  
-      )
     }
   }  
- export default SignUpPage;
+
+  render() {
+    const props = {
+      email: this.props.navigation.state.params.email,
+      fName: this.fName,
+      lName: this.lName,
+      password: this.password,
+      phone: this.phone,
+      organization: this.organization,
+      privacy: this.privacy,
+      mobility: this.mobility,
+      address: this.address,
+      city: this.city,
+      state: this.state,
+      zip: this.zip,
+      onEmailChange:this.onEmailChange,
+      onFNameChange: this.onFNameChange,
+      onLNameChange: this.onLNameChange,
+      onPasswordChange: this.onPasswordChange,
+      onPhoneChange: this.onPhoneChange,
+      onOrganizationChange: this.onOrganizationChange,
+      onPrivacyChange: this.onPrivacyChange,
+      onMobilityChange: this.onMobilityChange,
+      onAddressChange: this.onAddressChange,
+      onCityChange: this.onCityChange,
+      onStateChange: this.onStateChange,
+      onZipChange: this.onZipChange,
+      signup:this.signup
+    }
+    return <SignUpNavigator screenProps={props}/>  
+  }
+
+}
+
+
+
+export default SignUpPage;

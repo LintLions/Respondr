@@ -1,6 +1,11 @@
 import {StyleSheet } from 'react-native';
 
 var styles = StyleSheet.create({
+  bold:{
+    fontSize: 18,
+    fontWeight:'bold',
+    padding:4,
+  },
   button: {
     padding: 4,
     height: 36,
@@ -20,8 +25,7 @@ var styles = StyleSheet.create({
     alignSelf: 'center'
   },
   container: {
-    backgroundColor: 'white',
-    margin: 5,
+    backgroundColor: 'gainsboro',
     flex:1,
     flexDirection: 'column',
     justifyContent: 'flex-start'
@@ -31,6 +35,14 @@ var styles = StyleSheet.create({
     fontSize: 18,
     textAlign: 'center',
     color: '#656565'
+  },
+  explainer: {
+    fontSize: 16,
+    backgroundColor: 'white',
+    borderWidth: 1,
+    borderColor: '#48BBEC',
+    borderRadius: 8,
+    padding: 10
   },
   flowRight: {
     flexDirection: 'row',
@@ -44,7 +56,9 @@ var styles = StyleSheet.create({
   },
   header:{
     fontSize:24,
-    fontWeight:'bold'
+    fontWeight:'bold',
+    padding:8,
+    alignSelf:'center',
   },
   hideButton:{
     padding:4,
@@ -52,31 +66,36 @@ var styles = StyleSheet.create({
     alignSelf: 'center',
 
   },
-  icon:{
-    borderRadius:10,
-    borderWidth: 2,
-    borderColor: '#000000',
-    backgroundColor: 'white'
-  },
   IconContainer:{
     padding:10,
-    width:65
   },
   loginModalInner:{
     alignSelf: 'stretch',
     backgroundColor: '#fff'
   },
   loginModal:{
-          flex: 1,
-          flexDirection: 'column',
-          marginTop:65,
-          alignItems: 'center'
+    flex: 1,
+    flexDirection: 'column',
+    marginTop:65,
+    alignItems: 'center'
+  },
+  nav:{
+    alignContent: 'space-between',
+    justifyContent: 'center'
+  },
+  navIcon:{
+    padding:10
+  },
+  navArrow:{
+    alignContent: 'center',
+    justifyContent: 'center',
+    alignItems: 'center'
   },
   signUp:{
     backgroundColor: 'white',
     margin:8
   },
-  signupButton:{
+  signUpButton:{
     backgroundColor: 'white',
     borderColor: 'cyan',
     borderWidth: 1,
@@ -96,12 +115,14 @@ var styles = StyleSheet.create({
     borderWidth: 1,
     borderColor: '#48BBEC',
     borderRadius: 8,
-    color: '#48BBEC',
     backgroundColor: 'white'
   },
   searchIcon: {
-    padding: 10,
-    backgroundColor:'white'
+    padding: 4,
+    borderWidth: 1,
+    borderColor: '#48BBEC',
+    borderRadius: 4,
+    backgroundColor: 'white'
   },
   signUpInput:{
     backgroundColor:'ghostwhite',
