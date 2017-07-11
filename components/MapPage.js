@@ -155,7 +155,7 @@ class MapPage extends Component {
             location={this.props.location}
             navigation={this.props.navigation}
           />
-          {this.props.isLoggedIn && 
+          {this.props.screenProps.isLoggedIn && 
             <AngelStatusIcon switchIsOn={this.state.switchIsOn} handleSwitchIsOn={this.handleSwitchIsOn} />
           }
         </View>
@@ -167,7 +167,7 @@ class MapPage extends Component {
           >
           </HelpButton>
         </View>
-        {this.props.isLoggedIn &&
+        {this.props.screenProps.isLoggedIn &&
           <View style={styles.bottomBar}>
             <BottomBarAngel
               style={styles.bottomBar}
