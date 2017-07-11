@@ -15,6 +15,7 @@ import TopBar from './topbar/topBar';
 import SignUpPage from './signup/signUpPage';
 import BottomBarAngel from './BottomBarAngel';
 import HelpButton from './helpButton';
+import config from './config.js';
 import helpers from './helpers';
 
 const { googleMapsDirectionsApiKey } = require('./config.js');
@@ -41,7 +42,18 @@ class MapPage extends Component {
             latitude: crd.latitude,
             longitude: crd.longitude
           }
-        })        
+        }, function saveBeacon() { 
+            fetch(`${config.url}/beacons`, {
+              method: "POST",
+              headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json'
+              },
+              body: JSON.stringify(this.state.coordinate)
+            })
+            .then((response) => response.json())
+          }
+        )        
       }
 
       function error(err) {

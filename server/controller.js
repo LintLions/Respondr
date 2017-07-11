@@ -1,4 +1,5 @@
 const dynamicAngel = require('../db/models/dynamicAngels.js');
+const beacon = require('../db/models/beacons.js');
 const _ = require('lodash');
 const config = require('./config');
 const jwt = require('jsonwebtoken');
@@ -125,6 +126,18 @@ exports.getUsers = function(req, res) {
     res.send(results);
   }).catch((err) => {
     console.error( err + " on line 116")
+    res.sendStatus(500)
+  })
+};
+
+exports.addBeacon= function(req, res) {
+  beacon.create({
+    currentLocation: [req.body.latitude, req.body.longitude],
+  }).then((beacon) => {
+    console.log('Beacon Created')
+    res.status(200).send(beacon)
+  }).catch((err) => {
+    console.error(err)
     res.sendStatus(500)
   })
 };
