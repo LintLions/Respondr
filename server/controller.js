@@ -98,6 +98,8 @@ exports.addSession =  function(req, res) { //add session
 
   var userScheme = getUserScheme(req);
 
+  console.log("userScheme is ", userScheme);
+
   if (!userScheme.username || !req.body.password) {
     return res.status(400).send({error: "You must send the username and the password"});
   }
@@ -118,6 +120,24 @@ exports.addSession =  function(req, res) { //add session
     res.sendStatus(500);
   });
 }
+
+exports.getUserWithToken = function(req, res) {
+  console.log(req.params);
+  dynamicResponder.findOne({where: {token:req.params.token} }).then((user) => {
+    if (user){
+      return res.status(201).send({
+        fullName: user.fullName,
+        email: user.email,
+        phone: user.phone,
+        organization: user.organization,
+        status: user.status,
+        public: user.public, 
+      });
+    } else{
+      return res.status(400).send({error: "No user with that token_id found"});
+    }  
+  })
+}  
 
 exports.getUsers = function(req, res) {
   dynamicResponder.findAll({})

@@ -1,7 +1,7 @@
 'use strict';
 
 import React, { Component } from 'react'
-import { TabNavigator } from "react-navigation";
+import { TabNavigator, NavigationActions } from "react-navigation";
 import {
   AlertIOS,
 } from 'react-native';
@@ -36,7 +36,7 @@ class SignUpPage extends Component {
   constructor(props) {
     super(props);
     this.state = {
-     email:this.props.navigation.state.params.email,
+     email:this.props.navigation.state.params.email || '',
      fName:'',
      lName:'',
      password: '',
@@ -98,11 +98,10 @@ class SignUpPage extends Component {
       })
         .then((response) => response.json())
         .then((responseData) => {
-          this.props.screenProps.methods.updateToken(responseData.id_token),
-          AlertIOS.alert(
-            "Signup Success!",
-            JSON.stringify(responseData)
-          )
+          this.props.screenProps.methods.updateToken(responseData.id_token)
+          AlertIOS.alert("Signup Success!")
+          this.props.screenProps.isLoggedIn = true
+          this.props.navigation.dispatch(NavigationActions.back())
         })
         .done();
     
@@ -111,7 +110,7 @@ class SignUpPage extends Component {
 
   render() {
     const props = {
-      email: this.props.navigation.state.params.email,
+      email: this.email,
       fName: this.fName,
       lName: this.lName,
       password: this.password,
