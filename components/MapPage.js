@@ -165,15 +165,17 @@ class MapPage extends Component {
           >
           </HelpButton>
         </View>
-        <View style={styles.bottomBar}>
-          <BottomBarAngel
-            style={styles.bottomBar}
-            username={this.props.screenProps.user.username}
-            beaconLocation={this.state.beaconLocation}
-            beaconExist={this.state.beaconExist}
-            switchIsOn={this.state.switchIsOn}
-            handleSwitchIsOn={this.handleSwitchIsOn}/>
-        </View>
+        {this.props.isLoggedIn &&
+          <View style={styles.bottomBar}>
+            <BottomBarAngel
+              style={styles.bottomBar}
+              username={this.props.screenProps.user.username}
+              beaconLocation={this.state.beaconLocation}
+              beaconExist={this.state.beaconExist}
+              switchIsOn={this.state.switchIsOn}
+              handleSwitchIsOn={this.handleSwitchIsOn}/>
+          </View>
+        }
       </View>
     );
   }
