@@ -43,7 +43,7 @@ const dynamicResponder = db.define('dynamicResponder', {
     type: Sequelize.STRING,
   },
   token: {
-    type: Sequelize.STRING,
+    type: Sequelize.STRING(1000),
   },
   lastNotification: {
     type: Sequelize.DATE,
