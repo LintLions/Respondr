@@ -10,6 +10,7 @@ import {
 import MapView from 'react-native-maps';
 
 import HelpRequestAccepted from './HelpRequestAccepted';
+import AngelStatusPage from './AngelStatusPage';
 
 // props received: username, beaconLocation
 // props to pass down: yes/no to help request 

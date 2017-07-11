@@ -9,10 +9,12 @@ import {
 } from 'react-native';
 import MapView from 'react-native-maps';
 
+import AngelStatusPage from './AngelStatusPage';
+
 // props received: userName, beaconLocation
 // props to pass down: yes/no to help request 
 
-class HelpRequest extends Component {
+class HelpRequestAccepted extends Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -28,7 +30,7 @@ class HelpRequest extends Component {
       
         <View style={styles.box1}>
           <Text style={styles.prompt}>
-            You're an angel {this.props.username} !
+            You're an angel {this.props.username}!
           </Text>
           <View style={styles.buttonDirection}>
             <TouchableHighlight
@@ -93,5 +95,5 @@ var styles = StyleSheet.create({
   }
 });
 
-module.exports = HelpRequest;
+module.exports = HelpRequestAccepted;
 

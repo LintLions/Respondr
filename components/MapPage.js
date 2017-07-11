@@ -15,6 +15,7 @@ import TopBar from './topbar/topBar';
 import SignUpPage from './signup/signUpPage';
 import BottomBarAngel from './BottomBarAngel';
 import HelpButton from './helpButton';
+import AngelStatusIcon from './AngelStatusIcon';
 import config from './config.js';
 import helpers from './helpers';
 
@@ -26,8 +27,10 @@ class MapPage extends Component {
     super(props);
     this.state = {
       coordinate: null,
-      beaconCoordinate: null,
       coords: [],
+      beaconExist: true,
+      switchIsOn: false, 
+      beaconCoordinate: null,
       helpButtonVisible: true
     };
 
@@ -101,6 +104,12 @@ class MapPage extends Component {
       
       console.log('url: ', url)
     }
+
+    this.handleSwitchIsOn = (e) => {
+      this.setState({
+        switchIsOn: !this.state.switchIsOn
+      })
+    }
   }
 
   componentWillMount() {
@@ -126,7 +135,7 @@ class MapPage extends Component {
 
   render() {
     return (
-      <View style={styles.map}>
+      <View style={styles.container}>
         <MapView
           style={styles.map}
           showsUserLocation={true}
@@ -140,11 +149,14 @@ class MapPage extends Component {
             strokeColor='black'
           />
         </MapView>
-        <TopBar
-          screenProps={this.props.screenProps}
-          location={this.props.location}
-          navigation={this.props.navigation}
-        />
+        <View style={styles.row}>
+          <TopBar
+            screenProps={this.props.screenProps}
+            location={this.props.location}
+            navigation={this.props.navigation}
+          />
+          <AngelStatusIcon switchIsOn={this.state.switchIsOn} handleSwitchIsOn={this.handleSwitchIsOn} />
+        </View>
         <View>
           <HelpButton
             helpButtonVisible={this.state.helpButtonVisible}
@@ -157,7 +169,10 @@ class MapPage extends Component {
           <BottomBarAngel
             style={styles.bottomBar}
             username={this.props.screenProps.user.username}
-            beaconLocation={this.state.beaconLocation}/>
+            beaconLocation={this.state.beaconLocation}
+            beaconExist={this.state.beaconExist}
+            switchIsOn={this.state.switchIsOn}
+            handleSwitchIsOn={this.handleSwitchIsOn}/>
         </View>
       </View>
     );
@@ -172,10 +187,11 @@ var styles = StyleSheet.create({
     color: '#656565'
   },
   container: {
-    backgroundColor: 'white',
-    marginTop: 65,
-    alignItems: 'center',
-    justifyContent: 'space-around'
+    flex: 1
+    // backgroundColor: 'white',
+    // marginTop: 65,
+    // alignItems: 'center',
+    // justifyContent: 'space-around'
   },
    map: {
     ...StyleSheet.absoluteFillObject,
@@ -221,6 +237,10 @@ var styles = StyleSheet.create({
     // position: 'absolute',
     // bottom: 0
   },
+  row: {
+    flexDirection: 'row',
+    justifyContent: 'space-between'
+  }
 });
 
 module.exports = MapPage;
