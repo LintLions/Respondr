@@ -130,7 +130,7 @@ exports.getUsers = function(req, res) {
   })
 };
 
-exports.addBeacon= function(req, res) {
+exports.addBeacon = function(req, res) {
   beacon.create({
     currentLocation: [req.body.latitude, req.body.longitude],
   }).then((beacon) => {
@@ -141,3 +141,14 @@ exports.addBeacon= function(req, res) {
     res.sendStatus(500)
   })
 };
+
+exports.deleteBeacon = function (req, res) {
+  console.log(req.body)
+  beacon.findOne({where: {currentLocation:[req.body.latitude, req.body.longitude]}})
+  .then(beacon => {
+    return beacon.destroy()
+  })
+  .then(() => {
+    res.status(200).send('Beacon Destroyed')
+  })
+}
