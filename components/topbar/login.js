@@ -34,11 +34,9 @@ class Login extends Component {
         .then((response) => response.json())
         .then((responseData) => {
           this.props.screenProps.methods.updateToken(responseData.id_token);
-          console.log(JSON.stringify(responseData));
-          AlertIOS.alert(
-            "Login Success!",
-            JSON.stringify(responseData)
-          )
+          AlertIOS.alert("Login Success!")
+          this.props.screenProps.isLoggedIn = true;
+          this.props.screenProps.user.email = this.state.email;
         })
         .done();
     }

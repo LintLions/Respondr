@@ -133,6 +133,10 @@ class MapPage extends Component {
     navigator.geolocation.getCurrentPosition(success.bind(this), error, options)
   }
 
+  componentDidMount(){
+    this.props.screenProps.methods.getUserWithToken()
+  }
+
   render() {
     return (
       <View style={styles.container}>

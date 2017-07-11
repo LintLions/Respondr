@@ -15,8 +15,12 @@ router.get('/', function (req, res) {
 })
 router.get('/all', auth.check, auth.restrict('full_access'), controller.getUsers)
 
+router.get('/getUser/:token', controller.getUserWithToken);
+
 router.post('', controller.addUser);
 
 router.post('/sessions/create', controller.addSession);
+
+
 
 module.exports = router;
