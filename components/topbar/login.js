@@ -35,7 +35,7 @@ class Login extends Component {
         .then((responseData) => {
           this.props.screenProps.methods.updateToken(responseData.id_token);
           AlertIOS.alert("Login Success!")
-          this.props.screenProps.isLoggedIn = true;
+          this.props.handleIsLoggedIn();
           this.props.screenProps.user.email = this.state.email;
         })
         .done();
