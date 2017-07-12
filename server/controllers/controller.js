@@ -122,16 +122,15 @@ exports.addSession =  function(req, res) { //add session
 }
 
 exports.getUserWithToken = function(req, res) {
-  console.log(req.params);
-  dynamicResponder.findOne({where: {token:req.params.token} }).then((user) => {
+  console.log('in get user with token ', req.body.token)
+  dynamicResponder.findOne({where: {token:req.body.token} }).then((user) => {
+    console.log('user is ', user)
     if (user){
       return res.status(201).send({
         fullName: user.fullName,
         email: user.email,
         phone: user.phone,
-        organization: user.organization,
-        status: user.status,
-        public: user.public, 
+        organization: user.organization
       });
     } else{
       return res.status(400).send({error: "No user with that token_id found"});

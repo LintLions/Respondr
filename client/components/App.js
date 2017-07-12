@@ -38,27 +38,30 @@ class App extends React.Component {
         getUserWithToken: async() => {
           try {
             const value = await AsyncStorage.getItem('id_token');
+            console.log('value is ', value)
             if (value !== null){
-              fetch(`${config.url}/users/getUser/${value}`, {
-                method: "GET"
-              })
-              .then((response) => {
+              return fetch(`${config.url}/users/getUser/`)
+                .then((response) => response.json())
+                .then((responseJson) => {
+                console.log('response from getUserWithToken ', responseJson);
                 this.setState({
                   user:{
-                    fullName: response.fullName,
-                    email: response.email,
-                    phone: response.phone,
-                    organization: response.organization,
-                    status: response.status,
-                    public: response.public
+                    fullName: responseJson.fullName,
+                    email: responseJson.email
                    }, 
                   isLoggedIn: true
                 })
+                
               })
             }      
           } catch (error) {
             console.error("error getting user with id_token", error);
           }
+        },
+        handleIsLoggedIn: () => {
+          this.setState({
+            isLoggedIn: !(this.state.isLoggedIn)
+          })
         }
       }
     }

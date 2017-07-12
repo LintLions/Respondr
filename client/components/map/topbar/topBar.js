@@ -49,7 +49,8 @@ class TopBar extends Component {
       try {
         await AsyncStorage.removeItem('id_token');
         AlertIOS.alert("Logout Success!")
-        this.props.screenProps.isLoggedIn = false;
+        // this.props.screenProps.isLoggedIn = false;
+        this.props.handleIsLoggedIn();
       } catch (error) {
         console.log('AsyncStorage error: ' + error.message);
       }
@@ -89,7 +90,7 @@ class TopBar extends Component {
                     }}
                   />
                   {this.state.selectedIndex === 0 &&  //LOGIN
-                    <Login screenProps={this.props.screenProps} setModalVisible={this.setModalVisible.bind(this)} modalVisible = {this.state.modalVisible} />
+                    <Login screenProps={this.props.screenProps} setModalVisible={this.setModalVisible.bind(this)} modalVisible = {this.state.modalVisible} handleIsLoggedIn={this.props.handleIsLoggedIn}/>
                   } 
              
                   {this.state.selectedIndex === 1 &&  //SIGNUP
