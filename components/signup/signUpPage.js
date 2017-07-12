@@ -98,8 +98,9 @@ class SignUpPage extends Component {
       })
         .then((response) => response.json())
         .then((responseData) => {
+          console.log("response Data is ", responseData);
           this.props.screenProps.methods.updateToken(responseData.id_token)
-          AlertIOS.alert("Signup Success!")
+          AlertIOS.alert("Signup Success!", responseData.id_token)
           this.props.screenProps.isLoggedIn = true
           this.props.navigation.dispatch(NavigationActions.back())
         })
