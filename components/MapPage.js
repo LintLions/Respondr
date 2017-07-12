@@ -157,6 +157,7 @@ class MapPage extends Component {
             screenProps={this.props.screenProps}
             location={this.props.location}
             navigation={this.props.navigation}
+            handleIsLoggedIn={this.props.screenProps.methods.handleIsLoggedIn}
           />
           {this.props.screenProps.isLoggedIn && 
             <AngelStatusIcon switchIsOn={this.state.switchIsOn} handleSwitchIsOn={this.handleSwitchIsOn} />
