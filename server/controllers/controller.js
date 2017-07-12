@@ -1,7 +1,7 @@
 const dynamicResponder = require('../db/models/dynamicResponders.js');
 const beacon = require('../db/models/beacons.js');
 const _ = require('lodash');
-const config = require('./config');
+const config = require('../config');
 const jwt = require('jsonwebtoken');
 const bcrypt = require('bcrypt-nodejs');
 

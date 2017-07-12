@@ -7,7 +7,7 @@ dist/
 
 # PRIVATES
 .env
-**/components/config.js
+**/client/components/config.js
 
 # Xcode
 !**/*.xcodeproj

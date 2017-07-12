@@ -9,11 +9,11 @@ const errorhandler = require('errorhandler');
 // const session = require('express-session');
 // const RedisStore = require('connect-redis')(session)
 // const controller = require('./server/controller.js');
-const db = require('./db/db.js');
+const db = require('./server/db/db.js');
 // const Session = require('./db/models/session.js');
 // const SequelizeStore = require('connect-session-sequelize')(session.Store);
-const users = require('./server/users');
-const beaconsRouter = require('./server/beaconsRouter')
+const users = require('./server/routers/users');
+const beaconsRouter = require('./server/routers/beaconsRouter')
 
 // const extendDefaultFields = (defaults, session) => ({ // config for holding session in db
 //   userId: session.userId,
