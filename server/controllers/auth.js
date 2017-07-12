@@ -1,6 +1,6 @@
 const express = require('express');
 const jwt = require('express-jwt');
-const config = require('./config');
+const config = require('../config');
 
 // Validate access_token
 exports.check = jwt({

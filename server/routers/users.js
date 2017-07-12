@@ -1,7 +1,7 @@
 const express = require('express');
 const router = express.Router();
-const auth = require('./auth');
-const controller = require('./controller');
+const auth = require('../controllers/auth');
+const controller = require('../controllers/controller');
 
 const users = [{
   id: 1,

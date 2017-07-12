@@ -7,7 +7,7 @@ import {
   ActivityIndicator,
   Image,
 } from 'react-native';
-import styles from './signupStyles';
+import styles from '../../styles/signupStyles';
 import Icon from 'react-native-vector-icons/Entypo';
 import {NavigationActions} from "react-navigation";
 
@@ -17,7 +17,7 @@ class PersonalInfoScreen extends Component {
     return ( 
     <View style={styles.container}>
       <View style={styles.flowRightImage}>
-        <Image source={require('../../assets/bigwing.png')}/>
+        <Image source={require('../../styles/assets/bigwing.png')}/>
       </View>
       <View style={styles.flowRight}>
         <TextInput
@@ -78,11 +78,11 @@ class PersonalInfoScreen extends Component {
           </TouchableHighlight>  
         </View>
         <View style={styles.flowRight}>
-          <Image source={require('../../assets/wings.png')}/>
+          <Image source={require('../../styles/assets/wings.png')}/>
           <Icon style={styles.navIcon} name="minus" size={40} color="#C5B358"/>
           <Icon style={styles.navIcon} name="minus" size={40} />
           <Icon style={styles.navIcon} name="minus" size={40} />
-          <Image source={require('../../assets/heart.png')}/>
+          <Image source={require('../../styles/assets/heart.png')}/>
          
         </View>
       </View>    

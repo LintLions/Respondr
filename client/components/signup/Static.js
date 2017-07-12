@@ -7,7 +7,7 @@ import {
   Text,
   Image
 } from 'react-native';
-import styles from './signupStyles';
+import styles from '../../styles/signupStyles';
 import Icon from 'react-native-vector-icons/Entypo';
 
 
@@ -86,11 +86,11 @@ class StaticScreen extends Component {
 
           <View style={styles.nav}>
         <View style={styles.flowRight}>
-          <Image source={require('../../assets/wings.png')}/>
+          <Image source={require('../../styles/assets/wings.png')}/>
           <Icon style={styles.navIcon} name="minus" size={40} />
           <Icon style={styles.navIcon} name="minus" size={40} />
           <Icon style={styles.navIcon} name="minus" size={40} color="#C5B358"/>
-          <Image source={require('../../assets/heart.png')}/>
+          <Image source={require('../../styles/assets/heart.png')}/>
          
         </View>
       </View> 

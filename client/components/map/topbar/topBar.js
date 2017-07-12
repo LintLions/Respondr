@@ -14,8 +14,8 @@ import { Modal,
 import Icon from 'react-native-vector-icons/Entypo';
 import Login from './login';
 import Signup from './signup';
-import styles from './styles';
-import config from '../config.js';
+import config from '../../config.js';
+import styles from '../../../styles/styles.js';
 
 class TopBar extends Component {
   constructor(props) {

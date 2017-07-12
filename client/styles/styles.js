@@ -107,4 +107,5 @@ var styles = StyleSheet.create({
     padding:2
   }
 });
+
 export default styles;

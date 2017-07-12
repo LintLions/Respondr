@@ -1,8 +1,8 @@
 import React, { Component } from 'react';
 import {Picker, Image, Text, TextInput, View, TouchableHighlight, SegmentedControlIOS} from 'react-native';
 import Icon from 'react-native-vector-icons/Entypo';
-import styles from './styles';
-import SignUpPage from '../signup/signUpPage';
+import styles from '../../../styles/styles.js'
+import SignUpPage from '../../signup/signUpPage';
 
 class Signup extends Component { 
   constructor(props) {
@@ -23,9 +23,9 @@ class Signup extends Component {
       <View style ={styles.signUp}>
       
         <View style={styles.flowRight}>
-          <Image source={require('../../assets/wings.png')} />
+          <Image source={require('../../../styles/assets/wings.png')} />
           <Text>---------------------</Text>
-          <Image source={require('../../assets/heart.png')} />
+          <Image source={require('../../../styles/assets/heart.png')} />
         </View>  
         <View style={styles.flowRight}>  
           <Icon style={styles.searchIcon} name="mail" size={20} color="#000"/>
