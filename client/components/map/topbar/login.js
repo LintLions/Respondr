@@ -1,8 +1,8 @@
 import React, { Component } from 'react';
 import { Text, TextInput, View, TouchableHighlight, AlertIOS} from 'react-native';
-import styles from './styles';
+import styles from '../../../styles/styles.js';
 import Icon from 'react-native-vector-icons/Entypo';
-import config from '../config.js';
+import config from '../../config.js';
 class Login extends Component {
   constructor(props) {
     super(props);

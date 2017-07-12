@@ -10,12 +10,13 @@ import {
   AsyncStorage
 } from 'react-native';
 import {StackNavigator} from 'react-navigation';
-import MapPage from './MapPage';
+import MapPage from './map/MapPage';
+import HelpRequest from './map/bottombar/HelpRequest';
 import SignUpPage from './signup/signUpPage'
 import config from './config.js';
 
 const Navigator = StackNavigator({
-  Home: { screen: MapPage}, // MapPage
+  Home: { screen: MapPage},
   Signup: {screen: SignUpPage }
 });
 

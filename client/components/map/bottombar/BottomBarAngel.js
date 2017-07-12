@@ -14,7 +14,7 @@ import MapView from 'react-native-maps';
 import AngelStatusPage from './AngelStatusPage';
 import HelpRequest from './HelpRequest';
 import HelpRequestAccepted from './HelpRequestAccepted';
-import config from './config.js';
+import config from '../../config.js';
 
 class BottomBarAngel extends Component {
   constructor(props) {

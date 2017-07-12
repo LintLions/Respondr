@@ -12,14 +12,14 @@ import {
 } from 'react-native';
 import MapView from 'react-native-maps';
 import TopBar from './topbar/topBar';
-import SignUpPage from './signup/signUpPage';
-import BottomBarAngel from './BottomBarAngel';
-import HelpButton from './helpButton';
-import AngelStatusIcon from './AngelStatusIcon';
-import config from './config.js';
-import helpers from './helpers';
+import SignUpPage from '../signup/signUpPage';
+import BottomBarAngel from './bottombar/BottomBarAngel';
+import HelpButton from './bottombar/helpButton';
+import AngelStatusIcon from './bottombar/AngelStatusIcon';
+import config from '../config';
+import helpers from '../helpers';
 
-const { googleMapsDirectionsApiKey } = require('./config.js');
+const { googleMapsDirectionsApiKey } = require('../config.js');
 const APIKEY = googleMapsDirectionsApiKey;
 
 class MapPage extends Component {

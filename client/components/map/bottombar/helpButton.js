@@ -10,7 +10,7 @@ import {
   StyleSheet
 } from 'react-native';
 import MapView from 'react-native-maps';
-import styles from './topbar/styles'
+import styles from '../../../styles/styles.js'
 
 class HelpButton extends Component {
   constructor(props) {
