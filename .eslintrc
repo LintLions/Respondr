@@ -8,6 +8,9 @@
   "globals": {
     "exports": true,
     "module": true,
+    "require": true,
+    "process": true,
+    "__dirname": true,
   },
   "parser": "babel-eslint",
   "parserOptions": {

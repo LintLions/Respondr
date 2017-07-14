@@ -3,6 +3,7 @@ import {
   AsyncStorage,
 } from 'react-native';
 import { StackNavigator } from 'react-navigation';
+import SocketIOClient from 'socket.io-client';
 import MapPage from './map/MapPage';
 import SignUpPage from './signup/signUpPage';
 import config from './config';
@@ -59,6 +60,7 @@ class App extends React.Component {
   }
   componentDidMount() {
     this.state.methods.getUserWithToken();
+    this.socket = SocketIOClient(config.url);
   }
   render() {
     const props = {

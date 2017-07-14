@@ -236,7 +236,7 @@ var styles = StyleSheet.create({
   },
   bottomBar: {
     position: 'absolute',
-    bottom: 0,
+    bottom: 40,
     width: 375,
     // height: 222,
     // backgroundColor: 'rgba(0,0,0,0.5)'
