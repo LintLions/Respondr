@@ -29,14 +29,20 @@ class Login extends Component {
         body: JSON.stringify({
           email: this.state.email,
           password: this.state.password,
-        })
+        }),
       })
         .then((response) => response.json())
         .then((responseData) => {
-          this.props.screenProps.methods.updateToken(responseData.id_token);
-          AlertIOS.alert("Login Success!")
-          this.props.handleIsLoggedIn();
-          this.props.screenProps.user.email = this.state.email;
+          if (responseData.user) {
+            this.props.screenProps.methods.updateToken(responseData.user.token);
+            this.props.screenProps.methods.updateState({
+              user: responseData.user,
+              isLoggedIn: true,
+            });
+            AlertIOS.alert('Login Success!');
+          } else {
+            AlertIOS.alert('Login Failed!', responseData.error);
+          }
         })
         .done();
     }
