@@ -29,6 +29,7 @@ class Login extends Component {
         body: JSON.stringify({
           email: this.state.email,
           password: this.state.password,
+          socket: this.props.screenProps.socket.id,
         }),
       })
         .then((response) => response.json())

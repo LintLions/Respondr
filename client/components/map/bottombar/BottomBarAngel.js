@@ -23,31 +23,31 @@ class BottomBarAngel extends Component {
       helpRequestStatus: 'default',
       helpRequestCancel: false
     };
-    this.handleHelpRequestYes = this.handleHelpRequestYes.bind(this);
-    this.handleHelpRequestNo = this.handleHelpRequestNo.bind(this);
-    this.handleHelpRequestCancel = this.handleHelpRequestCancel.bind(this);
+    this.handleHelpRequestYes = (e) => {
+      e.preventDefault();
+      this.setState({
+        helpRequestStatus: 'yes',
+      });
+      this.props.drawRoute(this.props.screenProps.beaconLocation);
+    };
+
+    this.handleHelpRequestNo = async (e) => {
+      e.preventDefault();
+      this.setState({
+        helpRequestStatus: 'no',
+      });
+      this.props.screenProps.methods.updateState({ beaconLocation: null });
+    };
+
+    this.handleHelpRequestCancel = (e) => {
+      e.preventDefault();
+      this.setState({
+        helpRequestCancel: true,
+      });
+      this.props.screenProps.methods.updateState({ beaconLocation: null });
+    };
   }
 
-  handleHelpRequestYes = (e) => {
-    e.preventDefault;
-    this.setState ({
-      helpRequestStatus: 'yes'
-    })
-  }
-
-  handleHelpRequestNo = async (e) => {
-    e.preventDefault;
-    this.setState ({
-      helpRequestStatus: 'no'
-    });
-  }
-
-  handleHelpRequestCancel = (e) => {
-    e.preventDefault;
-    this.setState ({
-      helpRequestCancel: true
-    })
-  }
   render() {
     let Page = null;
     if(this.props.switchIsOn === false || this.props.beaconExists === false ) {

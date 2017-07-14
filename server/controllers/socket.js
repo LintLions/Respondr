@@ -8,24 +8,43 @@ const websocket = socketio(server);
 const socketUsers = [];
 
 websocket.on('connection', (socket) => {
-  beacon.find({ where: { socket: socket.id } }) // socket.handshake.query
-    .then((found) => {
-      if (!found) {
-        beacon.create({
-          socket: socket.id,
-        });
-      }
-    });
+  console.log('A client just joined on', socket.id);
+  beacon.create({
+    socket: socket.id,
+  });
+
   socket.on('disconnect', () => {
     beacon.destroy({ where: { socket: socket.id } })
     .then(rows => console.log(`deleted ${rows} rows`));
   });
-  console.log('A client just joined on', socket.id, socket.handshake.query.location);
+
+  socket.on('getHelp', (loc) => {
+    console.log('server rcvd help request', loc);
+    dynamicResponder.findAll()
+      .then((responders) => {
+        if (Array.isArray(responders)) {
+          responders.forEach((responder) => {
+            console.log(responder.socket);
+            if (responder.socket !== socket.id) {
+              socket.to(responder.socket).emit('newBeacon', loc);
+            }
+          });
+        } else if (responders) {
+          console.log(responders.id);
+          if (responders.socket !== socket.id) {
+            socket.to(responders.socket).emit('newBeacon', loc);
+          }
+        } else {
+          console.log('no responder for gethelp');
+        }
+      });
+  });
+  socket.on('updateUser', (token) => {
+    dynamicResponder.find({ where: { token } })
+      .then(responder => responder.update({ socket: socket.id }));
+  });
 });
 
-websocket.on('getHelp', (socket) => {
-  io.to(socketid).emit('message', 'for your eyes only');
-});
 
 module.exports = {
   websocket,

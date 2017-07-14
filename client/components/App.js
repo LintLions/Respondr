@@ -19,7 +19,7 @@ class App extends React.Component {
       user: {},
       userLocation: '',
       isLoggedIn: false,
-      beaconExists: false,
+      beaconLocation: null,
       methods: {
         updateToken: async (value) => {
           try {
@@ -34,8 +34,10 @@ class App extends React.Component {
           try {
             const value = await AsyncStorage.getItem('id_token');
             console.log('value is ', value);
+            console.log(this.state.socket);
+            console.log(this.state.socket.id);
             if (value !== null) {
-              fetch(`${config.url}/users?token=${value}`)
+              fetch(`${config.url}/users?token=${value}&socket=${this.state.socket.id}`)
                 .then(response => response.json())
                 .then((responseJson) => {
                   console.log('response from getUserWithToken ', responseJson);
@@ -66,19 +68,25 @@ class App extends React.Component {
     navigator.geolocation.watchPosition(locChange, { timeout: 10 * 1000 });
   }
   componentDidMount() {
-    this.state.methods.getUserWithToken();
-    this.socket = SocketIOClient(config.url, {
-      query: {
-        token: this.state.user.token,
-        location: this.state.userLocation,
-      },
+    this.state.socket = SocketIOClient(config.url);
+    this.state.socket.on('newBeacon', (data) => {
+      console.log('hello', data);
+      this.setState({ beaconLocation: data });
     });
+    this.state.methods.getUserWithToken();
+  }
+  componentWillUpdate(nextProps, nextState) {
+    if (!this.state.isLoggedIn && nextState.isLoggedIn) {
+      this.state.socket.emit('updateUser', nextState.user.token);
+    }
   }
   render() {
     const props = {
       user: this.state.user,
+      userLocation: this.state.userLocation,
+      socket: this.state.socket,
       methods: this.state.methods,
-      beaconExists: this.state.beaconExists,
+      beaconLocation: this.state.beaconLocation,
       isLoggedIn: this.state.isLoggedIn,
     };
     // StackNavigator **only** accepts a screenProps prop so we're passing

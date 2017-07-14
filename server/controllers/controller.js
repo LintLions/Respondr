@@ -79,6 +79,7 @@ exports.addUser = function(req, res) { //add user
       static: req.body.static,
       fullName: `${req.body.fName} ${req.body.lName}`,
       token: createIdToken(req.body.email),
+      socket: req.body.socket,
     }).then((newUser) => {
       res.status(201).send({
         newUser,
@@ -97,7 +98,6 @@ exports.addUser = function(req, res) { //add user
 
 exports.addSession = (req, res) => {
   const userScheme = getUserScheme(req);
-  console.log(`userScheme is ${userScheme}`);
   if (!userScheme.username || !req.body.password) {
     return res.status(400).send({error: "You must send the username and the password"});
   }
@@ -108,9 +108,12 @@ exports.addSession = (req, res) => {
     } else if (!bcrypt.compareSync(req.body.password, user.password)) {
       return res.status(401).send({ error: 'The username and password don\'t match' });
     }
-    res.status(201).send({
-      user,
-      access_token: createAccessToken(),
+    user.update({ socket: req.body.socket })
+    .then(() => {
+      res.status(201).send({
+        user,
+        access_token: createAccessToken(),
+      });
     });
   }).catch((err) => {
     console.log(err);
@@ -118,18 +121,24 @@ exports.addSession = (req, res) => {
   });
 };
 
-exports.getUser = function(req, res) {
-  console.log(req.query);
-  console.log('in get user query is', req.query)
-  dynamicResponder.findOne({ where: req.query }).then((user) => {
-    console.log('user is ', user)
-    if (user){
-      return res.status(201).send(user);
-    } else{
-      return res.status(400).send({error: "No user with that token_id found"});
-    }  
-  })
-}  
+exports.getUser = (req, res) => {
+  const socket = req.query.socket;
+  const query = delete req.query.socket && req.query;
+  dynamicResponder.findOne({ where: query })
+    .then((user) => {
+      if (user) {
+        return user.update({ socket })
+          .then(() => res.status(201).send(user))
+          .catch(() => res.status(500).send({
+            error: 'uhh, the server found you and then ran away... fast!',
+          }));
+      }
+      return res.status(400).send({ error: 'No user with that token_id found' });
+    })
+    .catch(() => res.status(500).send({
+      error: 'Looks like the DB gots beef. Come back later with Chicken.',
+    }));
+};
 
 exports.getUsers = function(req, res) {
   dynamicResponder.findAll({})

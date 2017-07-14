@@ -34,39 +34,10 @@ class MapPage extends Component {
     };
 
     this.getHelp = () => {
-      var options = {
-        enableHighAccuracy: true,
-        timeout: 5000,
-        maximumAge: 0
-      };
-      function success(pos) {
-        var crd = pos.coords;
-        this.setState({
-          beaconCoordinate:{
-            latitude: crd.latitude,
-            longitude: crd.longitude
-          },
-          helpButtonVisible: false,
-        }, function saveBeacon() { 
-            fetch(`${config.url}/beacons`, {
-              method: "POST",
-              headers: {
-                'Accept': 'application/json',
-                'Content-Type': 'application/json'
-              },
-              body: JSON.stringify(this.state.beaconCoordinate)
-            })
-            .then((response) => response.json())
-          }
-        )        
-      }
-
-      function error(err) {
-        console.warn(`ERROR(${err.code}): ${err.message}`);
-      };
-
-      navigator.geolocation.getCurrentPosition(success.bind(this), error, options)
-    }
+      const helpLoc = this.props.screenProps.userLocation;
+      this.props.screenProps.socket.emit('getHelp', helpLoc);
+      this.setState({ helpButtonVisible: false });
+    };
 
     this.cancelHelp = () => {
       let oldBeaconCoordinate = this.state.beaconCoordinate;
@@ -84,19 +55,21 @@ class MapPage extends Component {
             })
             .then((response) => response.json())
           })
-    } 
+    };
 
-    this.drawRoute = (dest) => { // dest needs to be a string of coordinates (without space)
+    this.drawRoute = (latLong) => { // dest needs to be a string of coordinates (without space)
       const mode = 'walking'; 
-      const origin = `${this.state.coordinate.latitude},${this.state.coordinate.longitude}`;
+      const origin = `${this.props.screenProps.userLocation[0]},${this.props.screenProps.userLocation[1]}`;
+      const dest = `${latLong[0]},${latLong[1]}`;
       const url = `https://maps.googleapis.com/maps/api/directions/json?origin=${origin}&destination=${dest}&key=${APIKEY}&mode=${mode}`;
-
+      console.log(url);
       fetch(url)
         .then(response => response.json())
         .then(responseJson => {
           if(responseJson.routes.length) {
+            console.log(`setting coords state`);
             this.setState({
-              coords: helpers.decode(responseJson.routes[0].overview_polyline.points)
+              coords: helpers.decode(responseJson.routes[0].overview_polyline.points),
             });
           }
         }).catch(e => {console.warn(e)});
@@ -120,9 +93,9 @@ class MapPage extends Component {
     function success(pos) {
       var crd = pos.coords;
       this.setState({
-        coordinate:{
+        coordinate: {
           latitude: crd.latitude,
-          longitude: crd.longitude
+          longitude: crd.longitude,
         }
       })        
     }
@@ -132,7 +105,7 @@ class MapPage extends Component {
     navigator.geolocation.getCurrentPosition(success.bind(this), error, options)
   }
 
-  componentDidMount(){
+  componentDidMount() {
     this.props.screenProps.methods.getUserWithToken()
   }
 
@@ -144,12 +117,18 @@ class MapPage extends Component {
           showsUserLocation={true}
           followsUserLocation={true}
         >
-          <MapView.Marker
-            coordinate={this.state.beaconCoordinate}/>
-          <MapView.Polyline 
+          {this.props.screenProps.beaconLocation
+            ? <MapView.Marker
+              coordinate={{
+                latitude: this.props.screenProps.beaconLocation[0],
+                longitude: this.props.screenProps.beaconLocation[1],
+              }}
+            /> : null
+          }
+          <MapView.Polyline
             coordinates={this.state.coords}
             strokeWidth={4}
-            strokeColor='black'
+            strokeColor="black"
           />
         </MapView>
         <View style={styles.row}>
@@ -171,16 +150,19 @@ class MapPage extends Component {
           >
           </HelpButton>
         </View>
-        {this.props.screenProps.isLoggedIn &&
+        {this.props.screenProps.beaconLocation ?
           <View style={styles.bottomBar}>
             <BottomBarAngel
               style={styles.bottomBar}
               username={this.props.screenProps.user.username}
-              beaconLocation={this.state.beaconLocation}
-              beaconExists={this.props.screenProps.beaconExists}
-              switchIsOn={this.state.switchIsOn}
-              handleSwitchIsOn={this.handleSwitchIsOn}/>
-          </View>
+              beaconLocation={this.props.screenProps.beaconLocation}
+              beaconExists={true}
+              switchIsOn={true}
+              handleSwitchIsOn={this.handleSwitchIsOn}
+              drawRoute={this.drawRoute}
+              screenProps={this.props.screenProps}
+            />
+          </View> : null
         }
       </View>
     );

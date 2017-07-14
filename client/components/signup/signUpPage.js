@@ -35,6 +35,7 @@ class SignUpPage extends Component {
   constructor(props) {
     super(props);
     this.state = {
+      socket: this.props.screenProps.socket.id,
       email: this.props.navigation.state.params.email || '',
       fName: '',
       lName: '',
