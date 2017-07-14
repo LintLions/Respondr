@@ -21,18 +21,17 @@ class TopBar extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      modalVisible: false, //is the modal visible?
-      buttonVisible: true, //is the buttion for calling the modal visible?
+      modalVisible: false, // is the modal visible?
+      buttonVisible: true, // is the buttion for calling the modal visible?
       selectedIndex: 0,
       location: this.props.location,
-    }
-
+    };
     this.setModalVisible = (visible) => { //hide modal and button
       this.setState({modalVisible: visible, buttonVisible: !visible});
-    }
+    };
 
     this.checkRestricted = async () => {
-      let DEMO_TOKEN = await AsyncStorage.getItem('id_token');
+      const DEMO_TOKEN = await AsyncStorage.getItem('id_token');
       fetch(`${config.url}/users/all`, {
         method: "GET",
         headers: {
@@ -60,63 +59,85 @@ class TopBar extends Component {
   render() {
     return (
       <View style={styles.container}>
-     
-        <Modal //the modal component
-          animationType={"fade"}
-          transparent={true}
+        <Modal // the modal component
+          animationType={'fade'}
+          transparent
           visible={this.state.modalVisible}
-          onRequestClose={() => {this.setModalVisible(false)}}
+          onRequestClose={() => this.setModalVisible(false)}
+        >
+          <TouchableWithoutFeedback
+            onPress={
+              () => this.setModalVisible(!this.state.modalVisible)
+            }
           >
-          <TouchableWithoutFeedback onPress={() => this.setModalVisible(!this.state.modalVisible) }> 
             <View style={styles.loginModal}>
               <TouchableWithoutFeedback>
                 <View style={styles.loginModalInner}>
-                {this.props.screenProps.isLoggedIn && 
-                  <View style={styles.container}>
-                   <TouchableHighlight 
-                    onPress={this.logout}>
-                    <Text>Logout</Text>
-                  </TouchableHighlight>  
-                </View>  
-                } 
-                {!this.props.screenProps.isLoggedIn &&  
-                  <View>  
-                  <SegmentedControlIOS
-                    style-={styles.header}
-                    values={['Login', 'Signup']}
-                    selectedIndex={this.state.selectedIndex}
-                    onChange={(event) => {
-                    this.setState({selectedIndex: event.nativeEvent.selectedSegmentIndex});
-                    }}
-                  />
-                  {this.state.selectedIndex === 0 &&  //LOGIN
-                    <Login screenProps={this.props.screenProps} setModalVisible={this.setModalVisible.bind(this)} modalVisible = {this.state.modalVisible} handleIsLoggedIn={this.props.handleIsLoggedIn}/>
-                  } 
-             
-                  {this.state.selectedIndex === 1 &&  //SIGNUP
-                    <Signup navigation={this.props.navigation} setModalVisible={this.setModalVisible.bind(this)} modalVisible = {this.state.modalVisible}/>
-                  } 
-                </View>
-               } 
-
+                  {this.props.screenProps.isLoggedIn &&
+                    <View style={styles.container}>
+                      <TouchableHighlight
+                        onPress={this.logout}
+                      >
+                        <Text>Logout</Text>
+                      </TouchableHighlight>
+                    </View>
+                  }
+                  {!this.props.screenProps.isLoggedIn &&
+                    <View>
+                      <SegmentedControlIOS
+                        style-={styles.header}
+                        values={['Login', 'Signup']}
+                        selectedIndex={this.state.selectedIndex}
+                        onChange={(event) => {
+                        this.setState({selectedIndex: event.nativeEvent.selectedSegmentIndex});
+                        }}
+                      />
+                      {this.state.selectedIndex === 0 &&  // LOGIN
+                        <Login
+                          screenProps={this.props.screenProps}
+                          modalVisible={this.state.modalVisible}
+                          setModalVisible={this.setModalVisible}
+                          handleIsLoggedIn={this.props.handleIsLoggedIn}
+                        />
+                      }
+                      {this.state.selectedIndex === 1 &&  // SIGNUP
+                        <Signup
+                          navigation={this.props.navigation}
+                          setModalVisible={this.setModalVisible}
+                          modalVisible={this.state.modalVisible}
+                        />
+                      }
+                    </View>
+                  }
                 </View>
               </TouchableWithoutFeedback>
-            </View>    
+            </View>
           </TouchableWithoutFeedback>
         </Modal>
 
         {this.state.buttonVisible && <View style={styles.IconContainer}>
-          {!this.props.screenProps.isLoggedIn &&  <Text>Login</Text>}
-         
-          <TouchableHighlight 
-            onPress={() => {this.setModalVisible(true)
-          }}>
-          <Icon name="feather" size={40} color="#4F8EF7" style={styles.icon} />
+          {!this.props.screenProps.isLoggedIn && <Text>Login</Text>}
+          <TouchableHighlight
+            onPress={() => this.setModalVisible(true)}
+          >
+            <Icon name="feather" size={40} color="#4F8EF7" style={styles.icon} />
           </TouchableHighlight>
-          {!this.props.screenProps.isLoggedIn &&  <Text>Signup</Text>}
-  
+          {!this.props.screenProps.isLoggedIn && <Text>Signup</Text>}
         </View> }
-
+        <TouchableHighlight
+          onPress={
+            () => this.checkRestricted()
+          }
+        >
+          <Icon name="tools" size={40} color="#4F8EF7" style={styles.icon} />
+        </TouchableHighlight>
+        <TouchableHighlight
+          onPress={
+            () => this.logout()
+          }
+        >
+          <Icon name="lock" size={40} color="#4F8EF7" style={styles.icon} />
+        </TouchableHighlight>
       </View>
     );
   }

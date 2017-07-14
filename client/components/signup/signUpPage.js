@@ -1,54 +1,53 @@
-'use strict';
-
-import React, { Component } from 'react'
-import { TabNavigator, NavigationActions } from "react-navigation";
+import React, { Component } from 'react';
+import { TabNavigator, NavigationActions } from 'react-navigation';
 import {
   AlertIOS,
 } from 'react-native';
-import PersonalInfoScreen from "./PersonalInfo";
-import PublicScreen from "./Public";
-import StaticScreen from "./Static";
-import config from '../config.js';
+import PersonalInfoScreen from './PersonalInfo';
+import PublicScreen from './Public';
+import StaticScreen from './Static';
+import config from '../config';
 
-const SignUpNavigator = TabNavigator ({
-    Personal: { screen: PersonalInfoScreen },
-    Privacy: { screen: PublicScreen },
-    Location: { screen: StaticScreen }
-  }, {
-    tabBarPosition:'top',
-    swipeEnabled: true,
-    animationEnabled: true,
-    tabBarOptions: {
-      labelStyle: {
-        fontSize: 18,
-      },
-      style: {
-        backgroundColor: 'gainsboro',
-      }
-    }  
-  });
+const navScreens = {
+  Personal: { screen: PersonalInfoScreen },
+  Privacy: { screen: PublicScreen },
+  Location: { screen: StaticScreen },
+};
+const navOptions = {
+  tabBarPosition: 'top',
+  swipeEnabled: true,
+  animationEnabled: true,
+  tabBarOptions: {
+    labelStyle: {
+      fontSize: 18,
+    },
+    style: {
+      backgroundColor: 'gainsboro',
+    },
+  },
+};
+const SignUpNavigator = TabNavigator(navScreens, navOptions);
 
 class SignUpPage extends Component {
   static navigationOptions = ({ navigation }) => ({
     title: `Signup for ${navigation.state.params.email}`,
   });
-  
   constructor(props) {
     super(props);
     this.state = {
-     email:this.props.navigation.state.params.email || '',
-     fName:'',
-     lName:'',
-     password: '',
-     phone: '',
-     organization: '',
-     privacy: '',
-     mobility: '',
-     city: '',
-     state: '',
-     zip: '',
-     address: ''
-   };
+      email: this.props.navigation.state.params.email || '',
+      fName: '',
+      lName: '',
+      password: '',
+      phone: '',
+      organization: '',
+      privacy: '',
+      mobility: '',
+      city: '',
+      state: '',
+      zip: '',
+      address: '',
+    };
 
     this.onEmailChange = (e) => {
       let email = e.nativeEvent.text
@@ -99,15 +98,18 @@ class SignUpPage extends Component {
         .then((response) => response.json())
         .then((responseData) => {
           console.log("response Data is ", responseData);
-          this.props.screenProps.methods.updateToken(responseData.id_token)
-          AlertIOS.alert("Signup Success!", responseData.id_token)
-          this.props.screenProps.isLoggedIn = true
-          this.props.navigation.dispatch(NavigationActions.back())
+          if (responseData.success) {
+            this.props.screenProps.methods.updateToken(responseData.newUser.token);
+            AlertIOS.alert("Signup Success!", responseData.id_token);
+            this.props.screenProps.methods.handleIsLoggedIn();
+            this.props.navigation.goBack();
+          } else {
+            AlertIOS.alert("Signup Failed!", responseData.error);
+          }
         })
         .done();
-    
-    }
-  }  
+    };
+  }
 
   render() {
     const props = {
@@ -123,7 +125,7 @@ class SignUpPage extends Component {
       city: this.city,
       state: this.state,
       zip: this.zip,
-      onEmailChange:this.onEmailChange,
+      onEmailChange: this.onEmailChange,
       onFNameChange: this.onFNameChange,
       onLNameChange: this.onLNameChange,
       onPasswordChange: this.onPasswordChange,
@@ -135,13 +137,11 @@ class SignUpPage extends Component {
       onCityChange: this.onCityChange,
       onStateChange: this.onStateChange,
       onZipChange: this.onZipChange,
-      signup:this.signup
-    }
-    return <SignUpNavigator screenProps={props}/>  
+      signup: this.signup,
+    };
+    return <SignUpNavigator screenProps={props} />;
   }
 
 }
-
-
 
 export default SignUpPage;

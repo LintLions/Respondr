@@ -11,7 +11,6 @@ const Navigator = StackNavigator({
   Home: { screen: MapPage },
   Signup: { screen: SignUpPage },
 });
-
 class App extends React.Component {
   constructor(props) {
     super(props);
@@ -27,20 +26,19 @@ class App extends React.Component {
             console.log(`AsyncStorage error: ${error.message}`);
           }
         },
+        updateState: newState => this.setState(newState),
+        getToken: async () => AsyncStorage.getItem('id_token'),
         getUserWithToken: async () => {
           try {
             const value = await AsyncStorage.getItem('id_token');
             console.log('value is ', value);
             if (value !== null) {
-              return fetch(`${config.url}/users/getUser/`)
+              fetch(`${config.url}/users?token=${value}`)
                 .then(response => response.json())
                 .then((responseJson) => {
                   console.log('response from getUserWithToken ', responseJson);
                   this.setState({
-                    user: {
-                      fullName: responseJson.fullName,
-                      email: responseJson.email,
-                    },
+                    user: responseJson,
                     isLoggedIn: true,
                   });
                 });
@@ -58,6 +56,9 @@ class App extends React.Component {
         },
       },
     };
+  }
+  componentDidMount() {
+    this.state.methods.getUserWithToken();
   }
   render() {
     const props = {
