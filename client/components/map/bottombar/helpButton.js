@@ -1,5 +1,8 @@
 'use strict';
 
+import { getHelp, cancelHelp } from '../../../actions/actions'
+
+import { connect } from 'react-redux';
 import React, { Component } from 'react'
 import {
   View,
@@ -14,26 +17,24 @@ import MapView from 'react-native-maps';
 class HelpButton extends Component {
   constructor(props) {
     super(props);
-    this.state = {
-      
-    };
+  
   }
   render() {
-    const btnOrModal = this.props.helpButtonVisible ?
+    const btnOrModal = this.props.isBeacon === false ?
       (<View>
           <TouchableHighlight
             style={styles.button}
             underlayColor='#48BBEC'
-            onPress={this.props.getHelp}>
+            onPress={this.props.handleHelpButtonPress}>
             <Text style={styles.buttonText}>Get Help</Text>
           </TouchableHighlight>
         </View>) :
         (<View>
           <Text style={styles.prompt}>Help is on the way</Text>
-          <TouchableHighlight 
+          <TouchableHighlight
             style={styles.button}
             underlayColor='#b22222'
-            onPress={this.props.cancelHelp}>
+            onPress={this.props.handleCancelButtonPress}>
             <Text style={styles.buttonText}>Cancel Help Request</Text>
           </TouchableHighlight>
         </View>);
@@ -98,5 +99,21 @@ var styles = StyleSheet.create({
     color: 'white',
   }
 });
+
+const mapStateToProps = (state) => ({
+  isBeacon: state.user.isBeacon
+})
+
+const mapDispatchToProps = (dispatch) => ({
+  handleCancelButtonPress: () => {
+    dispatch(cancelHelp());
+  },
+
+  handleHelpButtonPress: () => {
+    dispatch(getHelp());
+  }
+})
+
+HelpButton = connect(mapStateToProps, mapDispatchToProps)(HelpButton)
 
 module.exports = HelpButton

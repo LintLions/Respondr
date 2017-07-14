@@ -5,4 +5,4 @@ const help = (help) => {
   }
 }
 
-module.exports = addTodo;
+module.exports = help;

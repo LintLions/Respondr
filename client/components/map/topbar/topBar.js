@@ -11,6 +11,7 @@ import { Modal,
   StyleSheet,
   AlertIOS,
   AsyncStorage } from 'react-native';
+import { connect } from 'react-redux';
 import Icon from 'react-native-vector-icons/Entypo';
 import Login from './login';
 import Signup from './signup';
@@ -24,7 +25,6 @@ class TopBar extends Component {
       modalVisible: false, //is the modal visible?
       buttonVisible: true, //is the buttion for calling the modal visible?
       selectedIndex: 0,
-      location: this.props.location,
     }
 
     this.setModalVisible = (visible) => { //hide modal and button
@@ -49,7 +49,7 @@ class TopBar extends Component {
       try {
         await AsyncStorage.removeItem('id_token');
         AlertIOS.alert("Logout Success!")
-        // this.props.screenProps.isLoggedIn = false;
+        // this.props.isLoggedIn = false;
         this.props.handleIsLoggedIn();
       } catch (error) {
         console.log('AsyncStorage error: ' + error.message);
@@ -71,7 +71,7 @@ class TopBar extends Component {
             <View style={styles.loginModal}>
               <TouchableWithoutFeedback>
                 <View style={styles.loginModalInner}>
-                {this.props.screenProps.isLoggedIn && 
+                {this.props.isLoggedIn && 
                   <View style={styles.container}>
                    <TouchableHighlight 
                     onPress={this.logout}>
@@ -79,7 +79,7 @@ class TopBar extends Component {
                   </TouchableHighlight>  
                 </View>  
                 } 
-                {!this.props.screenProps.isLoggedIn &&  
+                {!this.props.isLoggedIn &&  
                   <View>  
                   <SegmentedControlIOS
                     style-={styles.header}
@@ -90,11 +90,11 @@ class TopBar extends Component {
                     }}
                   />
                   {this.state.selectedIndex === 0 &&  //LOGIN
-                    <Login screenProps={this.props.screenProps} setModalVisible={this.setModalVisible.bind(this)} modalVisible = {this.state.modalVisible} handleIsLoggedIn={this.props.handleIsLoggedIn}/>
+                    <Login />
                   } 
              
                   {this.state.selectedIndex === 1 &&  //SIGNUP
-                    <Signup navigation={this.props.navigation} setModalVisible={this.setModalVisible.bind(this)} modalVisible = {this.state.modalVisible}/>
+                    <Signup />
                   } 
                 </View>
                } 
@@ -106,14 +106,14 @@ class TopBar extends Component {
         </Modal>
 
         {this.state.buttonVisible && <View style={styles.IconContainer}>
-          {!this.props.screenProps.isLoggedIn &&  <Text>Login</Text>}
+          {!this.props.isLoggedIn &&  <Text>Login</Text>}
          
           <TouchableHighlight 
             onPress={() => {this.setModalVisible(true)
           }}>
           <Icon name="feather" size={40} color="#4F8EF7" style={styles.icon} />
           </TouchableHighlight>
-          {!this.props.screenProps.isLoggedIn &&  <Text>Signup</Text>}
+          {!this.props.isLoggedIn &&  <Text>Signup</Text>}
   
         </View> }
 
@@ -121,5 +121,17 @@ class TopBar extends Component {
     );
   }
 }
+const mapStateToProps = (state) => ({
+  isLoggedIn: state.user.isLoggedIn
+
+})
+
+const mapDispatchToProps = (dispatch) => ({
+  handleIsLoggedIn: () => {
+    dispatch(logOut());
+  }
+})
+
+TopBar = connect(mapStateToProps, mapDispatchToProps)(TopBar)
 
 export default TopBar

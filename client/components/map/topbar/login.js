@@ -1,4 +1,6 @@
 import React, { Component } from 'react';
+import { connect } from 'react-redux'
+import { logIn } from '../../../actions/actions'
 import { Text, TextInput, View, TouchableHighlight, AlertIOS} from 'react-native';
 import styles from '../../../styles/styles.js';
 import Icon from 'react-native-vector-icons/Entypo';
@@ -19,27 +21,7 @@ class Login extends Component {
     this.onLoginPressed = (event) => {
       this.login();
     }
-    this.login = () => {
-      fetch(`${config.url}/users/sessions/create`, {
-        method: "POST",
-        headers: {
-          'Accept': 'application/json',
-          'Content-Type': 'application/json'
-        },
-        body: JSON.stringify({
-          email: this.state.email,
-          password: this.state.password,
-        })
-      })
-        .then((response) => response.json())
-        .then((responseData) => {
-          this.props.screenProps.methods.updateToken(responseData.id_token);
-          AlertIOS.alert("Login Success!")
-          this.props.handleIsLoggedIn();
-          this.props.screenProps.user.email = this.state.email;
-        })
-        .done();
-    }
+    
   }
 
   render() {
@@ -62,8 +44,8 @@ class Login extends Component {
             placeholder='password'/>
           <TouchableHighlight 
             style={styles.button}
-            underlayColor='#99d9f4'
-            onPress={this.onLoginPressed}>
+            underlayColor='#99d9f4'  
+            onPress={this.props.handleIsLoggedIn(this.state.email, this.state.password)}>
             <Text style={styles.buttonText}>Go</Text>
           </TouchableHighlight>
         </View>  
@@ -71,6 +53,18 @@ class Login extends Component {
     )
   }  
 }
+
+const mapStateToProps = (state) => ({
+
+})
+
+const mapDispatchToProps = (dispatch) => ({
+  handleIsLoggedIn: (email, password) => {
+    dispatch(logIn(email, password));
+  }
+})
+
+Login = connect(mapStateToProps, mapDispatchToProps)(Login)
 
 export default Login;  
 
