@@ -22,17 +22,17 @@ class TopBar extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      modalVisible: false, //is the modal visible?
-      buttonVisible: true, //is the buttion for calling the modal visible?
+      modalVisible: false, // is the modal visible?
+      buttonVisible: true, // is the buttion for calling the modal visible?
       selectedIndex: 0,
     }
 
     this.setModalVisible = (visible) => { //hide modal and button
       this.setState({modalVisible: visible, buttonVisible: !visible});
-    }
+    };
 
     this.checkRestricted = async () => {
-      let DEMO_TOKEN = await AsyncStorage.getItem('id_token');
+      const DEMO_TOKEN = await AsyncStorage.getItem('id_token');
       fetch(`${config.url}/users/all`, {
         method: "GET",
         headers: {
@@ -60,14 +60,17 @@ class TopBar extends Component {
   render() {
     return (
       <View style={styles.container}>
-     
-        <Modal //the modal component
-          animationType={"fade"}
-          transparent={true}
+        <Modal // the modal component
+          animationType={'fade'}
+          transparent
           visible={this.state.modalVisible}
-          onRequestClose={() => {this.setModalVisible(false)}}
+          onRequestClose={() => this.setModalVisible(false)}
+        >
+          <TouchableWithoutFeedback
+            onPress={
+              () => this.setModalVisible(!this.state.modalVisible)
+            }
           >
-          <TouchableWithoutFeedback onPress={() => this.setModalVisible(!this.state.modalVisible) }> 
             <View style={styles.loginModal}>
               <TouchableWithoutFeedback>
                 <View style={styles.loginModalInner}>
@@ -98,10 +101,9 @@ class TopBar extends Component {
                   } 
                 </View>
                } 
-
                 </View>
               </TouchableWithoutFeedback>
-            </View>    
+            </View>
           </TouchableWithoutFeedback>
         </Modal>
 
@@ -114,9 +116,21 @@ class TopBar extends Component {
           <Icon name="feather" size={40} color="#4F8EF7" style={styles.icon} />
           </TouchableHighlight>
           {!this.props.isLoggedIn &&  <Text>Signup</Text>}
-  
         </View> }
-
+        <TouchableHighlight
+          onPress={
+            () => this.checkRestricted()
+          }
+        >
+          <Icon name="tools" size={40} color="#4F8EF7" style={styles.icon} />
+        </TouchableHighlight>
+        <TouchableHighlight
+          onPress={
+            () => this.logout()
+          }
+        >
+          <Icon name="lock" size={40} color="#4F8EF7" style={styles.icon} />
+        </TouchableHighlight>
       </View>
     );
   }

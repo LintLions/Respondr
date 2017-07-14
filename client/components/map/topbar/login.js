@@ -21,7 +21,7 @@ class Login extends Component {
     this.onLoginPressed = (event) => {
       this.login();
     }
-    
+
   }
 
   render() {

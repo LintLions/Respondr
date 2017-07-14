@@ -8,7 +8,6 @@ import devToolsEnhancer from 'remote-redux-devtools'
 import thunk from 'redux-thunk';
 
 
-
 const store = createStore(
   rootReducer,
   applyMiddleware(thunk)

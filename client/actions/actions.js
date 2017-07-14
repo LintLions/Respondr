@@ -29,16 +29,17 @@ export const logIn = (email, password) => {
     })
       .then((response) => response.json())
       .then((responseData) => {
-        // this.props.screenProps.methods.updateToken(responseData.id_token);
-        console.log('responseData: ', responseData);
-        console.log('responseData.email: ', responseData.email);
-        
-        logInSuccess(responseData);
-        
-        // store.user.email = response.email
-      })
+        if (responseData.user){
+        //responseData
+        // updateToken(responseData.user.token);
+          logInSuccess(responseData);
+          AlertIOS.alert('Login Success!');
+        } else {
+           AlertIOS.alert('Login Failed!', responseData.error);
+          }
+      }).done();        
   }
-}
+}  
 
 export const logInSuccess = (userData) => {
   type: "LOGIN_SUCCESS",

@@ -66,72 +66,65 @@ exports.addUser = function(req, res) { //add user
   dynamicResponder.findOne({where: userScheme.userSearch}).then((user) => {
     if (user){
       return res.status(400).send({error: "A user with that username already exists"});
-    } else{
-//no static users plz
-      dynamicResponder.create({
-        firstName: req.body.fName,
-        lastName: req.body.lName,
-        phone: req.body.phone,
-        organization: req.body.organization,
-        email: req.body.email,
-        password: dynamicResponder.generateHash(req.body.password),
-        public: req.body.public,
-        static: req.body.static,
-        fullName: `${req.body.fName} ${req.body.lName}`
-      }).then(({email})=>{
-        res.status(201).send({
-          id_token: createIdToken(email),
-          access_token: createAccessToken()
-        });
-      }).catch((err)=>{
-        console.error(err + " on line 81");
-        res.sendStatus(500)
-      })
     }
-  }).catch((err)=>{
+// no static users plz
+    dynamicResponder.create({
+      firstName: req.body.fName,
+      lastName: req.body.lName,
+      phone: req.body.phone,
+      organization: req.body.organization,
+      email: req.body.email,
+      password: dynamicResponder.generateHash(req.body.password),
+      public: req.body.public,
+      static: req.body.static,
+      fullName: `${req.body.fName} ${req.body.lName}`,
+      token: createIdToken(req.body.email),
+    }).then((newUser) => {
+      res.status(201).send({
+        newUser,
+        success: true,
+        access_token: createAccessToken(),
+      });
+    }).catch((err) => {
+      console.error(`ERROR during create dynamicResponder => addUser ${err}`);
+      res.status(500).send({ error: 'umm, I asked the server to let you in, but it said nah' });
+    });
+  }).catch((err) => {
     console.log(err);
-    res.sendStatus(500);
-  })
-}
+    res.status(500).send({ error: 'Server doesn\'t feel like looking you up right now, try back later.' });
+  });
+};
 
-exports.addSession =  function(req, res) { //add session
-
-  var userScheme = getUserScheme(req);
-
-  console.log("userScheme is ", userScheme);
-
+exports.addSession = (req, res) => {
+  const userScheme = getUserScheme(req);
+  console.log(`userScheme is ${userScheme}`);
   if (!userScheme.username || !req.body.password) {
     return res.status(400).send({error: "You must send the username and the password"});
   }
 
-  dynamicResponder.findOne({where: userScheme.userSearch}).then((user) => {
+  dynamicResponder.findOne({ where: userScheme.userSearch }).then((user) => {
     if (!user) {
-      return res.status(401).send({error: "The username is incorrect"});
+      return res.status(401).send({ error: 'The username is incorrect' });
     } else if (!bcrypt.compareSync(req.body.password, user.password)) {
-      return res.status(401).send({error: "The username and password don't match"});
-    } else {   
-      res.status(201).send({
-        id_token: createIdToken(user.email),
-        access_token: createAccessToken()
-      });
+      return res.status(401).send({ error: 'The username and password don\'t match' });
     }
-  }) .catch(err => {
+    res.status(201).send({
+      user,
+      access_token: createAccessToken(),
+    });
+  }).catch((err) => {
     console.log(err);
     res.sendStatus(500);
   });
-}
+};
 
-exports.getUserWithToken = function(req, res) {
-  console.log('in get user with token ', req.body.token)
-  dynamicResponder.findOne({where: {token:req.body.token} }).then((user) => {
+exports.getUser = function(req, res) {
+  console.log(req.query);
+  console.log('in get user query is', req.query)
+  dynamicResponder.findOne({ where: req.query }).then((user) => {
     console.log('user is ', user)
     if (user){
-      return res.status(201).send({
-        fullName: user.fullName,
-        email: user.email,
-        phone: user.phone,
-        organization: user.organization
-      });
+      return res.status(201).send(user);
     } else{
       return res.status(400).send({error: "No user with that token_id found"});
     }  

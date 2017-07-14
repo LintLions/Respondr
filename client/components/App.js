@@ -1,19 +1,13 @@
 'use strict';
 import { connect } from 'react-redux';
-import React, { Component } from 'react';
+import React from 'react';
 import {
-  AppRegistry,
-  StyleSheet,
-  Text,
-  View,
-  TouchableHighlight,
-  AsyncStorage
+  AsyncStorage,
 } from 'react-native';
 import {StackNavigator, addNavigationHelpers } from 'react-navigation';
 import MapPage from './map/MapPage';
-import HelpRequest from './map/bottombar/HelpRequest';
-import SignUpPage from './signup/signUpPage'
-import config from './config.js';
+import SignUpPage from './signup/signUpPage';
+import config from './config';
 
 export const Navigator = StackNavigator({
   Home: { screen: MapPage},
@@ -32,5 +26,8 @@ const App = ({ dispatch, nav}) => (
 const mapStateToProps = (state) => ({
   nav: state.nav,
 })
+  // componentDidMount() {
+  //   this.state.methods.getUserWithToken();
+  // }
 
 export default connect(mapStateToProps)(App)
