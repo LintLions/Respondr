@@ -1,5 +1,5 @@
 'use strict';
-
+import { connect } from 'react-redux';
 import React, { Component } from 'react';
 import {
   AppRegistry,
@@ -9,7 +9,7 @@ import {
   TouchableHighlight,
   AsyncStorage
 } from 'react-native';
-import {StackNavigator} from 'react-navigation';
+import {StackNavigator, addNavigationHelpers } from 'react-navigation';
 import MapPage from './map/MapPage';
 import HelpRequest from './map/bottombar/HelpRequest';
 import SignUpPage from './signup/signUpPage'
@@ -70,8 +70,19 @@ class App extends React.Component {
     const props = {user: this.state.user, methods: this.state.methods, beaconExists: this.state.beaconExists, isLoggedIn:this.state.isLoggedIn};
     // StackNavigator **only** accepts a screenProps prop so we're passing
     // initialProps through that.
-    return <Navigator screenProps={props} />; 
+    return <Navigator navigation={addNavigationHelpers({
+      dispatch: this.props.dispatch,
+      state: this.props.nav
+    })} />; 
   }
 }
 
-module.exports = App;
+const mapStateToProps = (state) => ({
+  nav: state.nav,
+  help: state.help,
+})
+
+App = connect(mapStateToProps)(App)
+
+exports.App = App;
+exports.Navigator = Navigator;

@@ -1,5 +1,5 @@
 'use strict';
-
+import { connect } from 'react-redux';
 import React, { Component } from 'react'
 import {
   StyleSheet,
@@ -34,57 +34,81 @@ class MapPage extends Component {
     };
 
     this.getHelp = () => {
-      var options = {
-        enableHighAccuracy: true,
-        timeout: 5000,
-        maximumAge: 0
-      };
-      function success(pos) {
-        var crd = pos.coords;
-        this.setState({
-          beaconCoordinate:{
-            latitude: crd.latitude,
-            longitude: crd.longitude
-          },
-          helpButtonVisible: false,
-        }, function saveBeacon() { 
-            fetch(`${config.url}/beacons`, {
-              method: "POST",
-              headers: {
-                'Accept': 'application/json',
-                'Content-Type': 'application/json'
-              },
-              body: JSON.stringify(this.state.beaconCoordinate)
-            })
-            .then((response) => response.json())
-          }
-        )        
-      }
-
-      function error(err) {
-        console.warn(`ERROR(${err.code}): ${err.message}`);
-      };
-
-      navigator.geolocation.getCurrentPosition(success.bind(this), error, options)
+      store.dispatch('GET_HELP');
+      fetch(`${config.url}/beacons`, {
+        method: "POST",
+        headers: {
+          'Accept': 'application/json',
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(store.getState(User.location))
+      })
     }
-
     this.cancelHelp = () => {
-      let oldBeaconCoordinate = this.state.beaconCoordinate;
-       this.setState({
-        helpButtonVisible: true,
-        beaconCoordinate: null,
-      }, function cancelBeacon() { 
-            fetch(`${config.url}/beacons`, {
-              method: "PUT",
-              headers: {
-                'Accept': 'application/json',
-                'Content-Type': 'application/json'
-              },
-              body: JSON.stringify(oldBeaconCoordinate)
-            })
-            .then((response) => response.json())
-          })
-    } 
+    store.dispatch('CANCEL_HELP');
+    fetch(`${config.url}/beacons`, {
+      method: "PUT",
+      headers: {
+        'Accept': 'application/json',
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify(store.getState(User.location))
+    })
+  }
+//     this.getHelp = () => {
+//       var options = {
+//         enableHighAccuracy: true,
+//         timeout: 5000,
+//         maximumAge: 0
+//       };
+//       function success(pos) {
+//         var crd = pos.coords;
+//         store.dispatch('GET_HELP');
+//         this.setState({
+//           beaconCoordinate:{
+//             latitude: crd.latitude,
+//             longitude: crd.longitude
+//           },
+//           helpButtonVisible: false,
+//         }, function saveBeacon() { 
+//             fetch(`${config.url}/beacons`, {
+//               method: "POST",
+//               headers: {
+//                 'Accept': 'application/json',
+//                 'Content-Type': 'application/json'
+//               },
+//               body: JSON.stringify(this.state.beaconCoordinate)
+//             })
+//             .then((response) => response.json())
+//           }
+//         )        
+//       }
+// //dispatch Get Help Action;
+// // Get Help Action has is beacon bool change reliance on helpButtonVisible to is beacon. 
+//       function error(err) {
+//         console.warn(`ERROR(${err.code}): ${err.message}`);
+//       };
+
+//       navigator.geolocation.getCurrentPosition(success.bind(this), error, options)
+//     }
+
+    // this.cancelHelp = () => {
+    //   let oldBeaconCoordinate = this.state.beaconCoordinate;
+    //    this.setState({
+    //     helpButtonVisible: true,
+    //     beaconCoordinate: null,
+    //   }, function cancelBeacon() { 
+    //         fetch(`${config.url}/beacons`, {
+    //           method: "PUT",
+    //           headers: {
+    //             'Accept': 'application/json',
+    //             'Content-Type': 'application/json'
+    //           },
+    //           body: JSON.stringify(oldBeaconCoordinate)
+    //         })
+    //         .then((response) => response.json())
+    //       })
+    // } 
 
     this.drawRoute = (dest) => { // dest needs to be a string of coordinates (without space)
       const mode = 'walking'; 
@@ -251,4 +275,17 @@ var styles = StyleSheet.create({
   }
 });
 
+const mapStateToProps = (state) => ({
+
+})
+
+const mapDispatchToProps = (dispatch) => ({
+  getHelp: () => {
+    dispatch(getHelp())
+  }
+})
+MapPage = connect(mapDispatchToProps)(MapPage)
 module.exports = MapPage;
+
+
+

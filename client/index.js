@@ -1,16 +1,24 @@
-import React from 'react';
-import ReactDOM from 'react-dom';
-import { Provider } from 'react-redux';
-import { createStore, applyMiddleware } from 'redux';
-import ReduxPromise from 'redux-promise';
-import { Router, hashHistory } from 'react-router';
-import App from './components/app.js';
-import reducers from './reducers/index.js';
+import React from 'react'
+import { render } from 'react-dom'
+import { createStore } from 'redux'
+import { Provider } from 'react-redux'
+import { App } from './components/App'
+import MapPage from '/components/MapPage'
+import { connect } from 'react-redux';
+import rootReducer from './reducers/root'
+import devToolsEnhancer from 'remote-redux-devtools'
 
-const createStoreWithMiddleware = applyMiddleware(ReduxPromise)(createStore);
+const store = createStore(
+  rootReducer
+);
+// App = connect()(App);
 
 ReactDOM.render(
-  <Provider store={createStoreWithMiddleware(reducers)}>
+  <Provider store={store}>
     <App />
   </Provider>,
   document.querySelector('.container'));
+)
+
+
+export default store
