@@ -1,23 +1,15 @@
-'use strict';
-
-import React, { Component } from 'react';
+import React from 'react';
 import {
-  AppRegistry,
-  StyleSheet,
-  Text,
-  View,
-  TouchableHighlight,
-  AsyncStorage
+  AsyncStorage,
 } from 'react-native';
-import {StackNavigator} from 'react-navigation';
+import { StackNavigator } from 'react-navigation';
 import MapPage from './map/MapPage';
-import HelpRequest from './map/bottombar/HelpRequest';
-import SignUpPage from './signup/signUpPage'
-import config from './config.js';
+import SignUpPage from './signup/signUpPage';
+import config from './config';
 
 const Navigator = StackNavigator({
-  Home: { screen: MapPage},
-  Signup: {screen: SignUpPage }
+  Home: { screen: MapPage },
+  Signup: { screen: SignUpPage },
 });
 
 class App extends React.Component {
@@ -32,45 +24,51 @@ class App extends React.Component {
           try {
             await AsyncStorage.setItem('id_token', value);
           } catch (error) {
-            console.log('AsyncStorage error: ' + error.message);
+            console.log(`AsyncStorage error: ${error.message}`);
           }
         },
-        getUserWithToken: async() => {
+        getUserWithToken: async () => {
           try {
             const value = await AsyncStorage.getItem('id_token');
-            console.log('value is ', value)
-            if (value !== null){
+            console.log('value is ', value);
+            if (value !== null) {
               return fetch(`${config.url}/users/getUser/`)
-                .then((response) => response.json())
+                .then(response => response.json())
                 .then((responseJson) => {
-                console.log('response from getUserWithToken ', responseJson);
-                this.setState({
-                  user:{
-                    fullName: responseJson.fullName,
-                    email: responseJson.email
-                   }, 
-                  isLoggedIn: true
-                })
-                
-              })
-            }      
+                  console.log('response from getUserWithToken ', responseJson);
+                  this.setState({
+                    user: {
+                      fullName: responseJson.fullName,
+                      email: responseJson.email,
+                    },
+                    isLoggedIn: true,
+                  });
+                });
+            }
+            return value;
           } catch (error) {
-            console.error("error getting user with id_token", error);
+            console.error(`error getting user with id_token ${error}`);
+            return error;
           }
         },
         handleIsLoggedIn: () => {
           this.setState({
-            isLoggedIn: !(this.state.isLoggedIn)
-          })
-        }
-      }
-    }
-  }   
+            isLoggedIn: !(this.state.isLoggedIn),
+          });
+        },
+      },
+    };
+  }
   render() {
-    const props = {user: this.state.user, methods: this.state.methods, beaconExists: this.state.beaconExists, isLoggedIn:this.state.isLoggedIn};
+    const props = {
+      user: this.state.user,
+      methods: this.state.methods,
+      beaconExists: this.state.beaconExists,
+      isLoggedIn: this.state.isLoggedIn,
+    };
     // StackNavigator **only** accepts a screenProps prop so we're passing
     // initialProps through that.
-    return <Navigator screenProps={props} />; 
+    return <Navigator screenProps={props} />;
   }
 }
 
