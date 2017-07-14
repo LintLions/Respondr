@@ -6,7 +6,6 @@ const errorhandler = require('errorhandler');
 require('node-env-file')(path.join(__dirname, '/.env'));
 const users = require('./server/routers/users');
 const beaconsRouter = require('./server/routers/beaconsRouter');
-const db = require('./server/db/db.js');
 
 const app = express();
 module.exports = app;

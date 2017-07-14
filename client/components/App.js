@@ -17,6 +17,7 @@ class App extends React.Component {
     super(props);
     this.state = {
       user: {},
+      userLocation: '',
       isLoggedIn: false,
       beaconExists: false,
       methods: {
@@ -58,9 +59,20 @@ class App extends React.Component {
       },
     };
   }
+  componentWillMount() {
+    const locChange = ({ coords }) => {
+      this.setState({ userLocation: [coords.latitude, coords.longitude] });
+    };
+    navigator.geolocation.watchPosition(locChange, { timeout: 10 * 1000 });
+  }
   componentDidMount() {
     this.state.methods.getUserWithToken();
-    this.socket = SocketIOClient(config.url);
+    this.socket = SocketIOClient(config.url, {
+      query: {
+        token: this.state.user.token,
+        location: this.state.userLocation,
+      },
+    });
   }
   render() {
     const props = {
