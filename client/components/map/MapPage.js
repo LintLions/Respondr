@@ -137,8 +137,8 @@ var styles = StyleSheet.create({
 });
 
 const mapStateToProps = (state) => ({
-  isLoggedIn: state.user.isLoggedIn,
-  userEmail: state.user.email,
+  isLoggedIn: state.responder.isLoggedIn,
+  userEmail: state.responder.email,
   isBeacon: state.user.isBeacon,
 })
 

@@ -2,6 +2,13 @@ import config from '../components/config.js';
 import {AlertIOS, AsyncStorage} from 'react-native';
 import {updateToken} from '../components/helpers.js';
 
+export const getCurrentLocation = (userData) => {
+  return {
+    type: 'GET_CURRENT_LOCATION',
+    userData
+  };
+};
+
 export const getHelp = () => {
   return {
     type: 'GET_HELP',

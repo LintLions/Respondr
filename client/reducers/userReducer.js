@@ -1,29 +1,14 @@
 const userReducer = (state = {
-    isBeacon: false,
-    isLoggedIn: false,
-    location: [],
-    email: '',
-    fName:'',
-    lName:'',
-    password: '',
-    phone: '',
-    organization: '',
-    privacy: '',
-    mobility: '',
-    city: '',
-    state: '',
-    zip: '',
-    address: ''  
+    currentLocation: [],
+    isBeacon: false
 }, action) => {
   switch (action.type) {
     case 'GET_HELP':
       return { ...state, isBeacon:true };
     case 'CANCEL_HELP':
       return { ...state, isBeacon:false };
-    case 'LOGIN_SUCCESS':
-      return { ...state, email: action.userData.email, fName: action.userData.fName, isLoggedIn: true};
-    case 'LOGOUT':
-      return { ...state, isLoggedIn:false };
+    case 'GET_CURRENT_LOCATION':
+      return { ...state, currentLocation: [action.userData.latitude, action.userData.longitude]}
     default:
       return state;
   }
