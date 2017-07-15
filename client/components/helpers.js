@@ -1,5 +1,7 @@
 'user strict';
 
+import {AsyncStorage} from 'react-native';
+
 exports.decode = (t, e) => {
   // transforms something like this geocFltrhVvDsEtA}ApSsVrDaEvAcBSYOS_@...
   // to an array of coordinates
@@ -42,3 +44,16 @@ exports.decode = (t, e) => {
   }
   return d.map(time => ({ latitude: time[0], longitude: time[1] }));
 };
+
+exports.updateToken =  async (value) => {
+  try {
+    await AsyncStorage.setItem('id_token', value);
+  } catch (error) {
+    console.log(`AsyncStorage error: ${error.message}`);
+  }
+}
+
+exports.getToken =  async () => AsyncStorage.getItem('id_token')
+
+
+

@@ -10,9 +10,12 @@ const users = [{
   password: 'gonto'
 }];
 
-router.get('/', controller.getUser);
-
+router.get('/', function (req, res) {
+  res.send('users route')
+})
 router.get('/all', auth.check, auth.restrict('full_access'), controller.getUsers)
+
+router.get('/getUser', controller.getUserWithToken);
 
 router.post('', controller.addUser);
 

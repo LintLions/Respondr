@@ -1,3 +1,4 @@
+import Index from './client/index';
 /**
  * Sample React Native App
  * https://github.com/facebook/react-native
@@ -7,4 +8,4 @@
 import { AppRegistry } from 'react-native';
 import App from './client/components/App';
 
-AppRegistry.registerComponent('iosBeacon', () => App);
+AppRegistry.registerComponent('iosBeacon', () => Index);
