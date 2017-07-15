@@ -1,5 +1,7 @@
 import React from 'react'
+
 import { createStore, applyMiddleware, compose } from 'redux'
+
 import { Provider } from 'react-redux'
 import App from './components/App'
 import { connect } from 'react-redux';
@@ -13,6 +15,7 @@ const composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;
   const store = createStore(rootReducer, composeEnhancers(
   applyMiddleware(thunk)
 ));
+
 // App = connect()(App);
 class Index extends React.Component {
   constructor(props) {
