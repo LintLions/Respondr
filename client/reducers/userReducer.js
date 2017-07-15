@@ -21,9 +21,9 @@ const userReducer = (state = {
     case 'CANCEL_HELP':
       return { ...state, isBeacon:false };
     case 'LOGIN_SUCCESS':
-      return { ...state, email:action.userData.email, fName:action.userData.fName};
+      return { ...state, email: action.userData.email, fName: action.userData.fName, isLoggedIn: true};
     case 'LOGOUT':
-      return { ...state, isLoggedIn:false };  
+      return { ...state, isLoggedIn:false };
     default:
       return state;
   }

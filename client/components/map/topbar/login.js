@@ -5,6 +5,7 @@ import { Text, TextInput, View, TouchableHighlight, AlertIOS} from 'react-native
 import styles from '../../../styles/styles.js';
 import Icon from 'react-native-vector-icons/Entypo';
 import config from '../../config.js';
+
 class Login extends Component {
   constructor(props) {
     super(props);
@@ -45,7 +46,7 @@ class Login extends Component {
           <TouchableHighlight 
             style={styles.button}
             underlayColor='#99d9f4'  
-            onPress={this.props.handleIsLoggedIn(this.state.email, this.state.password)}>
+            onPress={() => this.props.handleIsLoggedIn(this.state.email, this.state.password)}>
             <Text style={styles.buttonText}>Go</Text>
           </TouchableHighlight>
         </View>  

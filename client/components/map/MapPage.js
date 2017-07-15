@@ -34,10 +34,10 @@ class MapPage extends Component {
           style={styles.map}
           showsUserLocation={true}
           followsUserLocation={true}
-        >
+        >{this.props.isBeacon &&
           <MapView.Marker
             // coordinate={this.state.beaconCoordinate}
-            />
+            />}
           <MapView.Polyline 
             // coordinates={this.state.coords}
             strokeWidth={4}
@@ -54,7 +54,7 @@ class MapPage extends Component {
           }
         </View>
         <View>
-        <Text> { this.props.userEmail } </Text>
+        <Text> { this.props.userEmail } hello? </Text>
           <HelpButton/>
         
 
@@ -138,8 +138,8 @@ var styles = StyleSheet.create({
 
 const mapStateToProps = (state) => ({
   isLoggedIn: state.user.isLoggedIn,
-  userEmail: state.user.email
-
+  userEmail: state.user.email,
+  isBeacon: state.user.isBeacon,
 })
 
 MapPage = connect(mapStateToProps)(MapPage)

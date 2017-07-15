@@ -1,4 +1,6 @@
 import config from '../components/config.js';
+import {AlertIOS, AsyncStorage} from 'react-native';
+import {updateToken} from '../components/helpers.js';
 
 export const getHelp = () => {
   return {
@@ -29,10 +31,10 @@ export const logIn = (email, password) => {
     })
       .then((response) => response.json())
       .then((responseData) => {
-        if (responseData.user){
-        //responseData
-        // updateToken(responseData.user.token);
-          logInSuccess(responseData);
+        if (responseData) {
+          console.log('responseData.user in LoginAction', responseData.user)
+          updateToken(responseData.user.token);
+          dispatch(logInSuccess(responseData.user));
           AlertIOS.alert('Login Success!');
         } else {
            AlertIOS.alert('Login Failed!', responseData.error);
@@ -42,14 +44,36 @@ export const logIn = (email, password) => {
 }  
 
 export const logInSuccess = (userData) => {
+  console.log('userData ', userData);
+  return {
   type: "LOGIN_SUCCESS",
   userData
+}
 }
 
 
 export const logOut = () => {
   return {
     type: 'LOGOUT',
+  }
+}
+
+export const getUserWithToken =  async () => {
+  try {
+    const value = await AsyncStorage.getItem('id_token');
+    console.log('value in getUserWithToken is ', value);
+    if (value !== null) {
+      fetch(`${config.url}/users?token=${value}`)
+        .then(response => response.json())
+        .then((responseJson) => {
+          console.log('response from getUserWithToken ', responseJson);
+          dispatch(logInSuccess(responseJson))
+        });
+    }
+    return value;
+  } catch (error) {
+    console.error(`error getting user with id_token ${error}`);
+    return error;
   }
 }
 

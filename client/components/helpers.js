@@ -1,5 +1,7 @@
 'user strict';
 
+import {AsyncStorage} from 'react-native';
+
 exports.decode = (t, e) => {
   // transforms something like this geocFltrhVvDsEtA}ApSsVrDaEvAcBSYOS_@...
   // to an array of coordinates
@@ -43,40 +45,15 @@ exports.decode = (t, e) => {
   return d.map(time => ({ latitude: time[0], longitude: time[1] }));
 };
 
-// methods: {
-//         updateToken: async (value) => {
-//           try {
-//             await AsyncStorage.setItem('id_token', value);
-//           } catch (error) {
-//             console.log(`AsyncStorage error: ${error.message}`);
-//           }
-//         },
-//         updateState: newState => this.setState(newState),
-//         getToken: async () => AsyncStorage.getItem('id_token'),
-//         getUserWithToken: async () => {
-//           try {
-//             const value = await AsyncStorage.getItem('id_token');
-//             console.log('value is ', value);
-//             if (value !== null) {
-//               fetch(`${config.url}/users?token=${value}`)
-//                 .then(response => response.json())
-//                 .then((responseJson) => {
-//                   console.log('response from getUserWithToken ', responseJson);
-//                   this.setState({
-//                     user: responseJson,
-//                     isLoggedIn: true,
-//                   });
-//                 });
-//             }
-//             return value;
-//           } catch (error) {
-//             console.error(`error getting user with id_token ${error}`);
-//             return error;
-//           }
-//         },
-//         handleIsLoggedIn: () => {
-//           this.setState({
-//             isLoggedIn: !(this.state.isLoggedIn),
-//           });
-//         },
+exports.updateToken =  async (value) => {
+  try {
+    await AsyncStorage.setItem('id_token', value);
+  } catch (error) {
+    console.log(`AsyncStorage error: ${error.message}`);
+  }
+}
+
+exports.getToken =  async () => AsyncStorage.getItem('id_token')
+
+
 
