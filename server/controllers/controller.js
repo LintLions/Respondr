@@ -111,6 +111,7 @@ exports.addSession =  function(req, res) { //add session
       return res.status(401).send({error: "The username and password don't match"});
     } else {   
       res.status(201).send({
+        user,
         id_token: createIdToken(user.email),
         access_token: createAccessToken()
       });
@@ -121,22 +122,24 @@ exports.addSession =  function(req, res) { //add session
   });
 }
 
-exports.getUserWithToken = function(req, res) {
-  console.log('in get user with token ', req.body.token)
-  dynamicResponder.findOne({where: {token:req.body.token} }).then((user) => {
-    console.log('user is ', user)
-    if (user){
-      return res.status(201).send({
-        fullName: user.fullName,
-        email: user.email,
-        phone: user.phone,
-        organization: user.organization
-      });
-    } else{
-      return res.status(400).send({error: "No user with that token_id found"});
-    }  
-  })
-}  
+exports.getUser = (req, res) => {
+  const socket = req.query.socket;
+  const query = delete req.query.socket && req.query;
+  dynamicResponder.findOne({ where: query })
+    .then((user) => {
+      if (user) {
+        return user.update({ socket })
+          .then(() => res.status(201).send(user))
+          .catch(() => res.status(500).send({
+            error: 'uhh, the server found you and then ran away... fast!',
+          }));
+      }
+      return res.status(400).send({ error: 'No user with that token_id found' });
+    })
+    .catch(() => res.status(500).send({
+      error: 'Looks like the DB gots beef. Come back later with Chicken.',
+    }));
+};
 
 exports.getUsers = function(req, res) {
   dynamicResponder.findAll({})

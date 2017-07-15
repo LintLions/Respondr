@@ -1,21 +1,16 @@
 'use strict';
-
-import React, { Component } from 'react';
+import { connect } from 'react-redux';
+import React from 'react';
 import {
-  AppRegistry,
-  StyleSheet,
-  Text,
-  View,
-  TouchableHighlight,
-  AsyncStorage
+  AsyncStorage,
 } from 'react-native';
-import {StackNavigator} from 'react-navigation';
+import {StackNavigator, addNavigationHelpers } from 'react-navigation';
 import MapPage from './map/MapPage';
-import HelpRequest from './map/bottombar/HelpRequest';
-import SignUpPage from './signup/signUpPage'
-import config from './config.js';
+import SignUpPage from './signup/signUpPage';
+import config from './config';
+import { getUserWithToken } from '../actions/actions.js';
 
-const Navigator = StackNavigator({
+export const Navigator = StackNavigator({
   Home: { screen: MapPage},
   Signup: {screen: SignUpPage }
 });
@@ -23,55 +18,32 @@ const Navigator = StackNavigator({
 class App extends React.Component {
   constructor(props) {
     super(props);
-    this.state = {
-      user: {},
-      isLoggedIn: false,
-      beaconExists: false,
-      methods: {
-        updateToken: async (value) => {
-          try {
-            await AsyncStorage.setItem('id_token', value);
-          } catch (error) {
-            console.log('AsyncStorage error: ' + error.message);
-          }
-        },
-        getUserWithToken: async() => {
-          try {
-            const value = await AsyncStorage.getItem('id_token');
-            console.log('value is ', value)
-            if (value !== null){
-              return fetch(`${config.url}/users/getUser/`)
-                .then((response) => response.json())
-                .then((responseJson) => {
-                console.log('response from getUserWithToken ', responseJson);
-                this.setState({
-                  user:{
-                    fullName: responseJson.fullName,
-                    email: responseJson.email
-                   }, 
-                  isLoggedIn: true
-                })
-                
-              })
-            }      
-          } catch (error) {
-            console.error("error getting user with id_token", error);
-          }
-        },
-        handleIsLoggedIn: () => {
-          this.setState({
-            isLoggedIn: !(this.state.isLoggedIn)
-          })
-        }
-      }
-    }
-  }   
-  render() {
-    const props = {user: this.state.user, methods: this.state.methods, beaconExists: this.state.beaconExists, isLoggedIn:this.state.isLoggedIn};
-    // StackNavigator **only** accepts a screenProps prop so we're passing
-    // initialProps through that.
-    return <Navigator screenProps={props} />; 
   }
+  componentWillMount() {
+    this.props.getUserWithToken()
+  }
+
+  render() {
+    return (
+      <Navigator navigation={addNavigationHelpers({
+        dispatch: this.props.dispatch,
+        state: this.props.nav
+        }
+        )}
+      /> 
+    )
+  }
+
 }
 
-module.exports = App;
+const mapStateToProps = (state) => ({
+  nav: state.nav,
+})
+
+const mapDispatchToProps = (dispatch) => ({
+  getUserWithToken: () => {
+    dispatch(getUserWithToken());
+  }
+})
+
+export default connect(mapStateToProps, mapDispatchToProps)(App)

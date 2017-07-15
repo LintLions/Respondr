@@ -1,16 +1,29 @@
-import React from 'react';
-import ReactDOM from 'react-dom';
-import { Provider } from 'react-redux';
-import { createStore, applyMiddleware } from 'redux';
-import ReduxPromise from 'redux-promise';
-import { Router, hashHistory } from 'react-router';
-import App from './components/app.js';
-import reducers from './reducers/index.js';
+import React from 'react'
+import { createStore, applyMiddleware } from 'redux'
+import { Provider } from 'react-redux'
+import App from './components/App'
+import { connect } from 'react-redux';
+import rootReducer from './reducers/root'
+import devToolsEnhancer from 'remote-redux-devtools'
+import thunk from 'redux-thunk';
 
-const createStoreWithMiddleware = applyMiddleware(ReduxPromise)(createStore);
 
-ReactDOM.render(
-  <Provider store={createStoreWithMiddleware(reducers)}>
-    <App />
-  </Provider>,
-  document.querySelector('.container'));
+const store = createStore(
+  rootReducer,
+  applyMiddleware(thunk)
+);
+// App = connect()(App);
+class Index extends React.Component {
+  constructor(props) {
+    super(props)
+  }
+  render() {
+    return (
+       <Provider store={store}>
+        <App />
+      </Provider> 
+    )
+  }
+}
+
+export default Index
