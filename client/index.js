@@ -4,11 +4,11 @@ import { Provider } from 'react-redux'
 import App from './components/App'
 import { connect } from 'react-redux';
 import rootReducer from './reducers/root'
-import devToolsEnhancer from 'remote-redux-devtools'
+import {composeWithDevTools} from 'remote-redux-devtools'
 import thunk from 'redux-thunk';
 
 
-const composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;
+const composeEnhancers = composeWithDevTools({ realtime: true, port: 8082 })
 
   const store = createStore(rootReducer, composeEnhancers(
   applyMiddleware(thunk)
