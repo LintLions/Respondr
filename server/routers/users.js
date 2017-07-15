@@ -10,7 +10,7 @@ const users = [{
   password: 'gonto'
 }];
 
-router.get('/', controller.getUser);
+router.get('/', controller.getUser)
 
 router.get('/all', auth.check, auth.restrict('full_access'), controller.getUsers)
 

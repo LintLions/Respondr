@@ -1,15 +1,33 @@
-import React from 'react';
-import ReactDOM from 'react-dom';
-import { Provider } from 'react-redux';
-import { createStore, applyMiddleware } from 'redux';
-import ReduxPromise from 'redux-promise';
-import App from './components/App';
-import reducers from './reducers/root';
+import React from 'react'
 
-const createStoreWithMiddleware = applyMiddleware(ReduxPromise)(createStore);
+import { createStore, applyMiddleware, compose } from 'redux'
 
-ReactDOM.render(
-  <Provider store={createStoreWithMiddleware(reducers)}>
-    <App />
-  </Provider>,
-  document.querySelector('.container'));
+import { Provider } from 'react-redux'
+import App from './components/App'
+import { connect } from 'react-redux';
+import rootReducer from './reducers/root'
+import {composeWithDevTools} from 'remote-redux-devtools'
+import thunk from 'redux-thunk';
+
+
+const composeEnhancers = composeWithDevTools({ realtime: true, port: 8082 })
+
+export const store = createStore(rootReducer, composeEnhancers(
+  applyMiddleware(thunk)
+));
+
+// App = connect()(App);
+class Index extends React.Component {
+  constructor(props) {
+    super(props)
+  }
+  render() {
+    return (
+       <Provider store={store}>
+        <App />
+      </Provider> 
+    )
+  }
+}
+
+export default Index;

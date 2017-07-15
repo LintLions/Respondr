@@ -12,6 +12,17 @@ websocket.on('connection', (socket) => {
   beacon.create({
     socket: socket.id,
   });
+  socket.on('updateUser', (query) => {
+    dynamicResponder.find({ where: query })
+      .then((responder) => {
+        if (responder) {
+          responder.update({ socket: socket.id })
+            .then(updated => socket.emit('updateUser', updated));
+        } else {
+          socket.emit('updateUser', { socket: socket.id });
+        }
+      });
+  });
 
   socket.on('disconnect', () => {
     // check if socket is in a beacon session
@@ -50,10 +61,6 @@ websocket.on('connection', (socket) => {
           console.log('no responder for gethelp');
         }
       });
-  });
-  socket.on('updateUser', (token) => {
-    dynamicResponder.find({ where: { token } })
-      .then(responder => responder.update({ socket: socket.id }));
   });
 });
 

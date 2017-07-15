@@ -66,6 +66,27 @@ exports.addUser = function(req, res) { //add user
   dynamicResponder.findOne({where: userScheme.userSearch}).then((user) => {
     if (user){
       return res.status(400).send({error: "A user with that username already exists"});
+    } else{
+//no static users plz
+      dynamicResponder.create({
+        firstName: req.body.fName,
+        lastName: req.body.lName,
+        phone: req.body.phone,
+        organization: req.body.organization,
+        email: req.body.email,
+        password: dynamicResponder.generateHash(req.body.password),
+        public: req.body.public,
+        static: req.body.static,
+        fullName: `${req.body.fName} ${req.body.lName}`
+      }).then(({email})=>{
+        res.status(201).send({
+          id_token: createIdToken(email),
+          access_token: createAccessToken()
+        });
+      }).catch((err)=>{
+        console.error(err + " on line 81");
+        res.sendStatus(500)
+      })
     }
 // no static users plz
     dynamicResponder.create({
@@ -92,9 +113,10 @@ exports.addUser = function(req, res) { //add user
     });
   }).catch((err) => {
     console.log(err);
-    res.status(500).send({ error: 'Server doesn\'t feel like looking you up right now, try back later.' });
-  });
-};
+    res.sendStatus(500);
+  })
+}
+
 
 exports.addSession = (req, res) => {
   const userScheme = getUserScheme(req);
@@ -102,11 +124,17 @@ exports.addSession = (req, res) => {
     return res.status(400).send({error: "You must send the username and the password"});
   }
 
-  dynamicResponder.findOne({ where: userScheme.userSearch }).then((user) => {
+  dynamicResponder.findOne({where: userScheme.userSearch}).then((user) => {
     if (!user) {
-      return res.status(401).send({ error: 'The username is incorrect' });
+      return res.status(401).send({error: "The username is incorrect"});
     } else if (!bcrypt.compareSync(req.body.password, user.password)) {
-      return res.status(401).send({ error: 'The username and password don\'t match' });
+      return res.status(401).send({error: "The username and password don't match"});
+    } else {   
+      res.status(201).send({
+        user,
+        id_token: createIdToken(user.email),
+        access_token: createAccessToken()
+      });
     }
     user.update({ socket: req.body.socket })
     .then(() => {
@@ -119,7 +147,7 @@ exports.addSession = (req, res) => {
     console.log(err);
     res.sendStatus(500);
   });
-};
+}
 
 exports.getUser = (req, res) => {
   const socket = req.query.socket;
