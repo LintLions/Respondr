@@ -20,8 +20,8 @@ class App extends React.Component {
     super(props);
   }
   componentWillMount() {
-    getUserWithToken();
-    navigator.geolocation.getCurrentPosition(
+    this.props.getUserWithToken()
+    navigator.geolocation.getCurrentPosition( //this will need to be refactored into redux updating the userReducer (not the current userReducer, the new one Jenny is writing)
       (position) => {
     console.log(position)
    })
@@ -44,4 +44,10 @@ const mapStateToProps = (state) => ({
   nav: state.nav,
 })
 
-export default connect(mapStateToProps)(App)
+const mapDispatchToProps = (dispatch) => ({
+  getUserWithToken: () => {
+    dispatch(getUserWithToken());
+  }
+})
+
+export default connect(mapStateToProps, mapDispatchToProps)(App)
