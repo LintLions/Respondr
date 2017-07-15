@@ -7,7 +7,8 @@ import {
   Text,
   Image
 } from 'react-native';
-import styles from '../../styles/signupStyles';
+// import styles from '../../styles/signupStyles';
+import styles from '../../styles/styles';
 import Icon from 'react-native-vector-icons/Entypo';
 
 

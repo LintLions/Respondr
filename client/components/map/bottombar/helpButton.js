@@ -14,6 +14,8 @@ import {
 } from 'react-native';
 import MapView from 'react-native-maps';
 
+import styles from '../../../styles/styles';
+
 class HelpButton extends Component {
   constructor(props) {
     super(props);
@@ -46,7 +48,7 @@ class HelpButton extends Component {
   }    
 }
 
-var styles = StyleSheet.create({
+var styleSheet = StyleSheet.create({
   container: {
     flex: 1
   },

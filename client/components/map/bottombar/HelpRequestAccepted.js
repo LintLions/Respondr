@@ -7,12 +7,8 @@ import {
   TouchableHighlight,
   StyleSheet
 } from 'react-native';
-import MapView from 'react-native-maps';
 
-import AngelStatusPage from './AngelStatusPage';
-
-// props received: userName, beaconLocation
-// props to pass down: yes/no to help request 
+import styles from '../../../styles/styles';
 
 class HelpRequestAccepted extends Component {
   constructor(props) {
@@ -24,7 +20,7 @@ class HelpRequestAccepted extends Component {
 
   render() {
     console.log('+++HelpRequestAccepted.js');
-
+    
     return (
       <View style={styles.container}>
       
@@ -47,7 +43,7 @@ class HelpRequestAccepted extends Component {
   }
 }
 
-var styles = StyleSheet.create({
+var styleSheet = StyleSheet.create({
   container: {
     flex: 1
   },

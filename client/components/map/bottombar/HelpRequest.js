@@ -12,8 +12,7 @@ import MapView from 'react-native-maps';
 import HelpRequestAccepted from './HelpRequestAccepted';
 import AngelStatusPage from './AngelStatusPage';
 
-// props received: username, beaconLocation
-// props to pass down: yes/no to help request 
+import styles from '../../../styles/styles';
 
 class HelpRequest extends Component {
   constructor(props) {
@@ -21,7 +20,6 @@ class HelpRequest extends Component {
     this.state = {
       
     };
-    
   }
 
   render() {
@@ -56,7 +54,7 @@ class HelpRequest extends Component {
   }
 }
 
-var styles = StyleSheet.create({
+var styleSheet = StyleSheet.create({
   container: {
     flex: 1
   },

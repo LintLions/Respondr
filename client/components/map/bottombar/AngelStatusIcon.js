@@ -9,6 +9,8 @@ import {
   Switch
 } from 'react-native';
 
+import styles from '../../../styles/styles';
+
 class AngelStatusIcon extends React.Component {
   constructor(props) {
     super(props)
@@ -34,7 +36,7 @@ class AngelStatusIcon extends React.Component {
   }
 }
 
-var styles = StyleSheet.create({
+var styleSheet = StyleSheet.create({
   toggleIcon: {
     padding: 20
   }
