@@ -66,7 +66,6 @@ class BottomBarAngel extends Component {
         Page = <AngelStatusPage switchIsOn={this.props.switchIsOn} handleSwitchIsOn={this.props.handleSwitchIsOn} username={this.props.username} />
       }
     }
-    
     return (
       <View style={styles.container}>
         {Page}
