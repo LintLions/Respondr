@@ -79,11 +79,11 @@ class TopBar extends Component {
                     }}
                   />
                   {this.state.selectedIndex === 0 &&  //LOGIN
-                    <Login />
+                    <Login setModalVisible={this.setModalVisible} />
                   } 
              
                   {this.state.selectedIndex === 1 &&  //SIGNUP
-                    <Signup />
+                    <Signup setModalVisible={this.setModalVisible} />
                   } 
                 </View>
                } 

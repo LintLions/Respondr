@@ -1,20 +1,34 @@
 import { Navigator } from '../components/App.js';
 
-const initialState = Navigator.router.getStateForAction(Navigator.router.getActionForPathAndParams('Home'));
-const secondAction = Navigator.router.getActionForPathAndParams('Signup');
 
+// const firstAction = Navigator.router.getActionForPathAndParams('Home');
+// const secondAction = Navigator.router.getActionForPathAndParams('Signup');
+// const initialNavState = Navigator.router.getStateForAction(
+//   firstAction,
+//   secondAction
+// );
+const firstAction = Navigator.router.getActionForPathAndParams('Home');
+const secondAction = Navigator.router.getActionForPathAndParams('Signup');
+const tempNavState = Navigator.router.getStateForAction(secondAction);
+const initialState = Navigator.router.getStateForAction(firstAction, tempNavState);
 
 const navReducer = (state = initialState, action) => {
-  let nextState;
-  // Simply return the original `state` if `nextState` is null or undefined.
-  switch (action.type)  {
-    case 'Signup':
-    nextState = Navigator.router.getStateForAction(
-     NavigationAction.navigate({ routeName: 'Signup'}),
-     state
-     );
-  }
-  return nextState || state;
+  let newState;
+  switch(action.type){
+    case 'Home':
+    newState =  Navigator.router.getStateForAction(
+      NavigationActions.navigate({ routeName: 'Home' }),
+      state
+    )
+    break;
+   case 'BACK':
+    newState = Navigator.router.getStateForAction(NavigationActions.back(), state)
+  default: 
+    newState = Navigator.router.getStateForAction(action, state);
+    break;
+  };
+  
+  return newState || state;
 };
 
 export default navReducer;

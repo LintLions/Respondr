@@ -2,6 +2,17 @@ import config from '../components/config.js';
 import {AlertIOS, AsyncStorage} from 'react-native';
 import {updateToken} from '../components/helpers.js';
 
+export const goBack = () => {
+  return {
+    type: 'BACK',
+  }
+}
+export const goHome = () => {
+  console.log("going Home");
+  return {
+    type: 'HOME'
+  }
+}
 export const getHelp = () => {
   return {
     type: 'GET_HELP',
@@ -75,4 +86,30 @@ export const getUserWithToken =  () => {
     })
   }
 }
-  
+
+export const signUp = (userData) => {
+  return dispatch => {
+    console.log("userData is ", userData);
+      fetch(`${config.url}/users`, {
+        method: "POST",
+        headers: {
+          'Accept': 'application/json',
+          'Content-Type': 'application/json'
+        },
+        body: userData
+      })
+        .then((response) => response.json())
+        .then((responseData) => {
+          console.log("response Data is ", responseData);
+          if (responseData.success) {
+            updateToken(responseData.newUser.token);
+            AlertIOS.alert("Signup Success!", responseData.id_token);
+            dispatch(logInSuccess(responseData.newUser));
+          } else {
+            AlertIOS.alert("Signup Failed!", responseData.error);
+          }
+        })
+        .done();
+    
+  }
+}
