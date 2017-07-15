@@ -75,8 +75,6 @@ export const getUserWithToken =  () => {
     })
   }
 }
-  
-
 
 
 // this.login = () => {

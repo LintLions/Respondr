@@ -21,6 +21,10 @@ class App extends React.Component {
   }
   componentWillMount() {
     this.props.getUserWithToken()
+    navigator.geolocation.getCurrentPosition( //this will need to be refactored into redux updating the userReducer (not the current userReducer, the new one Jenny is writing)
+      (position) => {
+    console.log(position)
+   })
   }
 
   render() {
