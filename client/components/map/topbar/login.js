@@ -19,9 +19,6 @@ class Login extends Component {
     this.onPasswordChange = (event)  => {
       this.setState({ password: event.nativeEvent.text });
     };
-    this.onLoginPressed = (event) => {
-      this.login();
-    }
 
   }
 

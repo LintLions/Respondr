@@ -34,10 +34,12 @@ class MapPage extends Component {
           style={styles.map}
           showsUserLocation={true}
           followsUserLocation={true}
-        >{this.props.isBeacon &&
+        >
+        {this.props.isBeacon &&
           <MapView.Marker
             // coordinate={this.state.beaconCoordinate}
             />}
+
           <MapView.Polyline 
             // coordinates={this.state.coords}
             strokeWidth={4}
@@ -54,7 +56,6 @@ class MapPage extends Component {
           }
         </View>
         <View>
-        <Text> { this.props.userEmail } hello? </Text>
           <HelpButton/>
         
 

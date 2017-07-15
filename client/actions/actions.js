@@ -67,22 +67,21 @@ export const logOut = () => {
   }
 }
 
-export const getUserWithToken =  async () => {
-  try {
-    const value = await AsyncStorage.getItem('id_token');
-    console.log('value in getUserWithToken is ', value);
-    if (value !== null) {
-      fetch(`${config.url}/users?token=${value}`)
-        .then(response => response.json())
-        .then((responseJson) => {
-          console.log('response from getUserWithToken ', responseJson);
-          dispatch(logInSuccess(responseJson))
-        });
-    }
-    return value;
-  } catch (error) {
-    console.error(`error getting user with id_token ${error}`);
-    return error;
+export const getUserWithToken =  () => {
+  return dispatch => {
+    console.log("I'm in getUserWithToken");
+    AsyncStorage.getItem('id_token', (err, value) => {
+      if (err) {console.error("error getting session from phone storage ", err)}
+      console.log('value in getUserWithToken is ', value);
+      if (value !== null) {
+        fetch(`${config.url}/users?token=${value}`)
+          .then((response) => response.json())
+          .then((responseJson) => {
+            console.log('response from getUserWithToken ', responseJson);
+            dispatch(logInSuccess(responseJson))
+          });
+      }
+    })
   }
 }
 
