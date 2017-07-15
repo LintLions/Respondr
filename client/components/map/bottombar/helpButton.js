@@ -1,6 +1,6 @@
 'use strict';
 
-import { getHelp, cancelHelp } from '../../../actions/actions'
+import { getHelp, cancelHelp } from '../../../actions/actions' // JC: do we need this? 
 
 import { connect } from 'react-redux';
 import React, { Component } from 'react'

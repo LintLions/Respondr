@@ -2,10 +2,12 @@ import config from '../components/config.js';
 import {AlertIOS, AsyncStorage} from 'react-native';
 import {updateToken} from '../components/helpers.js';
 
-export const getCurrentLocation = (userData) => {
+// these are all action creators that create the action object 
+
+export const getCurrentLocation = (userLocation) => {
   return {
     type: 'GET_CURRENT_LOCATION',
-    userData
+    userLocation
   };
 };
 
