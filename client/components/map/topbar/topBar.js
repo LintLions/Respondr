@@ -136,7 +136,7 @@ class TopBar extends Component {
   }
 }
 const mapStateToProps = (state) => ({
-  isLoggedIn: state.user.isLoggedIn
+  isLoggedIn: state.responder.isLoggedIn
 
 })
 
