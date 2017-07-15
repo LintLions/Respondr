@@ -2,13 +2,17 @@ import { combineReducers } from 'redux';
 // import all reducer files here
 import navReducer from './navReducer.js';
 import userReducer from './userReducer.js';
+import responderReducer from './responderReducer.js';
+import beaconReducer from './beaconReducer.js';
 
-/*
+/* APP STATE
 
 {
-  
   user: {
-    isBeacon: false,
+    currentLocation: [],
+    isBeacon: false
+  }
+  responder: {
     location: 
     email:this.props.navigation.state.params.email || '',
     fName:'',
@@ -29,9 +33,11 @@ import userReducer from './userReducer.js';
 */
 
 const rootReducer = combineReducers({
-    // include all reducers here
-    user: userReducer,
-    nav: navReducer,
+  // include all reducers here
+  user: userReducer,
+  responder: responderReducer,
+  nav: navReducer,
+  myBeacon: beaconReducer,
 });
 
 export default rootReducer;

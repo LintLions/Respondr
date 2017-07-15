@@ -3,7 +3,7 @@ import React from 'react';
 import { StackNavigator, addNavigationHelpers } from 'react-navigation';
 import MapPage from './map/MapPage';
 import SignUpPage from './signup/signUpPage';
-import { getUserWithToken } from '../actions/actions';
+import { getUserWithTokenAndSocket, getCurrentLocation } from '../actions/actions';
 
 export const Navigator = StackNavigator({
   Home: { screen: MapPage },
@@ -15,18 +15,18 @@ class App extends React.Component {
     super(props);
   }
   componentWillMount() {
+    const locChange = ({ coords }) => {
+      this.props.setLocation([coords.latitude, coords.longitude]);
+    };
+    navigator.geolocation.watchPosition(locChange, { timeout: 10 * 1000 });
     this.props.getUserWithTokenAndSocket();
-    // const locChange = ({ coords }) => {
-    //   this.setState({ userLocation: [coords.latitude, coords.longitude] });
-    // };
-    // navigator.geolocation.watchPosition(locChange, { timeout: 10 * 1000 });
   }
 
   render() {
     const navHelpers = {
       dispatch: this.props.dispatch,
       state: this.props.nav,
-    }
+    };
     return (
       <Navigator
         navigation={addNavigationHelpers(navHelpers)}
@@ -41,9 +41,12 @@ const mapStateToProps = (state) => ({
 });
 
 const mapDispatchToProps = (dispatch) => ({
-  getUserWithToken: () => {
-    dispatch(getUserWithToken());
-  }
-})
+  getUserWithTokenAndSocket: () => {
+    dispatch(getUserWithTokenAndSocket());
+  },
+  setLocation: (location) => {
+    dispatch(getCurrentLocation({ location }));
+  },
+});
 
 export default connect(mapStateToProps, mapDispatchToProps)(App)

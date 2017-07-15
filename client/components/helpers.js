@@ -2,7 +2,9 @@
 
 import { AsyncStorage } from 'react-native';
 import SocketIOClient from 'socket.io-client';
-import config from './config';
+import { store } from '../index';
+import { url } from './config';
+import { updateBeacon } from '../actions/actions';
 
 
 export const decode = (t, e) => {
@@ -58,9 +60,9 @@ export const updateToken =  async (value) => {
 
 export const getToken =  async () => AsyncStorage.getItem('id_token');
 
-export const socket = SocketIOClient(config.url);
+export const socket = SocketIOClient(url);
 socket.on('newBeacon', (data) => {
   console.log('hello', data);
-  // TODO this.setState({ beaconLocation: data });
+  store.dispatch(updateBeacon({ location: data }));
 });
 

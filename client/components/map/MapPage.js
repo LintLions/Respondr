@@ -125,13 +125,14 @@ const styles = StyleSheet.creconstte({
   },
 });
 
-const mapStateToProps = state => ({
-  isLoggedIn: state.user.isLoggedIn,
-  userEmail: state.user.email,
+
+const mapStateToProps = (state) => ({
+  isLoggedIn: state.responder.isLoggedIn,
+  userEmail: state.responder.email,
   isBeacon: state.user.isBeacon,
-  coords: state.user.coords,
-  userLocation: state.user.userLocation,
-  beaconLocation: state.user.beaconLocation,
+  coords: state.user.route,
+  userLocation: state.user.location,
+  beaconLocation: state.beacon.location,
 });
 
 MapPage = connect(mapStateToProps)(MapPage);

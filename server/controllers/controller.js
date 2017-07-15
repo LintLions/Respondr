@@ -64,29 +64,8 @@ exports.addUser = function(req, res) { //add user
   }
 
   dynamicResponder.findOne({where: userScheme.userSearch}).then((user) => {
-    if (user){
+    if (user) {
       return res.status(400).send({error: "A user with that username already exists"});
-    } else{
-//no static users plz
-      dynamicResponder.create({
-        firstName: req.body.fName,
-        lastName: req.body.lName,
-        phone: req.body.phone,
-        organization: req.body.organization,
-        email: req.body.email,
-        password: dynamicResponder.generateHash(req.body.password),
-        public: req.body.public,
-        static: req.body.static,
-        fullName: `${req.body.fName} ${req.body.lName}`
-      }).then(({email})=>{
-        res.status(201).send({
-          id_token: createIdToken(email),
-          access_token: createAccessToken()
-        });
-      }).catch((err)=>{
-        console.error(err + " on line 81");
-        res.sendStatus(500)
-      })
     }
 // no static users plz
     dynamicResponder.create({

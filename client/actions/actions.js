@@ -6,14 +6,26 @@ import {
 import { updateToken, socket } from '../components/helpers';
 import { store } from '../index';
 
+export const updateBeacon = (options) => ({
+  type: 'UPDATE_BEACON',
+  ...options,
+});
+
 export const updateHelp = () => ({
   type: 'GET_HELP',
   isBeacon: true,
 });
 export const getHelp = () => (dispatch) => {
-  const helpLoc = store.getState().user.currentLocation;
+  const helpLoc = store.getState().user.location;
   socket.emit('getHelp', helpLoc);
   dispatch(updateHelp);
+};
+
+export const getCurrentLocation = (location) => {
+  return {
+    type: 'GET_CURRENT_LOCATION',
+    location,
+  };
 };
 
 
