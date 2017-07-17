@@ -62,6 +62,7 @@ const mapStateToProps = () => ({
 
 });
 
+
 const mapDispatchToProps = dispatch => ({
   handleIsLoggedIn: (state) => {
     dispatch(logIn(state));

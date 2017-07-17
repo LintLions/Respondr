@@ -21,7 +21,6 @@ export const goBack = () => ({
 export const goHome = () => ({
   type: 'HOME',
 });
-
 export const updateHelp = () => ({
   type: 'GET_HELP',
   isBeacon: true,
@@ -47,13 +46,11 @@ export const logInSuccess = (userData) => {
 };
 export const logIn = (options) => {
   const socketID = store.getState().user.socket;
-  console.log(socketID);
   const body = JSON.stringify({
     email: options.email,
     password: options.password,
     socket: socketID,
   });
-  console.log('body is ', body);
   return (dispatch) => {
     fetch(`${url}/users/sessions/create`, {
       method: 'POST',

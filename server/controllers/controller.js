@@ -52,11 +52,9 @@ function getUserScheme(req) {
     userSearch,
   };
 }
-exports.addUser = (req, res) => {
-  console.log('loginBody', req.body)
-  var userScheme = getUserScheme(req); 
-  console.log(userScheme); 
 
+exports.addUser = function(req, res) { //add user
+  var userScheme = getUserScheme(req);  
   if (!userScheme.username || !req.body.password) {
     return res.status(400).send({error: "You must send the username and the password"});
   }
@@ -104,7 +102,7 @@ exports.addSession = (req, res) => {
   dynamicResponder.findOne({ where: userScheme.userSearch })
   .then((user) => {
     if (!user) {
-      return res.status(401).send({ error: 'The username is incorrect' });
+      return res.status(401).send({error: "The username is incorrect"});
     } else if (!bcrypt.compareSync(req.body.password, user.password)) {
       return res.status(401).send({ error: 'The username and password do not match' });
     }
