@@ -12,6 +12,8 @@ import {
 } from 'react-native';
 import MapView from 'react-native-maps';
 
+import styles from '../../../styles/styles';
+
 class HelpButton extends Component {
   constructor(props) {
     super(props);
@@ -19,13 +21,15 @@ class HelpButton extends Component {
   }
   render() {
     const btnOrModal = this.props.isBeacon === false ?
-      (<View>
+      (<View style={[styles.helpButtonContainer]}>
+          
           <TouchableHighlight
-            style={styles.button}
+            style={[styles.helpButton]}
             underlayColor='#48BBEC'
             onPress={this.props.handleHelpButtonPress}>
-            <Text style={styles.buttonText}>Get Help</Text>
+            <Text style={styles.helpButtonText}>HELP</Text>
           </TouchableHighlight>
+          
         </View>) :
         (<View>
           <Text style={styles.prompt}>Help is on the way</Text>
@@ -36,6 +40,7 @@ class HelpButton extends Component {
             <Text style={styles.buttonText}>Cancel Help Request</Text>
           </TouchableHighlight>
         </View>);
+    
     return (
       <View style={styles.container}>
         {btnOrModal}
@@ -44,7 +49,7 @@ class HelpButton extends Component {
   }    
 }
 
-var styles = StyleSheet.create({
+var styleSheet = StyleSheet.create({
   container: {
     flex: 1
   },

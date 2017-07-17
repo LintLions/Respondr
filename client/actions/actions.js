@@ -10,7 +10,17 @@ export const updateBeacon = options => ({
   type: 'UPDATE_BEACON',
   options,
 });
-
+export const goBack = () => {
+  return {
+    type: 'BACK',
+  }
+};
+export const goHome = () => {
+  console.log("going Home");
+  return {
+    type: 'HOME'
+  }
+};
 export const updateHelp = () => ({
   type: 'GET_HELP',
   isBeacon: true,
@@ -20,18 +30,14 @@ export const getHelp = () => (dispatch) => {
   socket.emit('getHelp', helpLoc);
   dispatch(updateHelp);
 };
-
 export const getCurrentLocation = location => ({
   type: 'GET_CURRENT_LOCATION',
   location,
 });
-
-
 export const cancelHelp = () => ({
   type: 'CANCEL_HELP',
   isBeacon: false,
 });
-
 export const logInSuccess = (userData) => {
   console.log('userData ', userData);
   return {
@@ -39,7 +45,6 @@ export const logInSuccess = (userData) => {
     userData,
   };
 };
-
 export const logIn = (options) => {
   const socketID = store.getState().user.socket;
   return (dispatch) => {
@@ -104,4 +109,28 @@ export const drawRoute = latLong => (dispatch) => {
         dispatch(updateRoute(decode(responseJson.routes[0].overview_polyline.points)));
       }
     }).catch(e => console.warn(e));
+};
+
+export const signUp = userData => (dispatch) => {
+  console.log("userData is ", userData);
+  fetch(`${url}/users`, {
+    method: 'POST',
+    headers: {
+      'Accept': 'application/json',
+      'Content-Type': 'application/json',
+    },
+    body: userData,
+  })
+    .then(response => response.json())
+    .then((responseData) => {
+      console.log("response Data is ", responseData);
+      if (responseData.success) {
+        updateToken(responseData.newUser.token);
+        AlertIOS.alert("Signup Success!", responseData.id_token);
+        dispatch(logInSuccess(responseData.newUser));
+      } else {
+        AlertIOS.alert("Signup Failed!", responseData.error);
+      }
+    })
+    .done();
 };

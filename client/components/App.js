@@ -1,9 +1,9 @@
 import { connect } from 'react-redux';
 import React from 'react';
 import { StackNavigator, addNavigationHelpers } from 'react-navigation';
+import { getUserWithTokenAndSocket, getCurrentLocation } from '../actions/actions';
 import MapPage from './map/MapPage';
 import SignUpPage from './signup/signUpPage';
-import { getUserWithTokenAndSocket, getCurrentLocation } from '../actions/actions';
 
 export const Navigator = StackNavigator({
   Home: { screen: MapPage },
@@ -36,17 +36,18 @@ class App extends React.Component {
 
 }
 
-const mapStateToProps = (state) => ({
+const mapStateToProps = state => ({
   nav: state.nav,
 });
 
-const mapDispatchToProps = (dispatch) => ({
+const mapDispatchToProps = dispatch => ({
   getUserWithTokenAndSocket: () => {
     dispatch(getUserWithTokenAndSocket());
   },
   setLocation: (location) => {
     dispatch(getCurrentLocation(location));
   },
+  dispatch,
 });
 
-export default connect(mapStateToProps, mapDispatchToProps)(App)
+export default connect(mapStateToProps, mapDispatchToProps)(App);

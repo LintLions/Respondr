@@ -9,6 +9,8 @@ import {
   Switch
 } from 'react-native';
 
+import styles from '../../../styles/styles';
+
 class AngelStatusIcon extends React.Component {
   constructor(props) {
     super(props)
@@ -25,7 +27,7 @@ class AngelStatusIcon extends React.Component {
     // }
     return(
       <View style={styles.toggleIcon}>
-        <Text>Your Angel Status</Text>
+        <Text>Online</Text>
         <Switch
           onValueChange={(e) => this.props.handleSwitchIsOn(e)}
           value={this.props.switchIsOn} />
@@ -34,7 +36,7 @@ class AngelStatusIcon extends React.Component {
   }
 }
 
-var styles = StyleSheet.create({
+var styleSheet = StyleSheet.create({
   toggleIcon: {
     padding: 20
   }

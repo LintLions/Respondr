@@ -1,15 +1,13 @@
 import { connect } from 'react-redux';
-import React, { Component } from 'react'
+import React, { Component } from 'react';
 import {
   View,
   Text,
   TouchableHighlight,
-  StyleSheet
+  StyleSheet,
 } from 'react-native';
-import MapView from 'react-native-maps';
-import AngelStatusPage from './AngelStatusPage';
-import { drawRoute, updateBeacon } from '../../../actions/actions';
-
+import { updateBeacon } from '../../../actions/actions';
+import styles from '../../../styles/styles';
 
 class HelpRequestAccepted extends Component {
   constructor(props) {
@@ -17,21 +15,19 @@ class HelpRequestAccepted extends Component {
   }
 
   render() {
-    console.log('+++HelpRequestAccepted.js');
-
     return (
       <View style={styles.container}>
-        <View style={styles.box1}>
+        <View style={[styles.container, styles.box1]}>
           <Text style={styles.prompt}>
             You're an angel {this.props.fName}!
           </Text>
-          <View style={styles.buttonDirection}>
+          <View style={styles.row}>
             <TouchableHighlight
-              style={styles.button}
+              style={styles.missionButton}
               underlayColor='#99d9f4'
               onPress={this.props.handleHelpRequestCancel}
             >
-              <Text style={styles.buttonText}>I can't make it anymore</Text>
+              <Text style={styles.missionButtonText}>I can't make it anymore</Text>
             </TouchableHighlight>
           </View>
         </View>
@@ -40,30 +36,30 @@ class HelpRequestAccepted extends Component {
   }
 }
 this.handleHelpRequestYes = (e) => {
-      e.preventDefault();
-      this.setState({
-        helpRequestStatus: 'yes',
-      });
-      this.props.drawRoute(this.props.beaconLocation);
-    };
+  e.preventDefault();
+  this.setState({
+    helpRequestStatus: 'yes',
+  });
+  this.props.drawRoute(this.props.beaconLocation);
+};
 
-    this.handleHelpRequestNo = async (e) => {
-      e.preventDefault();
-      this.setState({
-        helpRequestStatus: 'no',
-      });
-      this.props.screenProps.methods.updateState({ beaconLocation: null });
-    };
+this.handleHelpRequestNo = async (e) => {
+  e.preventDefault();
+  this.setState({
+    helpRequestStatus: 'no',
+  });
+  this.props.screenProps.methods.updateState({ beaconLocation: null });
+};
 
-    this.handleHelpRequestCancel = (e) => {
-      e.preventDefault();
-      this.setState({
-        helpRequestCancel: true,
-      });
-      this.props.screenProps.methods.updateState({ beaconLocation: null });
-    };
+this.handleHelpRequestCancel = (e) => {
+  e.preventDefault();
+  this.setState({
+    helpRequestCancel: true,
+  });
+  this.props.screenProps.methods.updateState({ beaconLocation: null });
+};
 
-var styles = StyleSheet.create({
+const styleSheet = StyleSheet.create({
   container: {
     flex: 1
   },
@@ -108,6 +104,9 @@ var styles = StyleSheet.create({
   buttonText: {
     fontSize: 18,
     color: 'white',
+  },
+  stretch: {
+    alignItems: 'stretch'
   }
 });
 
