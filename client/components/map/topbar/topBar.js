@@ -108,7 +108,7 @@ class TopBar extends Component {
 }
 
 const mapStateToProps = (state) => ({
-  fName: state.responder.fName,
+  firstName: state.responder.firstName,
   beaconLocation: state.myBeacon.location,
   isLoggedIn: state.responder.isLoggedIn,
 });

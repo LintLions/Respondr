@@ -39,8 +39,8 @@ class SignUpPage extends Component {
     this.state = {
       socket: this.props.socket,
       email: '',
-      fName: '',
-      lName: '',
+      firstName: '',
+      lastName: '',
       password: '',
       phone: '',
       organization: '',
@@ -58,12 +58,12 @@ class SignUpPage extends Component {
     }
     this.onFNameChange = (e) => {
       console.log(e.nativeEvent)
-      let fName = e.nativeEvent.text
-      this.setState( {fName:fName} );
+      let firstName = e.nativeEvent.text
+      this.setState( {firstName:firstName} );
     }
     this.onLNameChange = (e) => {
-      let lName = e.nativeEvent.text
-      this.setState( {lName:lName} );
+      let lastName = e.nativeEvent.text
+      this.setState( {lastName:lastName} );
     }
     this.onPasswordChange = (e) => {
       let password = e.nativeEvent.text
@@ -98,8 +98,8 @@ class SignUpPage extends Component {
   render() {
     const props = {
       email: this.email,
-      fName: this.fName,
-      lName: this.lName,
+      firstName: this.firstName,
+      lastName: this.lastName,
       password: this.password,
       phone: this.phone,
       organization: this.organization,

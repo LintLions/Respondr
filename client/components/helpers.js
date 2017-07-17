@@ -61,10 +61,16 @@ export const updateToken =  async (value) => {
 export const getToken =  async () => AsyncStorage.getItem('id_token');
 
 export const socket = SocketIOClient(url);
-socket.on('newBeacon', (activeBeacon) => { // I want to move this to action.js ideally (haven't done)
+socket.on('newBeacon', (activeBeacon) => { // was data (which was just loc)
   console.log('+++socket.on newBeacon', activeBeacon);
-  store.dispatch(updateBeacon({ 
+  store.dispatch(updateBeacon({
     chatRoom: activeBeacon.id, 
-    location: activeBeacon.loc }));
+    location: activeBeacon.loc, // was data
+    region: {
+      latitude: activeBeacon.loc[0], // was data
+      longitude: activeBeacon.loc[1], // was data
+      latitudeDelta: 0.0922,
+      longitudeDelta: 0.0421,
+    } }));
 });
 
