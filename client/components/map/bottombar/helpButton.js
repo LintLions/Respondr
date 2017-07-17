@@ -8,9 +8,7 @@ import {
   View,
   Text,
   TouchableHighlight,
-  Modal,
-  SegmentedControlIOS,
-  StyleSheet
+  StyleSheet,
 } from 'react-native';
 import MapView from 'react-native-maps';
 
@@ -116,8 +114,8 @@ const mapDispatchToProps = (dispatch) => ({
 
   handleHelpButtonPress: () => {
     dispatch(getHelp());
-  }
-})
+  },
+});
 
 HelpButton = connect(mapStateToProps, mapDispatchToProps)(HelpButton)
 

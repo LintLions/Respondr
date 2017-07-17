@@ -16,8 +16,11 @@ const beacon = db.define('beacon', {
   },
   device: {
     type: Sequelize.STRING,
-  }
-})
+  },
+  socket: {
+    type: Sequelize.STRING,
+  },
+});
 
 module.exports = beacon;
 

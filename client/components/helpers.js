@@ -1,8 +1,13 @@
 'user strict';
 
-import {AsyncStorage} from 'react-native';
+import { AsyncStorage } from 'react-native';
+import SocketIOClient from 'socket.io-client';
+import { store } from '../index';
+import { url } from './config';
+import { updateBeacon } from '../actions/actions';
 
-exports.decode = (t, e) => {
+
+export const decode = (t, e) => {
   // transforms something like this geocFltrhVvDsEtA}ApSsVrDaEvAcBSYOS_@...
   // to an array of coordinates
   let n;
@@ -45,7 +50,7 @@ exports.decode = (t, e) => {
   return d.map(time => ({ latitude: time[0], longitude: time[1] }));
 };
 
-exports.updateToken =  async (value) => {
+export const updateToken =  async (value) => {
   try {
     await AsyncStorage.setItem('id_token', value);
   } catch (error) {
@@ -53,7 +58,11 @@ exports.updateToken =  async (value) => {
   }
 }
 
-exports.getToken =  async () => AsyncStorage.getItem('id_token')
+export const getToken =  async () => AsyncStorage.getItem('id_token');
 
-
+export const socket = SocketIOClient(url);
+socket.on('newBeacon', (data) => {
+  console.log('hello', data);
+  store.dispatch(updateBeacon({ location: data }));
+});
 

@@ -1,65 +1,53 @@
-'use strict';
 import { connect } from 'react-redux';
 import React from 'react';
-import {
-  AsyncStorage,
-  BackButton
-} from 'react-native';
-import {StackNavigator, addNavigationHelpers } from 'react-navigation';
+import { StackNavigator, addNavigationHelpers } from 'react-navigation';
+import { getUserWithTokenAndSocket, getCurrentLocation } from '../actions/actions';
 import MapPage from './map/MapPage';
 import SignUpPage from './signup/signUpPage';
-import config from './config';
-import { getUserWithToken, goBack } from '../actions/actions.js';
-
-const navigationOptions = {
-    header: (navigation) => ({
-      title: 'Signup',
-      left:  <BackButton onPress={() => this.props.goBack()} />
-    })
-  }
 
 export const Navigator = StackNavigator({
-  Home: { screen: MapPage},
-  Signup: {screen: SignUpPage }
-})
+  Home: { screen: MapPage },
+  Signup: { screen: SignUpPage },
+});
 
 class App extends React.Component {
   constructor(props) {
     super(props);
   }
   componentWillMount() {
-    this.props.getUserWithToken()
-    navigator.geolocation.getCurrentPosition( //this will need to be refactored into redux updating the userReducer (not the current userReducer, the new one Jenny is writing)
-      (position) => {
-    console.log(position)
-   })
+    const locChange = ({ coords }) => {
+      this.props.setLocation([coords.latitude, coords.longitude]);
+    };
+    navigator.geolocation.watchPosition(locChange, { timeout: 10 * 1000 });
+    this.props.getUserWithTokenAndSocket();
   }
 
   render() {
+    const navHelpers = {
+      dispatch: this.props.dispatch,
+      state: this.props.nav,
+    };
     return (
-      <Navigator navigation={addNavigationHelpers({
-        dispatch: this.props.dispatch,
-        state: this.props.nav
-        }
-        )}
-      /> 
-    )
+      <Navigator
+        navigation={addNavigationHelpers(navHelpers)}
+      />
+    );
   }
 
 }
 
-const mapStateToProps = (state) => ({
+const mapStateToProps = state => ({
   nav: state.nav,
-})
+});
 
-const mapDispatchToProps = (dispatch) => ({
-  getUserWithToken: () => {
-    dispatch(getUserWithToken());
+const mapDispatchToProps = dispatch => ({
+  getUserWithTokenAndSocket: () => {
+    dispatch(getUserWithTokenAndSocket());
   },
-  goBack: () => {
-    dispatch(goBack(null));
+  setLocation: (location) => {
+    dispatch(getCurrentLocation(location));
   },
-  dispatch:dispatch
-})
+  dispatch,
+});
 
-export default connect(mapStateToProps, mapDispatchToProps)(App)
+export default connect(mapStateToProps, mapDispatchToProps)(App);

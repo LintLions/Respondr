@@ -37,7 +37,8 @@ class SignUpPage extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      email: '',
+      socket: this.props.screenProps.socket.id,
+      email: this.props.navigation.state.params.email || '',
       fName: '',
       lName: '',
       password: '',
@@ -127,8 +128,9 @@ class SignUpPage extends Component {
 
 }
 const mapStatetoProps = (state) => ({
-  nav: state.nav
-})
+  nav: state.nav,
+  socket: state.user.socket,
+});
 const mapDispatchToProps = (dispatch) => ({
   handleSignUp: (userData) => {
     dispatch(signUp(userData));

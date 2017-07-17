@@ -1,32 +1,25 @@
-'use strict';
-
-import React, { Component } from 'react'
+import { connect } from 'react-redux';
+import React, { Component } from 'react';
 import {
   View,
   Text,
   TouchableHighlight,
-  StyleSheet
+  StyleSheet,
 } from 'react-native';
-
+import { updateBeacon } from '../../../actions/actions';
 import styles from '../../../styles/styles';
 
 class HelpRequestAccepted extends Component {
   constructor(props) {
     super(props);
-    this.state = {
-    
-    };
   }
 
   render() {
-    console.log('+++HelpRequestAccepted.js');
-    
     return (
       <View style={styles.container}>
-      
         <View style={[styles.container, styles.box1]}>
           <Text style={styles.prompt}>
-            You're an angel {this.props.username}!
+            You're an angel {this.props.fName}!
           </Text>
           <View style={styles.row}>
             <TouchableHighlight
@@ -42,8 +35,31 @@ class HelpRequestAccepted extends Component {
     );
   }
 }
+this.handleHelpRequestYes = (e) => {
+  e.preventDefault();
+  this.setState({
+    helpRequestStatus: 'yes',
+  });
+  this.props.drawRoute(this.props.beaconLocation);
+};
 
-var styleSheet = StyleSheet.create({
+this.handleHelpRequestNo = async (e) => {
+  e.preventDefault();
+  this.setState({
+    helpRequestStatus: 'no',
+  });
+  this.props.screenProps.methods.updateState({ beaconLocation: null });
+};
+
+this.handleHelpRequestCancel = (e) => {
+  e.preventDefault();
+  this.setState({
+    helpRequestCancel: true,
+  });
+  this.props.screenProps.methods.updateState({ beaconLocation: null });
+};
+
+const styleSheet = StyleSheet.create({
   container: {
     flex: 1
   },
@@ -93,6 +109,19 @@ var styleSheet = StyleSheet.create({
     alignItems: 'stretch'
   }
 });
+
+const mapStateToProps = (state) => ({
+  fName: state.responder.fName,
+  beaconLocation: state.myBeacon.location,
+});
+
+const mapDispatchToProps = (dispatch) => ({
+  handleHelpRequestCancel: () => {
+    dispatch(updateBeacon({ location: null, isAssigned: false }));
+  },
+});
+
+HelpRequestAccepted = connect(mapStateToProps, mapDispatchToProps)(HelpRequestAccepted);
 
 module.exports = HelpRequestAccepted;
 

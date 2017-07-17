@@ -1,4 +1,5 @@
-require('node-env-file')('../.env');
+const path = require('path');
+require('node-env-file')(path.join(__dirname, '../../.env'));
 const dynamicResponder = require('./models/dynamicResponders.js');
 const staticResponderIndividual = require('./models/staticResponderIndividuals.js');
 const staticResponderStorefront = require('./models/staticResponderStorefronts.js');

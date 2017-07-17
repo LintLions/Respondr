@@ -12,7 +12,7 @@ import thunk from 'redux-thunk';
 
 const composeEnhancers = composeWithDevTools({ realtime: true, port: 8082 })
 
-  const store = createStore(rootReducer, composeEnhancers(
+export const store = createStore(rootReducer, composeEnhancers(
   applyMiddleware(thunk)
 ));
 
@@ -30,4 +30,4 @@ class Index extends React.Component {
   }
 }
 
-export default Index
+export default Index;

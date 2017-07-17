@@ -1,11 +1,10 @@
-import Index from './client/index';
+
 /**
  * Sample React Native App
  * https://github.com/facebook/react-native
  * @flow
  */
-'use strict';
 import { AppRegistry } from 'react-native';
-import App from './client/components/App';
+import Index from './client/index';
 
-AppRegistry.registerComponent('iosBeacon', () => Index);
+AppRegistry.registerComponent('Respondr', () => Index);

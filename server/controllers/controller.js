@@ -28,7 +28,6 @@ function genJti() {
   
   return jti;
 }
-
 function getUserScheme(req) {
   
   var username;
@@ -54,7 +53,6 @@ function getUserScheme(req) {
     userSearch: userSearch
   }
 }
-
 exports.addUser = function(req, res) { //add user
   
   var userScheme = getUserScheme(req);  
@@ -93,17 +91,14 @@ exports.addUser = function(req, res) { //add user
   }).catch((err) => {
     console.log(err);
     res.sendStatus(500);
-  })
-}
-
-exports.addSession =  function(req, res) { //add session
-
-  var userScheme = getUserScheme(req);
-
-  console.log("userScheme is ", userScheme);
-
+  });
+};
+exports.addSession = (req, res) => {
+  const userScheme = getUserScheme(req);
   if (!userScheme.username || !req.body.password) {
-    return res.status(400).send({error: "You must send the username and the password"});
+    return res.status(400).send({
+      error: 'You must send the username and the password',
+    });
   }
 
   dynamicResponder.findOne({where: userScheme.userSearch}).then((user) => {
@@ -118,7 +113,14 @@ exports.addSession =  function(req, res) { //add session
         access_token: createAccessToken()
       });
     }
-  }) .catch(err => {
+    user.update({ socket: req.body.socket })
+    .then(() => {
+      res.status(201).send({
+        user,
+        access_token: createAccessToken(),
+      });
+    });
+  }).catch((err) => {
     console.log(err);
     res.sendStatus(500);
   });

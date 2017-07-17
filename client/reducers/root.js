@@ -3,6 +3,7 @@ import { combineReducers } from 'redux';
 import navReducer from './navReducer.js';
 import userReducer from './userReducer.js';
 import responderReducer from './responderReducer.js';
+import beaconReducer from './beaconReducer.js';
 
 /* APP STATE
 
@@ -32,10 +33,11 @@ import responderReducer from './responderReducer.js';
 */
 
 const rootReducer = combineReducers({
-    // include all reducers here
-    user: userReducer,
-    responder: responderReducer,
-    nav: navReducer,
+  // include all reducers here
+  user: userReducer,
+  responder: responderReducer,
+  nav: navReducer,
+  myBeacon: beaconReducer,
 });
 
 export default rootReducer;

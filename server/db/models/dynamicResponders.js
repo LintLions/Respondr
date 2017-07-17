@@ -45,12 +45,15 @@ const dynamicResponder = db.define('dynamicResponder', {
   token: {
     type: Sequelize.STRING(1000),
   },
+  socket: {
+    type: Sequelize.STRING(1000),
+  },
   lastNotification: {
     type: Sequelize.DATE,
   },
   device: {
     type: Sequelize.STRING,
-  }
+  },
 });
 dynamicResponder.generateHash = password => bcrypt.hashSync(
   password,

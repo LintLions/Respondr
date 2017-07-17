@@ -2,22 +2,18 @@ import React, { Component } from 'react';
 import { Modal,
   Text,
   SegmentedControlIOS,
-  Image,
   TouchableHighlight,
-  TouchableOpacity,
   TouchableWithoutFeedback,
-  TextInput,
   View,
-  StyleSheet,
   AlertIOS,
   AsyncStorage } from 'react-native';
 import { connect } from 'react-redux';
 import Icon from 'react-native-vector-icons/Entypo';
 import Login from './login';
 import Signup from './signup';
-import config from '../../config.js';
-import styles from '../../../styles/styles.js';
-import { logOut } from '../../../actions/actions.js';
+import styles from '../../../styles/styles';
+import { logOut } from '../../../actions/actions';
+
 
 class TopBar extends Component {
   constructor(props) {
@@ -26,17 +22,17 @@ class TopBar extends Component {
       modalVisible: false, // is the modal visible?
       buttonVisible: true, // is the buttion for calling the modal visible?
       selectedIndex: 0,
-    }
-
+    };
     this.setModalVisible = (visible) => { //hide modal and button
       this.setState({modalVisible: visible, buttonVisible: !visible});
     };
 
     this.logout = async () => {
       try {
+        this.props.logout();
         await AsyncStorage.removeItem('id_token');
         AlertIOS.alert("Logout Success!")
-        this.props.handleIsLoggedIn();
+        this.props.logout();
       } catch (error) {
         console.log('AsyncStorage error: ' + error.message);
       }
@@ -60,29 +56,29 @@ class TopBar extends Component {
             <View style={styles.loginModal}>
               <TouchableWithoutFeedback>
                 <View style={styles.loginModalInner}>
-                {this.props.isLoggedIn && 
+                  {this.props.isLoggedIn &&
                   <View style={styles.container}>
-                   <TouchableHighlight 
-                    onPress={this.logout}>
-                    <Text>Logout</Text>
-                  </TouchableHighlight>  
-                </View>  
-                } 
-                {!this.props.isLoggedIn &&  
-                  <View>  
-                  <SegmentedControlIOS
-                    style-={styles.header}
-                    values={['Login', 'Signup']}
-                    selectedIndex={this.state.selectedIndex}
-                    onChange={(event) => {
-                    this.setState({selectedIndex: event.nativeEvent.selectedSegmentIndex});
-                    }}
-                  />
-                  {this.state.selectedIndex === 0 &&  //LOGIN
-                    <Login setModalVisible={this.setModalVisible} />
-                  } 
-             
-                  {this.state.selectedIndex === 1 &&  //SIGNUP
+                    <TouchableHighlight 
+                      onPress={this.logout}
+                    >
+                      <Text>Logout</Text>
+                    </TouchableHighlight>
+                  </View>
+                  }
+                  {!this.props.isLoggedIn &&
+                  <View>
+                    <SegmentedControlIOS
+                      style-={styles.header}
+                      values={['Login', 'Signup']}
+                      selectedIndex={this.state.selectedIndex}
+                      onChange={(event) => {
+                        this.setState({ selectedIndex: event.nativeEvent.selectedSegmentIndex });
+                      }}
+                    />
+                    {this.state.selectedIndex === 0 &&  //LOGIN
+                      <Login setModalVisible={this.setModalVisible} />
+                    }
+                    {this.state.selectedIndex === 1 &&  //SIGNUP
                     <Signup setModalVisible={this.setModalVisible} />
                   } 
                 </View>
@@ -110,35 +106,19 @@ class TopBar extends Component {
     );
   }
 }
-const mapStateToProps = (state) => ({
-  isLoggedIn: state.responder.isLoggedIn
 
-})
+const mapStateToProps = (state) => ({
+  fName: state.responder.fName,
+  beaconLocation: state.myBeacon.location,
+  isLoggedIn: state.responder.isLoggedIn,
+});
 
 const mapDispatchToProps = (dispatch) => ({
-  handleIsLoggedIn: () => {
+  logout: () => {
     dispatch(logOut());
-  }
-})
+  },
+});
 
-TopBar = connect(mapStateToProps, mapDispatchToProps)(TopBar)
+const TopBarConnected = connect(mapStateToProps, mapDispatchToProps)(TopBar);
 
-export default TopBar
-
-// ========================
-// Ben's 2 icons in topBar
-// ========================
-// <TouchableHighlight
-//   onPress={
-//     () => this.checkRestricted()
-//   }
-// >
-//   <Icon name="tools" size={40} color="#4F8EF7" style={styles.icon} />
-// </TouchableHighlight>
-// <TouchableHighlight
-//   onPress={
-//     () => this.logout()
-//   }
-// >
-//   <Icon name="lock" size={40} color="#4F8EF7" style={styles.icon} />
-// </TouchableHighlight>
+export default TopBarConnected;
