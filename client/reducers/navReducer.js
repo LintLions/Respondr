@@ -8,13 +8,11 @@ import { Navigator } from '../components/App.js';
 //   secondAction
 // );
 const firstAction = Navigator.router.getActionForPathAndParams('Home');
-const secondAction = Navigator.router.getActionForPathAndParams('Signup');
-const tempNavState = Navigator.router.getStateForAction(secondAction);
-const initialState = Navigator.router.getStateForAction(firstAction, tempNavState);
+const initialState = Navigator.router.getStateForAction(firstAction);
 
 const navReducer = (state = initialState, action) => {
   let newState;
-  switch(action.type){
+  switch (action.type) {
     case 'Home':
     newState =  Navigator.router.getStateForAction(
       NavigationActions.navigate({ routeName: 'Home' }),
