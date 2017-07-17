@@ -27,7 +27,7 @@ class AngelStatusIcon extends React.Component {
     // }
     return(
       <View style={styles.toggleIcon}>
-        <Text>Your Angel Status</Text>
+        <Text>Online</Text>
         <Switch
           onValueChange={(e) => this.props.handleSwitchIsOn(e)}
           value={this.props.switchIsOn} />

@@ -107,15 +107,18 @@ class TopBar extends Component {
           </TouchableWithoutFeedback>
         </Modal>
 
-        {this.state.buttonVisible && <View style={styles.IconContainer}>
-          {!this.props.isLoggedIn &&  <Text>Login</Text>}
+        {this.state.buttonVisible && <View style={[styles.iconContainer, styles.row]}>
+          
          
           <TouchableHighlight 
             onPress={() => {this.setModalVisible(true)
           }}>
-          <Icon name="feather" size={40} color="#4F8EF7" style={styles.icon} />
+            <Icon name="feather" size={40} color="#4F8EF7" style={styles.icon} />
           </TouchableHighlight>
+          <View style={[styles.column]}>
+          {!this.props.isLoggedIn &&  <Text>Login</Text>}
           {!this.props.isLoggedIn &&  <Text>Signup</Text>}
+          </View>
         </View> }
 
       </View>
@@ -136,7 +139,6 @@ const mapDispatchToProps = (dispatch) => ({
 TopBar = connect(mapStateToProps, mapDispatchToProps)(TopBar)
 
 export default TopBar
-
 
 // ========================
 // Ben's 2 icons in topBar

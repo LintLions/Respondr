@@ -24,17 +24,17 @@ class HelpRequestAccepted extends Component {
     return (
       <View style={styles.container}>
       
-        <View style={styles.box1}>
+        <View style={[styles.container, styles.box1]}>
           <Text style={styles.prompt}>
             You're an angel {this.props.username}!
           </Text>
-          <View style={styles.buttonDirection}>
+          <View style={styles.row}>
             <TouchableHighlight
-              style={styles.button}
+              style={styles.missionButton}
               underlayColor='#99d9f4'
               onPress={this.props.handleHelpRequestCancel}
             >
-              <Text style={styles.buttonText}>I can't make it anymore</Text>
+              <Text style={styles.missionButtonText}>I can't make it anymore</Text>
             </TouchableHighlight>
           </View>
         </View>
@@ -88,6 +88,9 @@ var styleSheet = StyleSheet.create({
   buttonText: {
     fontSize: 18,
     color: 'white',
+  },
+  stretch: {
+    alignItems: 'stretch'
   }
 });
 

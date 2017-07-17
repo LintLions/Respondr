@@ -19,6 +19,8 @@ import AngelStatusIcon from './bottombar/AngelStatusIcon';
 import config from '../config';
 import helpers from '../helpers';
 
+import styles from '../../styles/styles';
+
 const { googleMapsDirectionsApiKey } = require('../config.js');
 const APIKEY = googleMapsDirectionsApiKey;
 
@@ -30,7 +32,8 @@ class MapPage extends Component {
   render() {
     return (
       <View style={styles.container}>
-        <MapView
+        
+      <MapView
           style={styles.map}
           showsUserLocation={true}
           followsUserLocation={true}
@@ -39,41 +42,36 @@ class MapPage extends Component {
           <MapView.Marker
             // coordinate={this.state.beaconCoordinate}
             />}
-
           <MapView.Polyline 
             // coordinates={this.state.coords}
             strokeWidth={4}
             strokeColor='black'
           />
         </MapView>
-        <View style={styles.row}>
+
+        <View style={[styles.row]}>
           <TopBar />
-          {
-             this.props.isLoggedIn && 
+          {this.props.isLoggedIn && 
             <AngelStatusIcon 
             // switchIsOn={this.state.switchIsOn} handleSwitchIsOn={this.handleSwitchIsOn}
             />
           }
         </View>
-        <View>
-          <HelpButton/>
-        
-
+        <View style={[styles.column, styles.bottom]}>
+          {this.props.isLoggedIn &&          
+            <BottomBarAngel/>
+          }
         </View>
-        {
-          this.props.isLoggedIn &&
-          <View style={styles.bottomBar}>
-
-            <BottomBarAngel style={styles.bottomBar}/>
-
-          </View>
-        }
+        <View style={[styles.bottom]}>
+        {!this.props.isLoggedIn && 
+          <HelpButton />}
+        </View>
       </View>
     );
   }
 }
 
-var styles = StyleSheet.create({
+var styleSheet = StyleSheet.create({
   description: {
     marginBottom: 20,
     fontSize: 18,
