@@ -117,7 +117,7 @@ const mapStateToProps = (state) => ({
 
 const mapDispatchToProps = (dispatch) => ({
   handleHelpRequestCancel: () => {
-    dispatch(updateBeacon({ location: null, isAssigned: false }));
+    dispatch(updateBeacon({ location: null, completed: true })); // OR create another action 'BEACON_SAVED'???
   },
 });
 

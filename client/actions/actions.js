@@ -21,15 +21,41 @@ export const goHome = () => {
     type: 'HOME'
   }
 };
+
 export const updateHelp = () => ({
   type: 'GET_HELP',
   isBeacon: true,
 });
+export const setChatRoom = (activeBeaconSocketID) => ({
+  type: "SET_CHAT_ROOM",
+  chatRoom: activeBeaconSocketID
+})
 export const getHelp = () => (dispatch) => {
-  const helpLoc = store.getState().user.location;
-  socket.emit('getHelp', helpLoc);
+  const activeBeaconSocketID = store.getState().user.socket;
+  const activeBeaconLoc = store.getState().user.location;
+  const activeBeacon = {
+    id: activeBeaconSocketID, // this will be used at the chatRoom id 
+    loc: activeBeaconLoc
+  }
+  socket.emit('getHelp', activeBeacon);
   dispatch(updateHelp);
+  dispatch(setChatRoom(activeBeaconSocketID));
 };
+
+export const acceptBeacon = () => (dispatch) => {
+  const chatRoom = store.getState().myBeacon.chatRoom; 
+  const beaconTaken = !!chatRoom; 
+  if(!beaconTaken) {
+    socket.emit('acceptBeacon', chatRoom);
+  } else {
+    dispatch(updateBeacon({ location: null, completed: true })); // OR create another action 'BEACON_SAVED'???
+  }
+  // to check to see if responder is the first,
+  // see if chatroom id exists already
+  // if chatroom id exists -> not first
+  // if chatroom id doesn't exist -> first, set up chatroom 
+}
+
 export const getCurrentLocation = location => ({
   type: 'GET_CURRENT_LOCATION',
   location,

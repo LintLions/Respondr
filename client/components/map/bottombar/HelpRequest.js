@@ -6,7 +6,7 @@ import {
   TouchableHighlight,
   StyleSheet,
 } from 'react-native';
-import { drawRoute, updateBeacon } from '../../../actions/actions';
+import { drawRoute, updateBeacon, acceptBeacon } from '../../../actions/actions';
 
 import styles from '../../../styles/styles';
 
@@ -108,6 +108,17 @@ const mapDispatchToProps = (dispatch) => ({
   handleHelpRequestYes: () => {
     dispatch(drawRoute());
     dispatch(updateBeacon({ isAssigned: true }));
+    // TODO: 
+    // contact server, to 
+    // (1) I'm taking it to claim beacon
+    // (2) be added to a chatroom with beacon if i'm first responder yes
+    // (3) if i'm not the first yes, the server should tell you 
+    // by emitting beacon with NO location, so turn off beacon request 
+    
+    // create a new socket emitter that's listening on the server
+    // that's accepting new request acceptance 
+    // THEN logic of chatroom joining/not joining 
+    dispatch(acceptBeacon());
   },
   handleHelpRequestNo: () => {
     dispatch(updateBeacon({ location: null }));

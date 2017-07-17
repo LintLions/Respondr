@@ -3,11 +3,14 @@ const initState = {
   isAssigned: false,
   completed: false,
   chatRoom: '',
+  chatMessages: [], // individual msgs live on component's lcoal state 
 };
 const userReducer = (state = initState, action) => {
   switch (action.type) {
     case 'UPDATE_BEACON':
       return { ...state, ...action.options };
+    case 'SET_CHAT_ROOM': 
+      return { ...state, ...action.chatRoom };
     default:
       return state;
   }

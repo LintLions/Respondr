@@ -8,17 +8,19 @@ const websocket = socketio(server);
 const beaconSessions = [];
 
 websocket.on('connection', (socket) => {
-  console.log('A client just joined on', socket.id);
+  console.log('+++A client just joined on socket.id:', socket.id);
+  
   beacon.create({
     socket: socket.id,
   });
+
   socket.on('updateUser', (options) => {
-    console.log(options.query);
+    console.log('+++options.query: ', options.query);
     dynamicResponder.find({ where: options.query })
       .then((responder) => {
         if (responder) {
           responder.update({ socket: socket.id })
-            .then(updated => socket.emit('updateUser', updated));
+            .then(updatedResponder => socket.emit('updateUser', updatedResponder));
         } else {
           socket.emit('updateUser', { socket: socket.id });
         }
@@ -39,30 +41,42 @@ websocket.on('connection', (socket) => {
     .then(rows => console.log(`deleted ${rows} rows`));
   });
 
-  socket.on('getHelp', (loc) => {
-    console.log('server rcvd help request', loc);
+  socket.on('getHelp', (activeBeacon) => {
+    console.log('+++server rcvd help request', activeBeacon); // loc is an array of [lat, long]
+    // TODO: 
     // create beacon session with new room ID
     // find responder to pair with beacon
+    
     dynamicResponder.findAll()
       .then((responders) => {
         if (Array.isArray(responders)) {
           responders.forEach((responder) => {
             console.log(responder.socket);
-            if (responder.socket !== socket.id) {
-              // TODO: add room data
-              socket.to(responder.socket).emit('newBeacon', loc);
+            if (responder.socket !== socket.id) { // OR responder.socket !== activeBeacon.id ???
+              // TODO: add room data 
+              // should be given loc, AND chatroom! 
+              // send bigger object next line 
+              socket.to(responder.socket).emit('newBeacon', activeBeacon);
             }
           });
         } else if (responders) {
           console.log(responders.id);
-          if (responders.socket !== socket.id) {
-            socket.to(responders.socket).emit('newBeacon', loc);
+          if (responders.socket !== socket.id) { // OR responder.socket !== activeBeacon.id ???
+            socket.to(responders.socket).emit('newBeacon', activeBeacon);
           }
         } else {
           console.log('no responder for gethelp');
         }
       });
   });
+
+  socket.on('acceptBeacon', (chatRoom) => {
+    // to check to see if responder is the first,
+    // see if chatroom id exists already
+    // if chatroom id exists -> not first
+    // if chatroom id doesn't exist -> first, set up chatroom 
+    socket.join(chatRoom);
+  })
 });
 
 
