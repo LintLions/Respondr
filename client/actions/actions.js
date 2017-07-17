@@ -13,6 +13,16 @@ export const goHome = () => {
     type: 'HOME'
   }
 }
+// these are all action creators that create the action object 
+
+export const getCurrentLocation = (userLocation) => {
+  return {
+    type: 'GET_CURRENT_LOCATION',
+    userLocation
+  };
+};
+
+
 export const getHelp = () => {
   return {
     type: 'GET_HELP',
