@@ -29,61 +29,57 @@ function genJti() {
   return jti;
 }
 function getUserScheme(req) {
-  
-  var username;
-  var type;
-  var userSearch = {};
+  let username = '';
+  let type = '';
+  let userSearch = {};
 
   // The POST contains a username and not an email
-  if(req.body.username) {
+  if (req.body.username) {
     username = req.body.username;
     type = 'username';
     userSearch = { username: username };
   }
   // The POST contains an email and not an username
-  else if(req.body.email) {
+  else if (req.body.email) {
     username = req.body.email;
     type = 'email';
     userSearch = { email: username };
   }
 
   return {
-    username: username,
-    type: type,
-    userSearch: userSearch
-  }
+    username,
+    type,
+    userSearch,
+  };
 }
-exports.addUser = function(req, res) { //add user
-  
-  var userScheme = getUserScheme(req);  
 
+exports.addUser = function(req, res) { //add user
+  var userScheme = getUserScheme(req);  
   if (!userScheme.username || !req.body.password) {
     return res.status(400).send({error: "You must send the username and the password"});
   }
 
-  dynamicResponder.findOne({where: userScheme.userSearch}).then((user) => {
+  dynamicResponder.findOne({ where: userScheme.userSearch }).then((user) => {
     if (user) {
       return res.status(400).send({error: "A user with that username already exists"});
     }
 // no static users plz
     dynamicResponder.create({
-      firstName: req.body.fName,
-      lastName: req.body.lName,
+      firstName: req.body.firstName,
+      lastName: req.body.lastName,
       phone: req.body.phone,
       organization: req.body.organization,
       email: req.body.email,
       password: dynamicResponder.generateHash(req.body.password),
       public: req.body.public,
       static: req.body.static,
-      fullName: `${req.body.fName} ${req.body.lName}`,
+      fullName: `${req.body.firstName} ${req.body.lName}`,
       token: createIdToken(req.body.email),
       socket: req.body.socket,
     }).then((newUser) => {
-      res.status(201).send({
-        newUser,
-        success: true,
-        access_token: createAccessToken(),
-      });
+      const decor = { access_token: createAccessToken(), success: true };
+      const result = Object.assign({}, newUser.dataValues, decor);
+      res.status(201).send(result);
     }).catch((err) => {
       console.error(`ERROR during create dynamicResponder => addUser ${err}`);
       res.status(500).send({ error: 'umm, I asked the server to let you in, but it said nah' });
@@ -94,37 +90,42 @@ exports.addUser = function(req, res) { //add user
   });
 };
 exports.addSession = (req, res) => {
+  console.log('loginBody', req.body);
   const userScheme = getUserScheme(req);
+  console.log(userScheme);
   if (!userScheme.username || !req.body.password) {
     return res.status(400).send({
       error: 'You must send the username and the password',
     });
   }
 
-  dynamicResponder.findOne({where: userScheme.userSearch}).then((user) => {
+  dynamicResponder.findOne({ where: userScheme.userSearch })
+  .then((user) => {
     if (!user) {
       return res.status(401).send({error: "The username is incorrect"});
     } else if (!bcrypt.compareSync(req.body.password, user.password)) {
-      return res.status(401).send({error: "The username and password don't match"});
-    } else {   
-      res.status(201).send({
-        user,
-        id_token: createIdToken(user.email),
-        access_token: createAccessToken()
-      });
+      return res.status(401).send({ error: 'The username and password do not match' });
     }
-    user.update({ socket: req.body.socket })
-    .then(() => {
-      res.status(201).send({
-        user,
-        access_token: createAccessToken(),
-      });
-    });
-  }).catch((err) => {
-    console.log(err);
-    res.sendStatus(500);
-  });
-}
+    return user.update({
+      socket: req.body.socket,
+      token: createIdToken(user.email),
+    })
+    .then((updated) => {
+      const access = { access_token: createAccessToken() };
+      const result = Object.assign({}, updated.dataValues, access);
+      console.log(result);
+      return res.status(201).send(result);
+    })
+    .catch(err => console.log(err) && res.status(500).send({
+      error: 'You are logged in, but the server could not update your token and socket',
+      user,
+      access_token: createAccessToken(),
+    }));
+  })
+  .catch(err => console.log(err) && res.status(500).send({
+    error: 'The db could not find ya bro',
+  }));
+};
 
 exports.getUser = (req, res) => {
   const socket = req.query.socket;

@@ -24,7 +24,7 @@ class HelpRequest extends Component {
         
         <View style={[styles.container, styles.box1]}>
           <Text style={styles.prompt}>
-            Hi {this.props.fName}, there's a beacon, would you be able to assist?
+            Hi {this.props.firstName}, there's a beacon, would you be able to assist?
           </Text>
           <View style={styles.row}>
             <TouchableHighlight 
@@ -100,7 +100,7 @@ var styleSheet = StyleSheet.create({
 });
 
 const mapStateToProps = (state) => ({
-  fName: state.responder.fName,
+  firstName: state.responder.firstName,
   beaconLocation: state.myBeacon.location,
 });
 

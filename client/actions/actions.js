@@ -10,17 +10,17 @@ export const updateBeacon = options => ({
   type: 'UPDATE_BEACON',
   options,
 });
-export const goBack = () => {
-  return {
-    type: 'BACK',
-  }
-};
-export const goHome = () => {
-  console.log("going Home");
-  return {
-    type: 'HOME'
-  }
-};
+export const updateUser = options => ({
+  type: 'UPDATE_USER',
+  options,
+});
+export const goBack = () => ({
+  type: 'BACK',
+});
+
+export const goHome = () => ({
+  type: 'HOME',
+});
 export const updateHelp = () => ({
   type: 'GET_HELP',
   isBeacon: true,
@@ -39,7 +39,6 @@ export const cancelHelp = () => ({
   isBeacon: false,
 });
 export const logInSuccess = (userData) => {
-  console.log('userData ', userData);
   return {
     type: 'LOGIN_SUCCESS',
     userData,
@@ -47,23 +46,26 @@ export const logInSuccess = (userData) => {
 };
 export const logIn = (options) => {
   const socketID = store.getState().user.socket;
+  const body = JSON.stringify({
+    email: options.email,
+    password: options.password,
+    socket: socketID,
+  });
   return (dispatch) => {
     fetch(`${url}/users/sessions/create`, {
       method: 'POST',
       headers: {
         Accept: 'application/json',
-        ContentType: 'application/json',
+        'content-type': 'application/json',
       },
-      body: JSON.stringify({
-        ...options,
-        socket: socketID,
-      }),
+      body,
     })
       .then(response => response.json())
       .then((responseData) => {
-        if (responseData.user) {
-          updateToken(responseData.user.token);
-          dispatch(logInSuccess(responseData.user));
+        console.log(responseData)
+        if (responseData.email) {
+          updateToken(responseData.token);
+          dispatch(logInSuccess(responseData));
           AlertIOS.alert('Login Success!');
         } else {
           AlertIOS.alert('Login Failed!', responseData.error);
@@ -71,10 +73,18 @@ export const logIn = (options) => {
       }).done();
   };
 };
-
-export const logOut = () => ({
+export const logOutSuccess = () => ({
   type: 'LOGOUT',
 });
+
+export const logOut = () => (dispatch) => {
+  AsyncStorage.removeItem('id_token', (err) => {
+    if (err) {
+      console.error('error removing session from phone storage ', err);
+    }
+    dispatch(logOutSuccess());
+   });
+};
 
 export const getUserWithTokenAndSocket = () => (dispatch) => {
   AsyncStorage.getItem('id_token', (err, value) => {
@@ -86,7 +96,16 @@ export const getUserWithTokenAndSocket = () => (dispatch) => {
         token: value,
       },
     });
-    socket.on('updateUser', data => dispatch(logInSuccess(data)));
+    socket.on('updateUser', (data) => {
+      console.log('data is ', data);
+      if (data.email) {
+        dispatch(updateUser({ socket: data.socket }));
+        dispatch(logInSuccess(data));
+      } else {
+        console.log(data);
+        dispatch(updateUser(data)); // {socket: ________}
+      }
+    });
   });
 };
 
@@ -125,9 +144,9 @@ export const signUp = userData => (dispatch) => {
     .then((responseData) => {
       console.log("response Data is ", responseData);
       if (responseData.success) {
-        updateToken(responseData.newUser.token);
-        AlertIOS.alert("Signup Success!", responseData.id_token);
-        dispatch(logInSuccess(responseData.newUser));
+        updateToken(responseData.token);
+        AlertIOS.alert("Signup Success!");
+        dispatch(logInSuccess(responseData));
       } else {
         AlertIOS.alert("Signup Failed!", responseData.error);
       }

@@ -17,8 +17,8 @@ class MapPage extends Component {
   render() {
     return (
       <View style={styles.container}>
-        
-      <MapView
+        <MapView
+          region={this.props.region}
           style={styles.map}
           showsUserLocation
           followsUserLocation
@@ -29,7 +29,7 @@ class MapPage extends Component {
                 latitude: this.props.beaconLocation[0],
                 longitude: this.props.beaconLocation[1],
               }}
-            /> 
+            />
             : null
           }
           <MapView.Polyline
@@ -40,19 +40,19 @@ class MapPage extends Component {
         </MapView>
         <View style={[styles.row]}>
           <TopBar />
-          {this.props.isLoggedIn && 
+          {this.props.isLoggedIn &&
             <AngelStatusIcon 
             // switchIsOn={this.state.switchIsOn} handleSwitchIsOn={this.handleSwitchIsOn}
             />
           }
         </View>
         <View style={[styles.column, styles.bottom]}>
-          {this.props.beaconLocation &&          
-            <BottomBarAngel/>
+          {this.props.beaconLocation &&
+            <BottomBarAngel />
           }
         </View>
         <View style={[styles.bottom]}>
-        {!this.props.isLoggedIn && 
+          {!this.props.isLoggedIn &&
           <HelpButton />}
         </View>
       </View>
@@ -61,6 +61,7 @@ class MapPage extends Component {
 }
 
 const mapStateToProps = state => ({
+  region: state.myBeacon.region,
   isLoggedIn: state.responder.isLoggedIn,
   userEmail: state.responder.email,
   isBeacon: state.user.isBeacon,

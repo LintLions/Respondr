@@ -3,8 +3,9 @@ const initState = {
   isAssigned: false,
   completed: false,
   chatRoom: '',
+  region: null,
 };
-const userReducer = (state = initState, action) => {
+export default (state = initState, action) => {
   switch (action.type) {
     case 'UPDATE_BEACON':
       return { ...state, ...action.options };
@@ -12,5 +13,3 @@ const userReducer = (state = initState, action) => {
       return state;
   }
 };
-
-export default userReducer;

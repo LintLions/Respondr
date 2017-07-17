@@ -2,7 +2,6 @@ import React, { Component } from 'react';
 import {
   Image,
   Text,
-  TextInput,
   View,
   Button,
 } from 'react-native';
