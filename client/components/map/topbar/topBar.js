@@ -17,6 +17,7 @@ import Login from './login';
 import Signup from './signup';
 import config from '../../config.js';
 import styles from '../../../styles/styles.js';
+import { logOut } from '../../../actions/actions.js';
 
 class TopBar extends Component {
   constructor(props) {
@@ -31,25 +32,10 @@ class TopBar extends Component {
       this.setState({modalVisible: visible, buttonVisible: !visible});
     };
 
-    this.checkRestricted = async () => {
-      const DEMO_TOKEN = await AsyncStorage.getItem('id_token');
-      fetch(`${config.url}/users/all`, {
-        method: "GET",
-        headers: {
-          'Authorization': 'Bearer ' + DEMO_TOKEN
-        }
-      })
-        .then((response) => response.text())
-        .then((quote) => {
-          AlertIOS.alert("Auth Successful", quote)
-        })
-        .done();
-    }
     this.logout = async () => {
       try {
         await AsyncStorage.removeItem('id_token');
         AlertIOS.alert("Logout Success!")
-        // this.props.isLoggedIn = false;
         this.props.handleIsLoggedIn();
       } catch (error) {
         console.log('AsyncStorage error: ' + error.message);
@@ -93,11 +79,11 @@ class TopBar extends Component {
                     }}
                   />
                   {this.state.selectedIndex === 0 &&  //LOGIN
-                    <Login />
+                    <Login setModalVisible={this.setModalVisible} />
                   } 
              
                   {this.state.selectedIndex === 1 &&  //SIGNUP
-                    <Signup />
+                    <Signup setModalVisible={this.setModalVisible} />
                   } 
                 </View>
                } 
@@ -117,20 +103,6 @@ class TopBar extends Component {
           </TouchableHighlight>
           {!this.props.isLoggedIn &&  <Text>Signup</Text>}
         </View> }
-        <TouchableHighlight
-          onPress={
-            () => this.checkRestricted()
-          }
-        >
-          <Icon name="tools" size={40} color="#4F8EF7" style={styles.icon} />
-        </TouchableHighlight>
-        <TouchableHighlight
-          onPress={
-            () => this.logout()
-          }
-        >
-          <Icon name="lock" size={40} color="#4F8EF7" style={styles.icon} />
-        </TouchableHighlight>
       </View>
     );
   }

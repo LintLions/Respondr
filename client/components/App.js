@@ -3,17 +3,25 @@ import { connect } from 'react-redux';
 import React from 'react';
 import {
   AsyncStorage,
+  BackButton
 } from 'react-native';
 import {StackNavigator, addNavigationHelpers } from 'react-navigation';
 import MapPage from './map/MapPage';
 import SignUpPage from './signup/signUpPage';
 import config from './config';
-import { getUserWithToken } from '../actions/actions.js';
+import { getUserWithToken, goBack } from '../actions/actions.js';
+
+const navigationOptions = {
+    header: (navigation) => ({
+      title: 'Signup',
+      left:  <BackButton onPress={() => this.props.goBack()} />
+    })
+  }
 
 export const Navigator = StackNavigator({
   Home: { screen: MapPage},
   Signup: {screen: SignUpPage }
-});
+})
 
 class App extends React.Component {
   constructor(props) {
@@ -47,7 +55,11 @@ const mapStateToProps = (state) => ({
 const mapDispatchToProps = (dispatch) => ({
   getUserWithToken: () => {
     dispatch(getUserWithToken());
-  }
+  },
+  goBack: () => {
+    dispatch(goBack(null));
+  },
+  dispatch:dispatch
 })
 
 export default connect(mapStateToProps, mapDispatchToProps)(App)

@@ -2,6 +2,17 @@ import config from '../components/config.js';
 import {AlertIOS, AsyncStorage} from 'react-native';
 import {updateToken} from '../components/helpers.js';
 
+export const goBack = () => {
+  return {
+    type: 'BACK',
+  }
+}
+export const goHome = () => {
+  console.log("going Home");
+  return {
+    type: 'HOME'
+  }
+}
 // these are all action creators that create the action object 
 
 export const getCurrentLocation = (userLocation) => {
@@ -10,6 +21,7 @@ export const getCurrentLocation = (userLocation) => {
     userLocation
   };
 };
+
 
 export const getHelp = () => {
   return {
@@ -85,83 +97,29 @@ export const getUserWithToken =  () => {
   }
 }
 
-
-// this.login = () => {
-//       fetch(`${config.url}/users/sessions/create`, {
-//         method: "POST",
-//         headers: {
-//           'Accept': 'application/json',
-//           'Content-Type': 'application/json'
-//         },
-//         body: JSON.stringify({
-//           email: this.state.email,
-//           password: this.state.password,
-//         })
-//       })
-//         .then((response) => response.json())
-//         .then((responseData) => {
-//           this.props.screenProps.methods.updateToken(responseData.id_token);
-//           AlertIOS.alert("Login Success!")
-          
-//           // store.user.email = response.email
-//         })
-//         .done();
-//     }
-
-
-  // methods: {
-  //       updateToken: async (value) => {
-  //         try {
-  //           await AsyncStorage.setItem('id_token', value);
-  //         } catch (error) {
-  //           console.log('AsyncStorage error: ' + error.message);
-  //         }
-  //       },
-  //       getUserWithToken: async () => {
-  //         try {
-  //           const value = await AsyncStorage.getItem('id_token');
-  //           console.log('value is ', value)
-  //           if (value !== null){
-  //             return fetch(`${config.url}/users/getUser/`)
-  //               .then((response) => response.json())
-  //               .then((responseJson) => {
-  //               console.log('response from getUserWithToken ', responseJson);
-  //               this.setState({
-  //                 user:{
-  //                   fullName: responseJson.fullName,
-  //                   email: responseJson.email
-  //                  }, 
-  //                 isLoggedIn: true
-  //               })
-                
-  //             })
-  //           }      
-  //         } catch (error) {
-  //           console.error("error getting user with id_token", error);
-  //         }
-  //       },
-  //       updateDevice: async (value) => {
-  //         try {
-  //           await AsyncStorage.setItem('device', value);
-  //         } catch (error) {
-  //           console.log('AsyncStorage error: ' + error.message);
-  //         }
-  //       },
-  //       getAsyncData: async (string) => {
-  //         try {
-  //           await AsyncStorage.getItem(string)
-  //         } catch (error) {
-  //           console.log('AsyncStorage error: ' + error.message);
-  //         }
-  //       },
-  //       updatePushData: (data) => {
-  //         this.setState({pushData: data});
-  //       },
-  //       handleIsLoggedIn: () => {
-  //         this.setState({
-  //           isLoggedIn: !(this.state.isLoggedIn)
-  //         })
-  //       }
-  //     }
-    // }
-  
+export const signUp = (userData) => {
+  return dispatch => {
+    console.log("userData is ", userData);
+      fetch(`${config.url}/users`, {
+        method: "POST",
+        headers: {
+          'Accept': 'application/json',
+          'Content-Type': 'application/json'
+        },
+        body: userData
+      })
+        .then((response) => response.json())
+        .then((responseData) => {
+          console.log("response Data is ", responseData);
+          if (responseData.success) {
+            updateToken(responseData.newUser.token);
+            AlertIOS.alert("Signup Success!", responseData.id_token);
+            dispatch(logInSuccess(responseData.newUser));
+          } else {
+            AlertIOS.alert("Signup Failed!", responseData.error);
+          }
+        })
+        .done();
+    
+  }
+}
