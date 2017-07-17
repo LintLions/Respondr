@@ -1,10 +1,10 @@
+
 /**
  * Sample React Native App
  * https://github.com/facebook/react-native
  * @flow
  */
-'use strict';
 import { AppRegistry } from 'react-native';
-import App from './client/components/App';
+import Index from './client/index';
 
-AppRegistry.registerComponent('Respondr', () => App);
+AppRegistry.registerComponent('Respondr', () => Index);

@@ -1,42 +1,46 @@
 'use strict';
 
+import { getHelp, cancelHelp } from '../../../actions/actions' // JC: do we need this? 
+
+import { connect } from 'react-redux';
 import React, { Component } from 'react'
 import {
   View,
   Text,
   TouchableHighlight,
-  Modal,
-  SegmentedControlIOS,
-  StyleSheet
+  StyleSheet,
 } from 'react-native';
 import MapView from 'react-native-maps';
+
+import styles from '../../../styles/styles';
 
 class HelpButton extends Component {
   constructor(props) {
     super(props);
-    this.state = {
-      
-    };
+  
   }
   render() {
-    const btnOrModal = this.props.helpButtonVisible ?
-      (<View>
+    const btnOrModal = this.props.isBeacon === false ?
+      (<View style={[styles.helpButtonContainer]}>
+          
           <TouchableHighlight
-            style={styles.button}
+            style={[styles.helpButton]}
             underlayColor='#48BBEC'
-            onPress={this.props.getHelp}>
-            <Text style={styles.buttonText}>Get Help</Text>
+            onPress={this.props.handleHelpButtonPress}>
+            <Text style={styles.helpButtonText}>HELP</Text>
           </TouchableHighlight>
+          
         </View>) :
         (<View>
           <Text style={styles.prompt}>Help is on the way</Text>
-          <TouchableHighlight 
+          <TouchableHighlight
             style={styles.button}
             underlayColor='#b22222'
-            onPress={this.props.cancelHelp}>
+            onPress={this.props.handleCancelButtonPress}>
             <Text style={styles.buttonText}>Cancel Help Request</Text>
           </TouchableHighlight>
         </View>);
+    
     return (
       <View style={styles.container}>
         {btnOrModal}
@@ -45,7 +49,7 @@ class HelpButton extends Component {
   }    
 }
 
-var styles = StyleSheet.create({
+var styleSheet = StyleSheet.create({
   container: {
     flex: 1
   },
@@ -98,5 +102,21 @@ var styles = StyleSheet.create({
     color: 'white',
   }
 });
+
+const mapStateToProps = (state) => ({
+  isBeacon: state.user.isBeacon
+})
+
+const mapDispatchToProps = (dispatch) => ({
+  handleCancelButtonPress: () => {
+    dispatch(cancelHelp());
+  },
+
+  handleHelpButtonPress: () => {
+    dispatch(getHelp());
+  },
+});
+
+HelpButton = connect(mapStateToProps, mapDispatchToProps)(HelpButton)
 
 module.exports = HelpButton

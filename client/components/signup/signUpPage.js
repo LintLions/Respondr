@@ -3,10 +3,12 @@ import { TabNavigator, NavigationActions } from 'react-navigation';
 import {
   AlertIOS,
 } from 'react-native';
+import { connect } from 'react-redux';
 import PersonalInfoScreen from './PersonalInfo';
 import PublicScreen from './Public';
 import StaticScreen from './Static';
 import config from '../config';
+import { signUp } from '../../actions/actions'
 
 const navScreens = {
   Personal: { screen: PersonalInfoScreen },
@@ -30,15 +32,15 @@ const SignUpNavigator = TabNavigator(navScreens, navOptions);
 
 class SignUpPage extends Component {
   static navigationOptions = ({ navigation }) => ({
-    title: `Signup for ${navigation.state.params.email}`,
+    title: `Signup`,
   });
   constructor(props) {
     super(props);
     this.state = {
-      socket: this.props.screenProps.socket.id,
-      email: this.props.navigation.state.params.email || '',
-      fName: '',
-      lName: '',
+      socket: this.props.socket,
+      email: '',
+      firstName: '',
+      lastName: '',
       password: '',
       phone: '',
       organization: '',
@@ -56,12 +58,12 @@ class SignUpPage extends Component {
     }
     this.onFNameChange = (e) => {
       console.log(e.nativeEvent)
-      let fName = e.nativeEvent.text
-      this.setState( {fName:fName} );
+      let firstName = e.nativeEvent.text
+      this.setState( {firstName:firstName} );
     }
     this.onLNameChange = (e) => {
-      let lName = e.nativeEvent.text
-      this.setState( {lName:lName} );
+      let lastName = e.nativeEvent.text
+      this.setState( {lastName:lastName} );
     }
     this.onPasswordChange = (e) => {
       let password = e.nativeEvent.text
@@ -87,36 +89,17 @@ class SignUpPage extends Component {
     }
 
     this.signup = () => {
-      console.log(this.state)
-      fetch(`${config.url}/users`, {
-        method: "POST",
-        headers: {
-          'Accept': 'application/json',
-          'Content-Type': 'application/json'
-        },
-        body: JSON.stringify(this.state)
-      })
-        .then((response) => response.json())
-        .then((responseData) => {
-          console.log("response Data is ", responseData);
-          if (responseData.success) {
-            this.props.screenProps.methods.updateToken(responseData.newUser.token);
-            AlertIOS.alert("Signup Success!", responseData.id_token);
-            this.props.screenProps.methods.handleIsLoggedIn();
-            this.props.navigation.goBack();
-          } else {
-            AlertIOS.alert("Signup Failed!", responseData.error);
-          }
-        })
-        .done();
+      var userData = JSON.stringify(this.state);
+      this.props.handleSignUp(userData);
+      this.props.goHome();
     };
   }
 
   render() {
     const props = {
       email: this.email,
-      fName: this.fName,
-      lName: this.lName,
+      firstName: this.firstName,
+      lastName: this.lastName,
       password: this.password,
       phone: this.phone,
       organization: this.organization,
@@ -144,5 +127,18 @@ class SignUpPage extends Component {
   }
 
 }
+const mapStatetoProps = (state) => ({
+  nav: state.nav,
+  socket: state.user.socket,
+});
+const mapDispatchToProps = (dispatch) => ({
+  handleSignUp: (userData) => {
+    dispatch(signUp(userData));
+  },
+  goHome: () => {
+    dispatch(NavigationActions.navigate({ routeName: 'Home' }))
+  }
+});
 
+SignUpPage = connect(mapStatetoProps, mapDispatchToProps)(SignUpPage)
 export default SignUpPage;
