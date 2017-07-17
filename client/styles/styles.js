@@ -205,7 +205,8 @@ var styles = StyleSheet.create({
 export default styles;
 
 // ======== OLD STYLES ARCHIVE ========
-var styles2 = StyleSheet.create({
+// =========== (DO NOT USE) ===========
+var stylesArchive = StyleSheet.create({
   container: {
     flexDirection: 'column',
     flex: 1
