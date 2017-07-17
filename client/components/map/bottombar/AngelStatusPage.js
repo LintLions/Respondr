@@ -9,6 +9,8 @@ import {
   Switch
 } from 'react-native';
 
+import styles from '../../../styles/styles';
+
 class AngelStatusPage extends React.Component {
   constructor(props) {
     super(props)
@@ -37,7 +39,7 @@ class AngelStatusPage extends React.Component {
   }
 }
 
-var styles = StyleSheet.create({
+var styleSheet = StyleSheet.create({
   container: {
     flex: 1,
     height: 222,

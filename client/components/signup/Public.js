@@ -7,7 +7,8 @@ import {
   TouchableHighlight,
 } from 'react-native';
 import {NavigationActions} from "react-navigation";
-import styles from '../../styles/signupStyles';
+// import styles from '../../styles/signupStyles';
+import styles from '../../styles/styles';
 import Icon from 'react-native-vector-icons/Entypo';
 
 class PublicScreen extends Component {
