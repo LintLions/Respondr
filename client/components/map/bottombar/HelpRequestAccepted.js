@@ -1,5 +1,4 @@
-'use strict';
-
+import { connect } from 'react-redux';
 import React, { Component } from 'react'
 import {
   View,
@@ -8,18 +7,13 @@ import {
   StyleSheet
 } from 'react-native';
 import MapView from 'react-native-maps';
-
 import AngelStatusPage from './AngelStatusPage';
+import { drawRoute, updateBeacon } from '../../../actions/actions';
 
-// props received: userName, beaconLocation
-// props to pass down: yes/no to help request 
 
 class HelpRequestAccepted extends Component {
   constructor(props) {
     super(props);
-    this.state = {
-    
-    };
   }
 
   render() {
@@ -27,10 +21,9 @@ class HelpRequestAccepted extends Component {
 
     return (
       <View style={styles.container}>
-      
         <View style={styles.box1}>
           <Text style={styles.prompt}>
-            You're an angel {this.props.username}!
+            You're an angel {this.props.fName}!
           </Text>
           <View style={styles.buttonDirection}>
             <TouchableHighlight
@@ -46,6 +39,29 @@ class HelpRequestAccepted extends Component {
     );
   }
 }
+this.handleHelpRequestYes = (e) => {
+      e.preventDefault();
+      this.setState({
+        helpRequestStatus: 'yes',
+      });
+      this.props.drawRoute(this.props.beaconLocation);
+    };
+
+    this.handleHelpRequestNo = async (e) => {
+      e.preventDefault();
+      this.setState({
+        helpRequestStatus: 'no',
+      });
+      this.props.screenProps.methods.updateState({ beaconLocation: null });
+    };
+
+    this.handleHelpRequestCancel = (e) => {
+      e.preventDefault();
+      this.setState({
+        helpRequestCancel: true,
+      });
+      this.props.screenProps.methods.updateState({ beaconLocation: null });
+    };
 
 var styles = StyleSheet.create({
   container: {
@@ -94,6 +110,19 @@ var styles = StyleSheet.create({
     color: 'white',
   }
 });
+
+const mapStateToProps = (state) => ({
+  fName: state.responder.fName,
+  beaconLocation: state.myBeacon.location,
+});
+
+const mapDispatchToProps = (dispatch) => ({
+  handleHelpRequestCancel: () => {
+    dispatch(updateBeacon({ location: null, isAssigned: false }));
+  },
+});
+
+HelpRequestAccepted = connect(mapStateToProps, mapDispatchToProps)(HelpRequestAccepted);
 
 module.exports = HelpRequestAccepted;
 

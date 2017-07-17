@@ -1,7 +1,8 @@
 const initState = {
   socket: '',
-  location: [],
+  location: null,
   isBeacon: false,
+  route: null,
 };
 const userReducer = (state = initState, action) => {
   switch (action.type) {

@@ -28,7 +28,6 @@ function genJti() {
   
   return jti;
 }
-
 function getUserScheme(req) {
   
   var username;
@@ -54,7 +53,6 @@ function getUserScheme(req) {
     userSearch: userSearch
   }
 }
-
 exports.addUser = function(req, res) { //add user
   
   var userScheme = getUserScheme(req);  
@@ -93,14 +91,14 @@ exports.addUser = function(req, res) { //add user
   }).catch((err) => {
     console.log(err);
     res.sendStatus(500);
-  })
-}
-
-
+  });
+};
 exports.addSession = (req, res) => {
   const userScheme = getUserScheme(req);
   if (!userScheme.username || !req.body.password) {
-    return res.status(400).send({error: "You must send the username and the password"});
+    return res.status(400).send({
+      error: 'You must send the username and the password',
+    });
   }
 
   dynamicResponder.findOne({where: userScheme.userSearch}).then((user) => {

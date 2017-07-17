@@ -1,5 +1,5 @@
 const initState = {
-  location: [],
+  location: null,
   isAssigned: false,
   completed: false,
   chatRoom: '',
@@ -7,7 +7,7 @@ const initState = {
 const userReducer = (state = initState, action) => {
   switch (action.type) {
     case 'UPDATE_BEACON':
-      return { ...state, ...action };
+      return { ...state, ...action.options };
     default:
       return state;
   }

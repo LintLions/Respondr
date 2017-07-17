@@ -45,7 +45,7 @@ const mapDispatchToProps = (dispatch) => ({
     dispatch(getUserWithTokenAndSocket());
   },
   setLocation: (location) => {
-    dispatch(getCurrentLocation({ location }));
+    dispatch(getCurrentLocation(location));
   },
 });
 

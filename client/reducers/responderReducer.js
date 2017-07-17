@@ -1,6 +1,6 @@
 const initState = {
   isLoggedIn: false,
-  location: [],
+  location: null,
   email: '',
   fName: '',
   lName: '',
@@ -28,7 +28,7 @@ const responderReducer = (state = initState, action) => {
         isLoggedIn: true,
       };
     case 'LOGOUT':
-      return { ...initState };
+      return initState;
     default:
       return state;
   }

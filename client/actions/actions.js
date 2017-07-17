@@ -3,12 +3,12 @@ import {
   googleMapsDirectionsApiKey as APIKEY,
   url,
  } from '../components/config';
-import { updateToken, socket } from '../components/helpers';
+import { updateToken, socket, decode } from '../components/helpers';
 import { store } from '../index';
 
-export const updateBeacon = (options) => ({
+export const updateBeacon = options => ({
   type: 'UPDATE_BEACON',
-  ...options,
+  options,
 });
 
 export const updateHelp = () => ({
@@ -21,20 +21,16 @@ export const getHelp = () => (dispatch) => {
   dispatch(updateHelp);
 };
 
-export const getCurrentLocation = (location) => {
-  return {
-    type: 'GET_CURRENT_LOCATION',
-    location,
-  };
-};
+export const getCurrentLocation = location => ({
+  type: 'GET_CURRENT_LOCATION',
+  location,
+});
 
 
-export const cancelHelp = () => {
-  return {
-    type: 'CANCEL_HELP',
-    isBeacon: false,
-  };
-};
+export const cancelHelp = () => ({
+  type: 'CANCEL_HELP',
+  isBeacon: false,
+});
 
 export const logInSuccess = (userData) => {
   console.log('userData ', userData);
@@ -44,45 +40,42 @@ export const logInSuccess = (userData) => {
   };
 };
 
-export const logIn = (...args) => {
-  const socket = store.getState().user.socket;
+export const logIn = (options) => {
+  const socketID = store.getState().user.socket;
   return (dispatch) => {
     fetch(`${url}/users/sessions/create`, {
-      method: "POST",
+      method: 'POST',
       headers: {
-        'Accept': 'application/json',
-        'Content-Type': 'application/json',
+        Accept: 'application/json',
+        ContentType: 'application/json',
       },
-      body: JSON.stringify({ ...args, socket }),
+      body: JSON.stringify({
+        ...options,
+        socket: socketID,
+      }),
     })
-      .then((response) => response.json())
+      .then(response => response.json())
       .then((responseData) => {
-        if (responseData) {
-          console.log('responseData.user in LoginAction', responseData.user)
+        if (responseData.user) {
           updateToken(responseData.user.token);
           dispatch(logInSuccess(responseData.user));
           AlertIOS.alert('Login Success!');
         } else {
-           AlertIOS.alert('Login Failed!', responseData.error);
-          }
-      }).done();        
-  }
-}  
-
-
-
-export const logOut = () => {
-  return {
-    type: 'LOGOUT',
+          AlertIOS.alert('Login Failed!', responseData.error);
+        }
+      }).done();
   };
 };
+
+export const logOut = () => ({
+  type: 'LOGOUT',
+});
 
 export const getUserWithTokenAndSocket = () => (dispatch) => {
   AsyncStorage.getItem('id_token', (err, value) => {
     if (err) {
       console.error('error getting session from phone storage ', err);
     }
-    console.log('value in getUserWithToken is ', value);
     socket.emit('updateUser', {
       query: {
         token: value,
@@ -92,105 +85,23 @@ export const getUserWithTokenAndSocket = () => (dispatch) => {
   });
 };
 
-// TODO 
-// this.drawRoute = (latLong) => { // dest needs to be a string of coordinates (without space)
-//       const mode = 'walking'; 
-//       const origin = `${this.props.userLocation[0]},${this.props.userLocation[1]}`;
-//       const dest = `${latLong[0]},${latLong[1]}`;
-//       const url = `https://maps.googleapis.com/maps/api/directions/json?origin=${origin}&destination=${dest}&key=${APIKEY}&mode=${mode}`;
-//       console.log(url);
-//       fetch(url)
-//         .then(response => response.json())
-//         .then(responseJson => {
-//           if(responseJson.routes.length) {
-//             console.log(`setting coords state`);
-//             // action
-//             this.setState({
-//               coords: helpers.decode(responseJson.routes[0].overview_polyline.points),
-//             });
-//           }
-//         }).catch(e => {console.warn(e)});
-      
-//       console.log('url: ', url)
-//     }
+export const updateRoute = route => ({
+  type: 'UPDATE_ROUTE',
+  route,
+});
 
-
-// this.login = () => {
-//       fetch(`${config.url}/users/sessions/create`, {
-//         method: "POST",
-//         headers: {
-//           'Accept': 'application/json',
-//           'Content-Type': 'application/json'
-//         },
-//         body: JSON.stringify({
-//           email: this.state.email,
-//           password: this.state.password,
-//         })
-//       })
-//         .then((response) => response.json())
-//         .then((responseData) => {
-//           this.props.screenProps.methods.updateToken(responseData.id_token);
-//           AlertIOS.alert("Login Success!")
-          
-//           // store.user.email = response.email
-//         })
-//         .done();
-//     }
-
-
-  // methods: {
-  //       updateToken: async (value) => {
-  //         try {
-  //           await AsyncStorage.setItem('id_token', value);
-  //         } catch (error) {
-  //           console.log('AsyncStorage error: ' + error.message);
-  //         }
-  //       },
-  //       getUserWithToken: async () => {
-  //         try {
-  //           const value = await AsyncStorage.getItem('id_token');
-  //           console.log('value is ', value)
-  //           if (value !== null){
-  //             return fetch(`${config.url}/users/getUser/`)
-  //               .then((response) => response.json())
-  //               .then((responseJson) => {
-  //               console.log('response from getUserWithToken ', responseJson);
-  //               this.setState({
-  //                 user:{
-  //                   fullName: responseJson.fullName,
-  //                   email: responseJson.email
-  //                  }, 
-  //                 isLoggedIn: true
-  //               })
-                
-  //             })
-  //           }      
-  //         } catch (error) {
-  //           console.error("error getting user with id_token", error);
-  //         }
-  //       },
-  //       updateDevice: async (value) => {
-  //         try {
-  //           await AsyncStorage.setItem('device', value);
-  //         } catch (error) {
-  //           console.log('AsyncStorage error: ' + error.message);
-  //         }
-  //       },
-  //       getAsyncData: async (string) => {
-  //         try {
-  //           await AsyncStorage.getItem(string)
-  //         } catch (error) {
-  //           console.log('AsyncStorage error: ' + error.message);
-  //         }
-  //       },
-  //       updatePushData: (data) => {
-  //         this.setState({pushData: data});
-  //       },
-  //       handleIsLoggedIn: () => {
-  //         this.setState({
-  //           isLoggedIn: !(this.state.isLoggedIn)
-  //         })
-  //       }
-  //     }
-    // }
-  
+export const drawRoute = latLong => (dispatch) => {
+  const mode = 'walking';
+  const origin = `${store.getState().user.location[0]},${store.getState().user.location[1]}`;
+  const dest = latLong
+    ? `${latLong[0]},${latLong[1]}`
+    : store.getState().myBeacon.location.join(',');
+  const googleUrl = `https://maps.googleapis.com/maps/api/directions/json?origin=${origin}&destination=${dest}&key=${APIKEY}&mode=${mode}`;
+  fetch(googleUrl)
+    .then(response => response.json())
+    .then((responseJson) => {
+      if (responseJson.routes.length) {
+        dispatch(updateRoute(decode(responseJson.routes[0].overview_polyline.points)));
+      }
+    }).catch(e => console.warn(e));
+};

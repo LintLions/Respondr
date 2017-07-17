@@ -23,47 +23,15 @@ class BottomBarAngel extends Component {
       helpRequestStatus: 'default',
       helpRequestCancel: false
     };
-    this.handleHelpRequestYes = (e) => {
-      e.preventDefault();
-      this.setState({
-        helpRequestStatus: 'yes',
-      });
-      this.props.drawRoute(this.props.screenProps.beaconLocation);
-    };
-
-    this.handleHelpRequestNo = async (e) => {
-      e.preventDefault();
-      this.setState({
-        helpRequestStatus: 'no',
-      });
-      this.props.screenProps.methods.updateState({ beaconLocation: null });
-    };
-
-    this.handleHelpRequestCancel = (e) => {
-      e.preventDefault();
-      this.setState({
-        helpRequestCancel: true,
-      });
-      this.props.screenProps.methods.updateState({ beaconLocation: null });
-    };
   }
 
   render() {
     let Page = null;
-    if(this.props.switchIsOn === false || this.props.beaconExists === false ) {
-      Page = <AngelStatusPage switchIsOn={this.props.switchIsOn} handleSwitchIsOn={this.props.handleSwitchIsOn} username={this.props.username} />
-    } else {
-      if(this.state.helpRequestStatus === 'default') {
-        Page = <HelpRequest switchIsOn={this.props.switchIsOn} handleSwitchIsOn={this.props.handleSwitchIsOn} username={this.props.username} beaconLocation={this.props.beaconLocation} handleHelpRequestYes={this.handleHelpRequestYes} handleHelpRequestNo={this.handleHelpRequestNo}/>
-      } else if(this.state.helpRequestStatus === 'yes') {
-        if(this.state.helpRequestCancel === false) {
-          Page = <HelpRequestAccepted switchIsOn={this.props.switchIsOn} handleSwitchIsOn={this.props.handleSwitchIsOn} username={this.props.username} handleHelpRequestCancel={this.handleHelpRequestCancel} />
-        } else {
-          Page = <AngelStatusPage switchIsOn={this.props.switchIsOn} handleSwitchIsOn={this.props.handleSwitchIsOn} username={this.props.username} />
-          // should be notified whne the next beacon shows up still 
-        }
-      } else if (this.state.helpRequestStatus === 'no') {
-        Page = <AngelStatusPage switchIsOn={this.props.switchIsOn} handleSwitchIsOn={this.props.handleSwitchIsOn} username={this.props.username} />
+    if (!this.props.isAssigned) {
+      Page = <HelpRequest />
+    } else if (this.props.isAssigned) {
+      if (this.props.isAssigned) {
+        Page = <HelpRequestAccepted  />
       }
     }
     return (
@@ -119,6 +87,18 @@ var styles = StyleSheet.create({
     fontSize: 18,
     color: 'white',
   }
+});
+
+const mapStateToProps = (state) => ({
+  beaconLocation: state.myBeacon.location,
+  isAssigned: state.myBeacon.isAssigned,
+});
+
+const mapDispatchToProps = (dispatch) => ({
+  handleHelpRequestYes: () => {
+    dispatch(drawRoute(this.props.beaconLocation));
+    dispatch(updateBeacon({ isAssigned: true }));
+  },
 });
 
 module.exports = BottomBarAngel;

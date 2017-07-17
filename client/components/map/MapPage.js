@@ -29,7 +29,8 @@ class MapPage extends Component {
                 latitude: this.props.beaconLocation[0],
                 longitude: this.props.beaconLocation[1],
               }}
-            /> : null
+            /> 
+            : null
           }
           <MapView.Polyline
             coordinates={this.props.coords}
@@ -38,7 +39,7 @@ class MapPage extends Component {
           />
         </MapView>
         <View style={styles.row}>
-          <TopBar />
+          <TopBar screenProps={{ isLoggedIn: false }}/>
           {
              this.props.isLoggedIn &&
             <AngelStatusIcon 
@@ -61,7 +62,7 @@ class MapPage extends Component {
   }
 }
 
-const styles = StyleSheet.creconstte({
+const styles = StyleSheet.create({
   description: {
     marginBottom: 20,
     fontSize: 18,
@@ -132,7 +133,7 @@ const mapStateToProps = (state) => ({
   isBeacon: state.user.isBeacon,
   coords: state.user.route,
   userLocation: state.user.location,
-  beaconLocation: state.beacon.location,
+  beaconLocation: state.myBeacon.location,
 });
 
 MapPage = connect(mapStateToProps)(MapPage);

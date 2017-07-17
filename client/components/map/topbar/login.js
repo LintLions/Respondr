@@ -46,7 +46,7 @@ class Login extends Component {
           <TouchableHighlight 
             style={styles.button}
             underlayColor='#99d9f4'  
-            onPress={() => this.props.handleIsLoggedIn(this.state.email, this.state.password)}>
+            onPress={() => this.props.handleIsLoggedIn(this.state)}>
             <Text style={styles.buttonText}>Go</Text>
           </TouchableHighlight>
         </View>  

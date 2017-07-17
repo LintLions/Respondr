@@ -12,8 +12,9 @@ websocket.on('connection', (socket) => {
   beacon.create({
     socket: socket.id,
   });
-  socket.on('updateUser', (query) => {
-    dynamicResponder.find({ where: query })
+  socket.on('updateUser', (options) => {
+    console.log(options.query);
+    dynamicResponder.find({ where: options.query })
       .then((responder) => {
         if (responder) {
           responder.update({ socket: socket.id })
@@ -68,6 +69,5 @@ websocket.on('connection', (socket) => {
 module.exports = {
   websocket,
   socketio,
-  socketUsers,
   server,
 };

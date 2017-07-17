@@ -1,5 +1,6 @@
 'use strict';
 
+import { connect } from 'react-redux';
 import React, { Component } from 'react'
 import {
   View,
@@ -11,6 +12,7 @@ import MapView from 'react-native-maps';
 
 import HelpRequestAccepted from './HelpRequestAccepted';
 import AngelStatusPage from './AngelStatusPage';
+import { drawRoute, updateBeacon } from '../../../actions/actions';
 
 // props received: username, beaconLocation
 // props to pass down: yes/no to help request 
@@ -18,11 +20,7 @@ import AngelStatusPage from './AngelStatusPage';
 class HelpRequest extends Component {
   constructor(props) {
     super(props);
-    this.state = {
-      
-    };
-    
-  }
+  };
 
   render() {
     console.log('+++HelpRequest.js');
@@ -32,7 +30,7 @@ class HelpRequest extends Component {
         
         <View style={styles.box1}>
           <Text style={styles.prompt}>
-            Hi {this.props.username}, there's a beacon at {this.props.beaconLocation}, would you be able to assist?
+            Hi {this.props.fName}, there's a beacon, would you be able to assist?
           </Text>
           <View style={styles.buttonDirection}>
             <TouchableHighlight 
@@ -56,7 +54,7 @@ class HelpRequest extends Component {
   }
 }
 
-var styles = StyleSheet.create({
+const styles = StyleSheet.create({
   container: {
     flex: 1
   },
@@ -107,4 +105,21 @@ var styles = StyleSheet.create({
   }
 });
 
-module.exports = HelpRequest;
+const mapStateToProps = (state) => ({
+  fName: state.responder.fName,
+  beaconLocation: state.myBeacon.location,
+});
+
+const mapDispatchToProps = (dispatch) => ({
+  handleHelpRequestYes: () => {
+    dispatch(drawRoute());
+    dispatch(updateBeacon({ isAssigned: true }));
+  },
+  handleHelpRequestNo: () => {
+    dispatch(updateBeacon({ location: null }));
+  },
+});
+
+HelpRequest = connect(mapStateToProps, mapDispatchToProps)(HelpRequest);
+
+export default HelpRequest;
