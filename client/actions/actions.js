@@ -65,7 +65,7 @@ export const cancelHelp = () => ({
   isBeacon: false,
 });
 export const logInSuccess = (userData) => {
-  console.log('userData ', userData);
+  console.log('userData in logInSuccess: ', userData);
   return {
     type: 'LOGIN_SUCCESS',
     userData,
@@ -138,7 +138,7 @@ export const drawRoute = latLong => (dispatch) => {
 };
 
 export const signUp = userData => (dispatch) => {
-  console.log("userData is ", userData);
+  console.log("userData in signUp: ", userData);
   fetch(`${url}/users`, {
     method: 'POST',
     headers: {

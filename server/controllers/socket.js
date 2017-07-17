@@ -11,8 +11,16 @@ websocket.on('connection', (socket) => {
   console.log('+++A client just joined on socket.id:', socket.id);
   
   beacon.create({
-    socket: socket.id,
+    socket: socket.id
   });
+  
+  // >>>>>> to test if socket.id is actually created
+  beacon.find({socket: socket.id})
+    .then((beacon) => {
+      console.log('+++beacon in socket.js: ', beacon);
+      console.log('+++socket in socket.js: ', socket);
+    })
+  // <<<<<< to test if socket.id is actually created
 
   socket.on('updateUser', (options) => {
     console.log('+++options.query: ', options.query);
