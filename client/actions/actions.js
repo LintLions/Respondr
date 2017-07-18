@@ -6,14 +6,17 @@ import {
 import { updateToken, socket, decode } from '../components/helpers';
 import { store } from '../index';
 
+
 export const updateBeacon = options => ({
   type: 'UPDATE_BEACON',
   options,
 });
+
 export const updateUser = options => ({
   type: 'UPDATE_USER',
   options,
 });
+
 export const goBack = () => ({
   type: 'BACK',
 });
@@ -21,48 +24,49 @@ export const goBack = () => ({
 export const goHome = () => ({
   type: 'HOME',
 });
+
 export const updateHelp = () => ({
   type: 'GET_HELP',
   isBeacon: true,
 });
-export const setChatRoom = (activeBeaconSocketID) => ({
-  type: "SET_CHAT_ROOM",
-  chatRoom: activeBeaconSocketID
-})
+
 export const getHelp = () => (dispatch) => {
   const activeBeaconSocketID = store.getState().user.socket;
   const activeBeaconLoc = store.getState().user.location;
+  console.log('+++actions.js - getHelp - activeBeaconSocketId: ', activeBeaconSocketID);
+  console.log('+++actions.js - getHelp - activeBeaconLoc: ', activeBeaconLoc);
+
   const activeBeacon = {
-    id: activeBeaconSocketID, // this will be used at the chatRoom id 
+    id: activeBeaconSocketID, 
     loc: activeBeaconLoc
   }
   socket.emit('getHelp', activeBeacon);
-  dispatch(updateHelp);
-  dispatch(setChatRoom(activeBeaconSocketID));
+
+  dispatch(updateHelp());
 };
 
 export const acceptBeacon = () => (dispatch) => {
-  const chatRoom = store.getState().myBeacon.chatRoom; 
-  const beaconTaken = !!chatRoom; 
-  if(!beaconTaken) {
+  console.log('+++in actions.js - acceptBeacon');
+  const isBeaconTaken = store.getState().myBeacon.isAssigned;
+  const chatRoom = store.getState().myBeacon.chatRoom;
+  if(!isBeaconTaken) {
     socket.emit('acceptBeacon', chatRoom);
+    dispatch(updateBeacon({ isAssigned: true }));
   } else {
-    dispatch(updateBeacon({ location: null, completed: true })); // OR create another action 'BEACON_SAVED'???
+    dispatch(updateBeacon({ location: null, completed: true }));
   }
-  // to check to see if responder is the first,
-  // see if chatroom id exists already
-  // if chatroom id exists -> not first
-  // if chatroom id doesn't exist -> first, set up chatroom 
 }
 
 export const getCurrentLocation = location => ({
   type: 'GET_CURRENT_LOCATION',
   location,
 });
+
 export const cancelHelp = () => ({
   type: 'CANCEL_HELP',
   isBeacon: false,
 });
+
 export const logInSuccess = (userData) => {
   console.log('userData in logInSuccess: ', userData);
   return {
@@ -70,6 +74,7 @@ export const logInSuccess = (userData) => {
     userData,
   };
 };
+
 export const logIn = (options) => {
   const socketID = store.getState().user.socket;
   const body = JSON.stringify({
@@ -99,6 +104,7 @@ export const logIn = (options) => {
       }).done();
   };
 };
+
 export const logOutSuccess = () => ({
   type: 'LOGOUT',
 });
@@ -123,7 +129,7 @@ export const getUserWithTokenAndSocket = () => (dispatch) => {
       },
     });
     socket.on('updateUser', (data) => {
-      console.log('data is ', data);
+      console.log('socket.on updateUser in actions.js is ', data);
       if (data.email) {
         dispatch(updateUser({ socket: data.socket }));
         dispatch(logInSuccess(data));
@@ -143,7 +149,7 @@ export const updateRoute = route => ({
 export const drawRoute = latLong => (dispatch) => {
   const mode = 'walking';
   const origin = `${store.getState().user.location[0]},${store.getState().user.location[1]}`;
-  const dest = latLong
+  const dest = latLong 
     ? `${latLong[0]},${latLong[1]}`
     : store.getState().myBeacon.location.join(',');
   const googleUrl = `https://maps.googleapis.com/maps/api/directions/json?origin=${origin}&destination=${dest}&key=${APIKEY}&mode=${mode}`;

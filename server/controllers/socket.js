@@ -1,26 +1,23 @@
 const app = require('../../index.js');
 const server = require('http').createServer(app);
 const socketio = require('socket.io');
+
 const dynamicResponder = require('../db/models/dynamicResponders');
 const beacon = require('../db/models/beacons');
 
 const websocket = socketio(server);
-const beaconSessions = [];
+const activeBeaconSession = {
+  beacon: '',
+  responder: '',
+  messages: []
+};
 
 websocket.on('connection', (socket) => {
   console.log('+++A client just joined on socket.id:', socket.id);
   
   beacon.create({
     socket: socket.id
-  });
-  
-  // >>>>>> to test if socket.id is actually created
-  beacon.find({socket: socket.id})
-    .then((beacon) => {
-      console.log('+++beacon in socket.js: ', beacon);
-      console.log('+++socket in socket.js: ', socket);
-    })
-  // <<<<<< to test if socket.id is actually created
+  });  
 
   socket.on('updateUser', (options) => {
     console.log('+++options.query: ', options.query);
@@ -37,7 +34,7 @@ websocket.on('connection', (socket) => {
 
   socket.on('disconnect', () => {
     // check if socket is in a beacon session
-      // if yes and isREsponder -> ask beacon if they still need help
+      // if yes and isResponder -> ask beacon if they still need help
         // if yes then rerun getHelp functionality
         // if no then remove session
       // if yes and isBeacon ->
@@ -50,20 +47,15 @@ websocket.on('connection', (socket) => {
   });
 
   socket.on('getHelp', (activeBeacon) => {
-    console.log('+++server rcvd help request', activeBeacon); // loc is an array of [lat, long]
-    // TODO: 
-    // create beacon session with new room ID
-    // find responder to pair with beacon
-    
+    console.log('+++server rcvd help request, activeBeacon: ', activeBeacon); 
+    activeBeaconSession.beacon = activeBeacon.id;
+
     dynamicResponder.findAll()
       .then((responders) => {
         if (Array.isArray(responders)) {
           responders.forEach((responder) => {
-            console.log(responder.socket);
+            console.log('+++responder.socekt: ', responder.socket);
             if (responder.socket !== socket.id) { // OR responder.socket !== activeBeacon.id ???
-              // TODO: add room data 
-              // should be given loc, AND chatroom! 
-              // send bigger object next line 
               socket.to(responder.socket).emit('newBeacon', activeBeacon);
             }
           });
@@ -76,13 +68,27 @@ websocket.on('connection', (socket) => {
           console.log('no responder for gethelp');
         }
       });
+    
+    const chatRoom = activeBeacon.id;
+    socket.join(chatRoom);
+
+    // ============================================================
+    socket.emit('messages', activeBeaconSession.messages);
+    socket.on('messages', messages => {
+      this.props.displayMessages;
+    })
+
+    mapDispatchToProps = (dispatch) => ({
+      displayMessages: () => {
+        dispatch(displayMessages());
+      }
+    })
+    // ============================================================
+  
   });
 
   socket.on('acceptBeacon', (chatRoom) => {
-    // to check to see if responder is the first,
-    // see if chatroom id exists already
-    // if chatroom id exists -> not first
-    // if chatroom id doesn't exist -> first, set up chatroom 
+    console.log('+++in socket.js - acceptBeacon')
     socket.join(chatRoom);
   })
 });
