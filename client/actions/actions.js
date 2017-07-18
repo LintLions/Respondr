@@ -153,3 +153,19 @@ export const signUp = userData => (dispatch) => {
     })
     .done();
 };
+
+export const getRespondersSucceed = responders => ({
+  type: 'UPDATE_RESPONDERS',
+  responders,
+});
+
+export const getResponders = () => (dispatch) => {
+      console.log("In get responders url is ", url);
+  fetch(`${url}/users/all`)
+    .then(response => response.json())
+    .then((responseJson) => {
+
+      dispatch(getRespondersSucceed(responseJson));
+    })
+    .catch(e => console.warn(e));
+};

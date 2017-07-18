@@ -7,17 +7,15 @@ const users = [{
   id: 1,
   username: 'gonto',
   email: 'gonto',
-  password: 'gonto'
+  password: 'gonto',
 }];
 
-router.get('/', controller.getUser)
+router.get('/', controller.getUser);
 
-router.get('/all', auth.check, auth.restrict('full_access'), controller.getUsers)
+router.get('/all', controller.getUsers); // auth.check, auth.restrict('full_access'),
 
 router.post('', controller.addUser);
 
 router.post('/sessions/create', controller.addSession);
-
-
 
 module.exports = router;

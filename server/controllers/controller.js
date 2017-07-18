@@ -146,18 +146,18 @@ exports.getUser = (req, res) => {
     }));
 };
 
-exports.getUsers = function(req, res) {
+exports.getUsers = function (req, res) {
   dynamicResponder.findAll({})
   .then((results) => {
     console.log(results);
     res.send(results);
   }).catch((err) => {
-    console.error( err + " on line 116")
-    res.sendStatus(500)
-  })
+    console.error(err, ' on line 116');
+    res.sendStatus(500);
+  });
 };
 
-exports.addBeacon = function(req, res) {
+exports.addBeacon = function (req, res) {
   beacon.create({
     currentLocation: [req.body.latitude, req.body.longitude],
   }).then((beacon) => {
@@ -170,12 +170,12 @@ exports.addBeacon = function(req, res) {
 };
 
 exports.deleteBeacon = function (req, res) {
-  console.log(req.body)
-  beacon.findOne({where: {currentLocation:[req.body.latitude, req.body.longitude]}})
-  .then(beacon => {
-    return beacon.destroy()
+  console.log(req.body);
+  beacon.findOne({ where: { currentLocation: [req.body.latitude, req.body.longitude] } })
+  .then((beacon) => {
+    return beacon.destroy();
   })
   .then(() => {
-    res.status(200).send('Beacon Destroyed')
-  })
-}
+    res.status(200).send('Beacon Destroyed');
+  });
+};

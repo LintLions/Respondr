@@ -22,7 +22,24 @@ class MapPage extends Component {
           style={styles.map}
           showsUserLocation
           followsUserLocation
+          showsPointsOfInterest={false}
+          showsMyLocationButton={true}
+          showsBuildings={true}
         >
+          {this.props.responders.map((marker) => {
+           const coordinates = {
+            "latitude": marker.currentLocation[0],
+            "longitude": marker.currentLocation[1],
+          }
+            return (
+              <MapView.Marker
+                coordinate={coordinates}
+                title={marker.fullName}
+                description={marker.organization}
+                image={require('../../styles/assets/wings.png')}
+              />
+            );
+          })}
           {this.props.beaconLocation
             ? <MapView.Marker
               coordinate={{
@@ -68,6 +85,7 @@ const mapStateToProps = state => ({
   coords: state.user.route,
   userLocation: state.user.location,
   beaconLocation: state.myBeacon.location,
+  responders: state.user.responders,
 });
 
 const MapPageConnected = connect(mapStateToProps)(MapPage);
