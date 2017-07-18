@@ -88,7 +88,8 @@ websocket.on('connection', (socket) => {
   });
 
   socket.on('acceptBeacon', (chatRoom) => {
-    console.log('+++in socket.js - acceptBeacon')
+    console.log('+++in socket.js - acceptBeacon - chatRoomID: ', chatRoom);
+    activeBeaconSession.responder = socket.id; 
     socket.join(chatRoom);
   })
 });

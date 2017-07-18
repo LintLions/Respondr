@@ -8,6 +8,7 @@ import TopBar from './topbar/topBar';
 import BottomBarAngel from './bottombar/BottomBarAngel';
 import HelpButton from './bottombar/helpButton';
 import AngelStatusIcon from './bottombar/AngelStatusIcon';
+import Chat from './bottombar/Chat';
 import styles from '../../styles/styles';
 
 class MapPage extends Component {
@@ -50,6 +51,9 @@ class MapPage extends Component {
           {this.props.beaconLocation &&
             <BottomBarAngel />
           }
+        </View>
+        <View>
+          <Chat />
         </View>
         <View style={[styles.bottom]}>
           {!this.props.isLoggedIn &&
