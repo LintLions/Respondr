@@ -3,11 +3,13 @@ import {
   View,
   Keyboard,
 } from 'react-native';
+import { connect } from 'react-redux';
 import styles from '../../../styles/styles';
 import HelpRequest from './HelpRequest';
 import HelpRequestAccepted from './HelpRequestAccepted';
 import { messages as testMessages } from '../../../../testData';
 import { GiftedChat } from 'react-native-gifted-chat';
+import { socket } from '../../helpers';
 
 class BottomChat extends React.Component {
   constructor(props) {
@@ -47,6 +49,13 @@ class BottomChat extends React.Component {
     this.setState((previousState) => ({
       messages: GiftedChat.append(previousState.messages, messages),
     }));
+    console.log('+++messages in onSend: ', messages);
+
+    var eachMessage = {
+      ...messages[0],
+      chatRoom: this.props.chatRoom
+    }
+    socket.emit('new message', eachMessage);
   }
 
   render() {
@@ -54,11 +63,12 @@ class BottomChat extends React.Component {
       <View style={this.state.style}>
         <GiftedChat
           isAnimated={false}
-          messages={this.state.messages}
+          messages={this.props.messages}
           onSend={(messages) => this.onSend(messages)}
           renderChatFooter={() => null}
           user={{
             _id: 1,
+            name: this.props.name === ' ' ? null : this.props.name,
           }}
         />
       </View>
@@ -67,4 +77,34 @@ class BottomChat extends React.Component {
 
 }
 
-export default BottomChat;
+const mapStateToProps = (state) => ({
+  chatRoom: state.myBeacon.chatRoom,
+  messages: state.myBeacon.chatMessages,
+  name: state.responder.fullName,
+});
+
+const mapDispatchToProps = (dispatch) => ({
+
+});
+
+export default connect(mapStateToProps, mapDispatchToProps)(BottomChat);
+
+// sendMessage() {
+//     var eachMessage = {
+//       message: this.state.message,
+//       chatRoom: this.state.chatRoom
+//     }
+//     // socket.emit('new message', this.state.message);
+//     socket.emit('new message', eachMessage);
+//     console.log('++sendMessage is executed');
+
+//     this.setState({
+//       message: ''
+//     })
+
+//     socket.on('render all messages', (messages) => {
+//       this.setState({
+//         messages
+//       })
+//     })
+//   }

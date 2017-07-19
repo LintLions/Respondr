@@ -9,7 +9,8 @@ const websocket = socketio(server);
 const activeBeaconSession = {
   beacon: '',
   responder: '',
-  messages: ['default test message in server']
+  chatRoom: '',
+  messages: [],
 };
 
 websocket.on('connection', (socket) => {
@@ -76,7 +77,8 @@ websocket.on('connection', (socket) => {
   socket.on('acceptBeacon', (chatRoom) => {
     console.log('+++in socket.js - acceptBeacon - chatRoomID: ', chatRoom);
     activeBeaconSession.responder = socket.id; 
-    console.log('+++in socket.js - acceptBeacon - responder: ', activeBeaconSession.responder);
+    activeBeaconSession.chatRoom = chatRoom; 
+    console.log('+++in socket.js - activeBeacon object: ', activeBeaconSession);
     socket.join(chatRoom);
 
     socket.to(chatRoom).emit('render all messages', activeBeaconSession.messages);
@@ -84,10 +86,12 @@ websocket.on('connection', (socket) => {
 
   socket.on('new message', (eachMessage) => {
     console.log('+++in socket.js - new message - message: ', eachMessage.message);
-    activeBeaconSession.messages.push(eachMessage.message);
+    activeBeaconSession.messages.unshift(eachMessage);
     console.log('+++in socket.js - PUSH - messages: ', activeBeaconSession.messages);
+    websocket.to(activeBeaconSession.beacon).emit('render all messages', activeBeaconSession.messages);
+    websocket.to(activeBeaconSession.responder).emit('render all messages', activeBeaconSession.messages);
 
-    socket.emit('render all messages', activeBeaconSession.messages);
+    // socket.emit('render all messages', activeBeaconSession.messages);
     // websocket.to(eachMessage.chatRoom).emit('render all messages', activeBeaconSession.messages);
     // socket.broadcast.emit('render all messages', activeBeaconSession.messages); // ???
     // socket.to(eachMessage.chatRoom).emit('render all messages', activeBeaconSession.messages);

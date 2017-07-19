@@ -7,6 +7,7 @@ import {
 import MapView from 'react-native-maps';
 import TopBar from './topbar/topBar';
 import BottomNav from './bottombar/BottomNav';
+import BottomChat from './bottombar/BottomChat';
 import HelpButton from './bottombar/helpButton';
 import AngelStatusIcon from './bottombar/AngelStatusIcon';
 import Chat from './bottombar/Chat';
@@ -65,20 +66,29 @@ class MapPage extends Component {
             />
           }
         </View>
+        <View>
+          {!this.props.isLoggedIn &&
+          <HelpButton />}
+        </View>
         <View
           style={[styles.column, styles.bottom]}
         >
           {this.props.beaconLocation &&
             <BottomNav />
           }
+          
+
         </View>
-        <View>
-          <Chat />
-        </View>
-        <View style={[styles.bottom]}>
-          {!this.props.isLoggedIn &&
-          <HelpButton />}
-        </View>
+
+        {this.props.isBeacon && 
+            <View style={styles.box3}>
+              <BottomChat />
+            </View>
+        }
+        
+
+
+
       </View>
     );
   }

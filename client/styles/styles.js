@@ -186,6 +186,17 @@ var styles = StyleSheet.create({
     borderColor: '#999999',
     backgroundColor: 'rgba(255, 255, 255, 0.8)'
   },
+  box3: {
+    // flex: 1,
+    padding: 20,
+    height: 400,
+    // top: 50,
+    bottom: -120,
+    // justifyContent: 'center',
+    borderWidth: 1,
+    borderColor: '#999999',
+    backgroundColor: 'rgba(255, 255, 255, 0.8)'
+  },
   prompt: {
     fontSize: 18,
     padding: 5,

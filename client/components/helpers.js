@@ -75,8 +75,9 @@ socket.on('newBeacon', (activeBeacon) => {
   }));
 });
 
-// socket.on('render all messages', (messages) => {
-//   this.setState({
-//     messages
-//   })
-// });
+socket.on('render all messages', (messages) => {
+  console.log('+++render all messages listening: ', messages);
+  store.dispatch(updateBeacon({
+    chatMessages: messages,
+  }))
+});
