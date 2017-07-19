@@ -55,6 +55,7 @@ class MapPage extends Component {
                 latitude: this.props.beaconLocation[0],
                 longitude: this.props.beaconLocation[1],
               }}
+              image={require('../../styles/assets/heart.png')}
             />
             : null
           }

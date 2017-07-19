@@ -54,7 +54,7 @@ export const updateHelp = () => ({
 export const getHelp = () => (dispatch) => {
   const helpLoc = store.getState().user.location;
   socket.emit('getHelp', helpLoc);
-  dispatch(updateHelp);
+  dispatch(updateHelp());
 };
 export const getCurrentLocation = location => ({
   type: 'GET_CURRENT_LOCATION',

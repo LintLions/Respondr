@@ -47,7 +47,6 @@ class HelpRequest extends Component {
     );
   }
 }
-});
 
 const mapStateToProps = (state) => ({
   firstName: state.responder.firstName,
