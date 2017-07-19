@@ -6,6 +6,31 @@ import {
 import { updateToken, socket, decode } from '../components/helpers';
 import { store } from '../index';
 
+export const animateSuccess = responders => ({
+  type: 'UPDATE_RESPONDERS',
+  responders,
+});
+
+export const animate = location => (dispatch) => {
+  console.log("location in animation is ", location);
+  const body = JSON.stringify({
+    location,
+  });
+
+  fetch(`${url}/users/animate`, {
+    method: 'POST',
+    headers: {
+      'Accept': 'application/json',
+      'Content-Type': 'application/json',
+    },
+    body,
+  })
+    .then(response => response.json())
+    .then((responseJson) => {
+      dispatch(animateSuccess(responseJson));
+    })
+    .catch(e => console.warn(e));
+};
 
 export const updateBeacon = options => ({
   type: 'UPDATE_BEACON',
@@ -153,9 +178,11 @@ export const drawRoute = latLong => (dispatch) => {
     ? `${latLong[0]},${latLong[1]}`
     : store.getState().myBeacon.location.join(',');
   const googleUrl = `https://maps.googleapis.com/maps/api/directions/json?origin=${origin}&destination=${dest}&key=${APIKEY}&mode=${mode}`;
+  console.log('googleUrl in drawRoute is: ', googleUrl)
   fetch(googleUrl)
     .then(response => response.json())
     .then((responseJson) => {
+      console.log('responsein DrawRoute: ', responseJson)
       if (responseJson.routes.length) {
         dispatch(updateRoute(decode(responseJson.routes[0].overview_polyline.points)));
       }

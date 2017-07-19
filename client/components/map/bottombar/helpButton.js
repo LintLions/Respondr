@@ -25,7 +25,7 @@ class HelpButton extends Component {
           <TouchableHighlight
             style={[styles.helpButton]}
             underlayColor='#48BBEC'
-            onPress={this.props.handleHelpButtonPress}>
+            onPress={() => this.props.handleHelpButtonPress()}>
             <Text style={styles.helpButtonText}>HELP</Text>
           </TouchableHighlight>
         </View>) :
@@ -34,7 +34,7 @@ class HelpButton extends Component {
           <TouchableHighlight
             style={styles.button}
             underlayColor='#b22222'
-            onPress={this.props.handleCancelButtonPress}>
+            onPress={() => this.props.handleCancelButtonPress()}>
             <Text style={styles.buttonText}>Cancel Help Request</Text>
           </TouchableHighlight>
         </View>);
@@ -48,7 +48,7 @@ class HelpButton extends Component {
 }
 
 const mapStateToProps = (state) => ({
-  isBeacon: state.user.isBeacon
+  isBeacon: state.user.isBeacon 
 })
 
 const mapDispatchToProps = (dispatch) => ({

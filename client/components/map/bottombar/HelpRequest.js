@@ -31,7 +31,7 @@ class HelpRequest extends Component {
             <TouchableHighlight 
               style={styles.missionButton}
               underlayColor='#99d9f4'
-              onPress={this.props.handleHelpRequestYes}
+              onPress={() => this.props.handleHelpRequestYes()}
               >
               <Text style={styles.missionButtonText}>Yes</Text>
             </TouchableHighlight>
@@ -57,8 +57,8 @@ const mapStateToProps = (state) => ({
 const mapDispatchToProps = (dispatch) => ({
   handleHelpRequestYes: () => {
     dispatch(acceptBeacon());
-    // dispatch(updateBeacon({ isAssigned: true })); 
-    // dispatch(drawRoute()); // maybe dispatch later later???
+    dispatch(drawRoute());
+    dispatch(updateBeacon({ isAssigned: true }));
   },
   handleHelpRequestNo: () => {
     dispatch(updateBeacon({ location: null }));
