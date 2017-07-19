@@ -1,6 +1,6 @@
 'use strict';
 
-import { getHelp, cancelHelp } from '../../../actions/actions' // JC: do we need this? 
+import { getHelp, cancelHelp } from '../../../actions/actions'
 
 import { connect } from 'react-redux';
 import React, { Component } from 'react'
@@ -22,14 +22,12 @@ class HelpButton extends Component {
   render() {
     const btnOrModal = this.props.isBeacon === false ?
       (<View style={[styles.helpButtonContainer]}>
-          
           <TouchableHighlight
             style={[styles.helpButton]}
             underlayColor='#48BBEC'
             onPress={() => this.props.handleHelpButtonPress()}>
             <Text style={styles.helpButtonText}>HELP</Text>
           </TouchableHighlight>
-          
         </View>) :
         (<View>
           <Text style={styles.prompt}>Help is on the way</Text>
@@ -49,19 +47,16 @@ class HelpButton extends Component {
   }    
 }
 
-
-
 const mapStateToProps = (state) => ({
-  isBeacon: state.user.isBeacon
+  isBeacon: state.user.isBeacon 
 })
 
 const mapDispatchToProps = (dispatch) => ({
-  handleCancelButtonPress: () => {
-    dispatch(cancelHelp());
-  },
-
   handleHelpButtonPress: () => {
     dispatch(getHelp());
+  },
+  handleCancelButtonPress: () => {
+    dispatch(cancelHelp());
   },
 });
 

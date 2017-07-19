@@ -2,14 +2,17 @@ import { connect } from 'react-redux';
 import React, { Component } from 'react';
 import {
   View,
+  KeyboardAvoidingView,
   TouchableOpacity,
   Text,
 } from 'react-native';
 import MapView from 'react-native-maps';
 import TopBar from './topbar/topBar';
-import BottomBarAngel from './bottombar/BottomBarAngel';
+import BottomNav from './bottombar/BottomNav';
+import BottomChat from './bottombar/BottomChat';
 import HelpButton from './bottombar/helpButton';
 import AngelStatusIcon from './bottombar/AngelStatusIcon';
+import Chat from './bottombar/Chat';
 import styles from '../../styles/styles';
 import { animate } from '../../actions/actions';
 
@@ -79,15 +82,29 @@ class MapPage extends Component {
             />
           }
         </View>
-        <View style={[styles.column, styles.bottom]}>
-          {this.props.beaconLocation &&
-            <BottomBarAngel />
-          }
-        </View>
-        <View style={[styles.bottom]}>
+        <View>
           {!this.props.isLoggedIn &&
           <HelpButton />}
         </View>
+        <View
+          style={[styles.column, styles.bottom]}
+        >
+          {this.props.beaconLocation &&
+            <BottomNav />
+          }
+          
+
+        </View>
+
+        {this.props.isBeacon && 
+            <View style={styles.box3}>
+              <BottomChat />
+            </View>
+        }
+        
+
+
+
       </View>
     );
   }

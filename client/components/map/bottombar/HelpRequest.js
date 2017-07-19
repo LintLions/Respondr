@@ -5,8 +5,9 @@ import {
   Text,
   TouchableHighlight,
   StyleSheet,
+  FlatList
 } from 'react-native';
-import { drawRoute, updateBeacon } from '../../../actions/actions';
+import { drawRoute, updateBeacon, acceptBeacon } from '../../../actions/actions';
 
 import styles from '../../../styles/styles';
 
@@ -55,7 +56,7 @@ const mapStateToProps = (state) => ({
 
 const mapDispatchToProps = (dispatch) => ({
   handleHelpRequestYes: () => {
-    console.log('in handleHelpRequestYes')
+    dispatch(acceptBeacon());
     dispatch(drawRoute());
     dispatch(updateBeacon({ isAssigned: true }));
   },

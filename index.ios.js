@@ -6,5 +6,6 @@
  */
 import { AppRegistry } from 'react-native';
 import Index from './client/index';
+// import Chat from './client/components/map/bottombar/Chat';
 
-AppRegistry.registerComponent('Respondr', () => Index);
+AppRegistry.registerComponent('Respondr', () => Index); 
