@@ -1,9 +1,11 @@
 const dynamicResponder = require('../db/models/dynamicResponders.js');
 const beacon = require('../db/models/beacons.js');
 const _ = require('lodash');
+const db = require('../db/db');
 const config = require('../config');
 const jwt = require('jsonwebtoken');
 const bcrypt = require('bcrypt-nodejs');
+const radius = 1207;
 
 function createIdToken(user) {
   return jwt.sign(_.omit(user, 'password'), config.secret, { expiresIn: 60*60*5 });
@@ -147,10 +149,24 @@ exports.getUser = (req, res) => {
 };
 
 exports.getUsers = function (req, res) {
-  dynamicResponder.findAll({})
+  dynamicResponder.findAll({}) 
   .then((results) => {
     console.log(results);
     res.send(results);
+  }).catch((err) => {
+    console.error(err, ' on line 116');
+    res.sendStatus(500);
+  });
+};
+
+exports.getNearbyResponders = function (req, res) {
+  const currentLocation = req.body.location;
+  console.log("currentLocation ", currentLocation);
+  db
+  .query(`select * from "dynamicResponders" WHERE ST_DWithin(geometry, ST_MakePoint(${currentLocation[0]}, ${currentLocation[1]})::geography, ${radius})`)
+  .then((results) => {
+    console.log("the first result is ", results[0]);
+    res.send(results[0]);
   }).catch((err) => {
     console.error(err, ' on line 116');
     res.sendStatus(500);

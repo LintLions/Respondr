@@ -12,6 +12,8 @@ const users = [{
 
 router.get('/', controller.getUser);
 
+router.post('/nearby', controller.getNearbyResponders);
+
 router.get('/all', controller.getUsers); // auth.check, auth.restrict('full_access'),
 
 router.post('', controller.addUser);

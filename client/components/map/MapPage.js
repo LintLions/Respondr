@@ -26,7 +26,7 @@ class MapPage extends Component {
           showsMyLocationButton={true}
           showsBuildings={true}
         >
-          {this.props.responders.map((marker) => {
+          {this.props.responders && this.props.responders.map((marker) => {
            const coordinates = {
             "latitude": marker.currentLocation[0],
             "longitude": marker.currentLocation[1],

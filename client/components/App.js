@@ -17,10 +17,10 @@ class App extends React.Component {
   componentWillMount() {
     const locChange = ({ coords }) => {
       this.props.setLocation([coords.latitude, coords.longitude]);
+      this.props.getResponders([coords.latitude, coords.longitude]);
     };
     navigator.geolocation.watchPosition(locChange, { timeout: 10 * 1000 });
     this.props.getUserWithTokenAndSocket();
-    this.props.getResponders();
   }
 
   render() {
@@ -48,8 +48,8 @@ const mapDispatchToProps = dispatch => ({
   setLocation: (location) => {
     dispatch(getCurrentLocation(location));
   },
-  getResponders: () => {
-    dispatch(getResponders());
+  getResponders: (location) => {
+    dispatch(getResponders(location));
   },
   dispatch,
 });

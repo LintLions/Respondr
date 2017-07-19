@@ -159,12 +159,21 @@ export const getRespondersSucceed = responders => ({
   responders,
 });
 
-export const getResponders = () => (dispatch) => {
-      console.log("In get responders url is ", url);
-  fetch(`${url}/users/all`)
+export const getResponders = location => (dispatch) => {
+  console.log("In get responders currentLoc is ", location);
+  const body = JSON.stringify({
+    location,
+  });
+  fetch(`${url}/users/nearby`, {
+    method: 'POST',
+    headers: {
+      'Accept': 'application/json',
+      'Content-Type': 'application/json',
+    },
+    body: body,
+  })
     .then(response => response.json())
     .then((responseJson) => {
-
       dispatch(getRespondersSucceed(responseJson));
     })
     .catch(e => console.warn(e));
