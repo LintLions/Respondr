@@ -159,6 +159,19 @@ exports.getUsers = function (req, res) {
   });
 };
 
+//Controller for updating userLocation(geometry) field in DB. Needs location and user email from body.
+// exports.updateLocation = function (req, res) {
+//   dynamicResponder.findOne( {where: req.body.email} )
+//   .then((user) => {
+//     user.update({
+//       geometry: POINT(req.body.location)
+//     })
+//   })
+//   .then((updatedUser) => {
+//     res.status(200).send(updatedUser)
+//   }
+// }
+
 exports.getNearbyResponders = function (req, res) {
   const currentLocation = req.body.location;
   console.log("currentLocation ", currentLocation);
