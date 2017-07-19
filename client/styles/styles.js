@@ -22,6 +22,13 @@ var styles = StyleSheet.create({
     alignSelf: 'center',
     bottom: 0,
   },
+  bubble: {
+    flex: 1,
+    backgroundColor: 'rgba(255,255,255,0.7)',
+    paddingHorizontal: 18,
+    paddingVertical: 12,
+    borderRadius: 20,
+  },
   layoutTest: { // to test layout area
     backgroundColor: 'rgba(255, 255, 255, 0.8)',
     borderColor: 'red',
@@ -103,6 +110,12 @@ var styles = StyleSheet.create({
     borderColor: '#48BBEC',
     borderRadius: 8,
     backgroundColor: 'white'
+  },
+  button1: {
+    width: 80,
+    paddingHorizontal: 12,
+    alignItems: 'center',
+    marginHorizontal: 10,
   },
   button: {
     padding: 4,

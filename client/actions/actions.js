@@ -6,6 +6,32 @@ import {
 import { updateToken, socket, decode } from '../components/helpers';
 import { store } from '../index';
 
+export const animateSuccess = responders => ({
+  type: 'UPDATE_RESPONDERS',
+  responders,
+});
+
+export const animate = location => (dispatch) => {
+  console.log("location in animation is ", location);
+  const body = JSON.stringify({
+    location,
+  });
+
+  fetch(`${url}/users/animate`, {
+    method: 'POST',
+    headers: {
+      'Accept': 'application/json',
+      'Content-Type': 'application/json',
+    },
+    body,
+  })
+    .then(response => response.json())
+    .then((responseJson) => {
+      dispatch(animateSuccess(responseJson));
+    })
+    .catch(e => console.warn(e));
+};
+
 export const updateBeacon = options => ({
   type: 'UPDATE_BEACON',
   options,
@@ -28,7 +54,7 @@ export const updateHelp = () => ({
 export const getHelp = () => (dispatch) => {
   const helpLoc = store.getState().user.location;
   socket.emit('getHelp', helpLoc);
-  dispatch(updateHelp);
+  dispatch(updateHelp());
 };
 export const getCurrentLocation = location => ({
   type: 'GET_CURRENT_LOCATION',
