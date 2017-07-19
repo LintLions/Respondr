@@ -2,10 +2,11 @@ import { connect } from 'react-redux';
 import React, { Component } from 'react';
 import {
   View,
+  KeyboardAvoidingView,
 } from 'react-native';
 import MapView from 'react-native-maps';
 import TopBar from './topbar/topBar';
-import BottomBarAngel from './bottombar/BottomBarAngel';
+import BottomNav from './bottombar/BottomNav';
 import HelpButton from './bottombar/helpButton';
 import AngelStatusIcon from './bottombar/AngelStatusIcon';
 import Chat from './bottombar/Chat';
@@ -23,7 +24,24 @@ class MapPage extends Component {
           style={styles.map}
           showsUserLocation
           followsUserLocation
+          showsPointsOfInterest={false}
+          showsMyLocationButton={true}
+          showsBuildings={true}
         >
+          {this.props.responders && this.props.responders.map((marker) => {
+           const coordinates = {
+            "latitude": marker.currentLocation[0],
+            "longitude": marker.currentLocation[1],
+          }
+            return (
+              <MapView.Marker
+                coordinate={coordinates}
+                title={marker.fullName}
+                description={marker.organization}
+                image={require('../../styles/assets/wings.png')}
+              />
+            );
+          })}
           {this.props.beaconLocation
             ? <MapView.Marker
               coordinate={{
@@ -42,14 +60,16 @@ class MapPage extends Component {
         <View style={[styles.row]}>
           <TopBar />
           {this.props.isLoggedIn &&
-            <AngelStatusIcon 
+            <AngelStatusIcon
             // switchIsOn={this.state.switchIsOn} handleSwitchIsOn={this.handleSwitchIsOn}
             />
           }
         </View>
-        <View style={[styles.column, styles.bottom]}>
+        <View
+          style={[styles.column, styles.bottom]}
+        >
           {this.props.beaconLocation &&
-            <BottomBarAngel />
+            <BottomNav />
           }
         </View>
         <View>
@@ -72,6 +92,7 @@ const mapStateToProps = state => ({
   coords: state.user.route,
   userLocation: state.user.location,
   beaconLocation: state.myBeacon.location,
+  responders: state.user.responders,
 });
 
 const MapPageConnected = connect(mapStateToProps)(MapPage);
