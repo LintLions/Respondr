@@ -5,7 +5,7 @@ import {
 } from 'react-native';
 import MapView from 'react-native-maps';
 import TopBar from './topbar/topBar';
-import BottomBarAngel from './bottombar/BottomBarAngel';
+import BottomNav from './bottombar/BottomNav';
 import HelpButton from './bottombar/helpButton';
 import AngelStatusIcon from './bottombar/AngelStatusIcon';
 import styles from '../../styles/styles';
@@ -47,8 +47,8 @@ class MapPage extends Component {
           }
         </View>
         <View style={[styles.column, styles.bottom]}>
-          {this.props.beaconLocation &&          
-            <BottomBarAngel/>
+          {this.props.beaconLocation &&
+            <BottomNav />
           }
         </View>
         <View style={[styles.bottom]}>
