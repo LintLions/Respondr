@@ -54,6 +54,9 @@ const dynamicResponder = db.define('dynamicResponder', {
   device: {
     type: Sequelize.STRING,
   },
+  geometry: {
+    type: Sequelize.GEOMETRY,
+  },
 });
 dynamicResponder.generateHash = password => bcrypt.hashSync(
   password,

@@ -2,6 +2,8 @@ import { connect } from 'react-redux';
 import React, { Component } from 'react';
 import {
   View,
+  TouchableOpacity,
+  Text,
 } from 'react-native';
 import MapView from 'react-native-maps';
 import TopBar from './topbar/topBar';
@@ -9,11 +11,15 @@ import BottomBarAngel from './bottombar/BottomBarAngel';
 import HelpButton from './bottombar/helpButton';
 import AngelStatusIcon from './bottombar/AngelStatusIcon';
 import styles from '../../styles/styles';
+import { animate } from '../../actions/actions';
+
 
 class MapPage extends Component {
   constructor(props) {
     super(props);
   }
+
+
   render() {
     return (
       <View style={styles.container}>
@@ -23,14 +29,16 @@ class MapPage extends Component {
           showsUserLocation
           followsUserLocation
           showsPointsOfInterest={false}
-          showsMyLocationButton={true}
-          showsBuildings={true}
+          showsMyLocationButton
+          showsBuildings
         >
+        
           {this.props.responders && this.props.responders.map((marker) => {
-           const coordinates = {
-            "latitude": marker.currentLocation[0],
-            "longitude": marker.currentLocation[1],
-          }
+            const coordinates = {
+              latitude: marker.currentLocation[0],
+              longitude: marker.currentLocation[1],
+            };
+
             return (
               <MapView.Marker
                 coordinate={coordinates}
@@ -40,6 +48,7 @@ class MapPage extends Component {
               />
             );
           })}
+
           {this.props.beaconLocation
             ? <MapView.Marker
               coordinate={{
@@ -57,9 +66,15 @@ class MapPage extends Component {
         </MapView>
         <View style={[styles.row]}>
           <TopBar />
+          <TouchableOpacity
+            onPress={() => this.props.animate(this.props.userLocation)}
+            style={[styles.bubble, styles.button]}
+          >
+            <Text>Animate</Text>
+          </TouchableOpacity>
           {this.props.isLoggedIn &&
-            <AngelStatusIcon 
-            // switchIsOn={this.state.switchIsOn} handleSwitchIsOn={this.handleSwitchIsOn}
+            <AngelStatusIcon
+              // switchIsOn={this.state.switchIsOn} handleSwitchIsOn={this.handleSwitchIsOn}
             />
           }
         </View>
@@ -87,7 +102,11 @@ const mapStateToProps = state => ({
   beaconLocation: state.myBeacon.location,
   responders: state.user.responders,
 });
-
-const MapPageConnected = connect(mapStateToProps)(MapPage);
+const mapDispatchToProps = dispatch => ({
+  animate: (location) => {
+    dispatch(animate(location)); //setTimeout && animate w/ component will receive props?
+  },
+});
+const MapPageConnected = connect(mapStateToProps, mapDispatchToProps)(MapPage);
 
 export default MapPageConnected;

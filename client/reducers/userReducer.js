@@ -17,6 +17,8 @@ const userReducer = (state = initState, action) => {
       return { ...state, ...action.options };
     case 'UPDATE_RESPONDERS':
       return { ...state, responders: [...action.responders] };
+    case 'UPDATE_ROUTE':
+      return {...state, route: action.route };
     default:
       return state;
   }

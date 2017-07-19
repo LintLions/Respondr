@@ -36,7 +36,7 @@ class HelpButton extends Component {
           <TouchableHighlight
             style={styles.button}
             underlayColor='#b22222'
-            onPress={this.props.handleCancelButtonPress}>
+            onPress={() => this.props.handleCancelButtonPress()}>
             <Text style={styles.buttonText}>Cancel Help Request</Text>
           </TouchableHighlight>
         </View>);
