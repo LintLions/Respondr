@@ -147,9 +147,11 @@ export const drawRoute = latLong => (dispatch) => {
     ? `${latLong[0]},${latLong[1]}`
     : store.getState().myBeacon.location.join(',');
   const googleUrl = `https://maps.googleapis.com/maps/api/directions/json?origin=${origin}&destination=${dest}&key=${APIKEY}&mode=${mode}`;
+  console.log('googleUrl in drawRoute is: ', googleUrl)
   fetch(googleUrl)
     .then(response => response.json())
     .then((responseJson) => {
+      console.log('responsein DrawRoute: ', responseJson)
       if (responseJson.routes.length) {
         dispatch(updateRoute(decode(responseJson.routes[0].overview_polyline.points)));
       }
