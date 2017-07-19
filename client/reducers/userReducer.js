@@ -12,6 +12,8 @@ const userReducer = (state = initState, action) => {
       return { ...state, isBeacon: true };
     case 'CANCEL_HELP':
       return { ...state, isBeacon: false };
+    case 'UPDATE_USER':
+      return { ...state, ...action.options };
     default:
       return state;
   }

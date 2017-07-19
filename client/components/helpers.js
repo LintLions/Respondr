@@ -63,6 +63,13 @@ export const getToken =  async () => AsyncStorage.getItem('id_token');
 export const socket = SocketIOClient(url);
 socket.on('newBeacon', (data) => {
   console.log('hello', data);
-  store.dispatch(updateBeacon({ location: data }));
+  store.dispatch(updateBeacon({
+    location: data,
+    region: {
+      latitude: data[0],
+      longitude: data[1],
+      latitudeDelta: 0.0922,
+      longitudeDelta: 0.0421,
+    } }));
 });
 

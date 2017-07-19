@@ -34,39 +34,39 @@ class Login extends Component {
             value={this.state.email}
             style={styles.searchInput}
             onChange={this.onEmailChange}
-            placeholder='email address'/>
+            placeholder="email address"
+          />
         </View>
         <View style={styles.flowRight}>
           <TextInput
             style={styles.searchInput}
-            secureTextEntry={true} 
+            secureTextEntry
             value={this.state.password}
             onChange={this.onPasswordChange}
-            placeholder='password'/>
-          <TouchableHighlight 
+            placeholder="password"
+          />
+          <TouchableHighlight
             style={styles.button}
-            underlayColor='#99d9f4'  
-            onPress={() => this.props.handleIsLoggedIn(this.state)}>
+            underlayColor="#99d9f4"
+            onPress={() => this.props.handleIsLoggedIn(this.state)}
+          >
             <Text style={styles.buttonText}>Go</Text>
           </TouchableHighlight>
-        </View>  
+        </View>
       </View>
-    )
-  }  
+    );
+  }
 }
 
-const mapStateToProps = (state) => ({
+const mapStateToProps = () => ({
 
-})
-
-const mapDispatchToProps = (dispatch) => ({
-  handleIsLoggedIn: (email, password) => {
-    dispatch(logIn(email, password));
-  }
-})
-
-Login = connect(mapStateToProps, mapDispatchToProps)(Login)
-
-export default Login;  
+});
 
 
+const mapDispatchToProps = dispatch => ({
+  handleIsLoggedIn: (state) => {
+    dispatch(logIn(state));
+  },
+});
+
+export default connect(mapStateToProps, mapDispatchToProps)(Login);

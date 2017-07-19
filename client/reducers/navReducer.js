@@ -1,5 +1,5 @@
-import { Navigator } from '../components/App.js';
-
+import { NavigationActions } from 'react-navigation';
+import { Navigator } from '../components/App';
 
 // const firstAction = Navigator.router.getActionForPathAndParams('Home');
 // const secondAction = Navigator.router.getActionForPathAndParams('Signup');
@@ -14,18 +14,17 @@ const navReducer = (state = initialState, action) => {
   let newState;
   switch (action.type) {
     case 'Home':
-    newState =  Navigator.router.getStateForAction(
+      newState = Navigator.router.getStateForAction(
       NavigationActions.navigate({ routeName: 'Home' }),
-      state
-    )
-    break;
-   case 'BACK':
-    newState = Navigator.router.getStateForAction(NavigationActions.back(), state)
-  default: 
-    newState = Navigator.router.getStateForAction(action, state);
-    break;
-  };
-  
+      state,
+    );
+      break;
+    case 'BACK':
+      newState = Navigator.router.getStateForAction(NavigationActions.back(), state);
+      break;
+    default: newState = Navigator.router.getStateForAction(action, state);
+      break;
+  }
   return newState || state;
 };
 

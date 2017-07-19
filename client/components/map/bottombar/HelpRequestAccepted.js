@@ -19,7 +19,7 @@ class HelpRequestAccepted extends Component {
       <View style={styles.container}>
         <View style={[styles.container, styles.box1]}>
           <Text style={styles.prompt}>
-            You're an angel {this.props.fName}!
+            You're an angel {this.props.firstName}!
           </Text>
           <View style={styles.row}>
             <TouchableHighlight
@@ -92,7 +92,6 @@ const styleSheet = StyleSheet.create({
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
-    
     height: 36,
     margin: 10,
 
@@ -111,7 +110,7 @@ const styleSheet = StyleSheet.create({
 });
 
 const mapStateToProps = (state) => ({
-  fName: state.responder.fName,
+  firstName: state.responder.firstName,
   beaconLocation: state.myBeacon.location,
 });
 
