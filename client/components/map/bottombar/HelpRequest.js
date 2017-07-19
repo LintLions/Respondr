@@ -5,6 +5,7 @@ import {
   Text,
   TouchableHighlight,
   StyleSheet,
+  FlatList
 } from 'react-native';
 import { drawRoute, updateBeacon, acceptBeacon } from '../../../actions/actions';
 

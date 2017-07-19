@@ -90,7 +90,7 @@ import {
   StyleSheet,
 } from 'react-native';
 import { GiftedChat } from 'react-native-gifted-chat';
-import {ChatEntry} from './ChatEntry.js';
+import { ChatEntry } from './ChatEntry.js';
 import { socket } from '../../helpers';
 
 import styles from '../../../styles/styles';
@@ -102,96 +102,87 @@ class Chat extends Component {
       messages: [],
       message: '',
     }
-    this.setMessage = this.setMessage.bind(this);
     this.sendMessage = this.sendMessage.bind(this);
+    this.getAllMessages = this.getAllMessages.bind(this);
   }
 
   componentWillMount() {
-    socket.on('server:message', 
-      (messages) => {
-        this.setState({
-          messages
-        })
-        objDiv[0].scrollTop = objDiv[0].scrollHeight;
-      }
-    )
-
-    socket.on('server:new message',
-      (msg) => {
-        var newMessage = this.state.messages;
-        newMessage.push(msg);
-        this.setState({
-          messages: newMessage
-        })
-        objDiv[0].scrollTop = objDiv[0].scrollHeight;
-      }
-    )
+    socket.emit('get all messages')
   }
 
-
-  setMessage(e) {
-    this.setState({
-      message: e.target.value
-    })
-  }
-
-  sendMessage(e) {
-    e.preventDefault();
+  sendMessage() {
     var eachMessage = {
       message: this.state.message,
-      user_id: this.props.self,
-      friend: this.props.friend
+      chatRoom: this.state.chatRoom
     }
-
+    // socket.emit('new message', this.state.message);
     socket.emit('new message', eachMessage);
+    console.log('++sendMessage is executed');
 
     this.setState({
       message: ''
     })
+
+    socket.on('render all messages', (messages) => {
+      this.setState({
+        messages
+      })
+    })
+  }
+
+  getAllMessages() {
+    socket.on('render all messages', (messages) => {
+      this.setState({
+        messages
+      })
+    });
   }
 
   render() {
-    // let responder = this.props.responder;
     
+    socket.on('render all messages', (messages) => {
+      this.setState({
+        messages
+      })
+    });
+
     return (
-      <View style={styles.container}>
+      <View>
         <Text>CHAT</Text>
         <Text>
           chatRoomID: {this.props.chatRoom}
         </Text>
         <FlatList
-          data={[
-            {key: 'Devin'},
-            {key: 'Jackson'},
-            {key: 'James'},
-          ]}
-          extraData={this.state}
-          renderItem={({item}) => <Text style={styles.item}>{item.key}</Text>}
+          data={this.state.messages}
+          keyExtractor={(item, index) => item.id}
+          renderItem={({item, index}) => <Text>{item}</Text>}
         />
         <TextInput
           style={{height: 30, borderColor: 'gray', borderWidth: 1}}
-          onChangeText={(text) => this.setState({text})}
-          value={this.state.text}
+          onChangeText={(message) => {
+            this.setState({message});
+            this.getAllMessages();
+          }}
+          value={this.state.message}
         />
         <TouchableHighlight
-          
+          style={styles.missionButton}
           underlayColor='#48BBEC'
-          onPress={this.props.getFirstMessage}>
-          <Text style={styles.helpButtonText}>SUBMIT</Text>
+          onPress={this.sendMessage}>
+          <Text style={styles.missionButtonText}>SUBMIT</Text>
         </TouchableHighlight>      
       </View>
     )    
   }    
 }
 
-// const mapStateToProps = (state) => ({
-//   // responder: state.responder.firstName
-//   chatRoom: state.myBeacon.chatRoom,
-// })
+const mapStateToProps = (state) => ({
+  chatRoom: state.myBeacon.chatRoom,
+})
 
-// const mapDispatchToProps = (dispatch) => ({
-// });
+const mapDispatchToProps = (dispatch) => ({
+});
 
-// Chat = connect(mapStateToProps, mapDispatchToProps)(Chat)
+Chat = connect(mapStateToProps, mapDispatchToProps)(Chat)
 
 module.exports = Chat

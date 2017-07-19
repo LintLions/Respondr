@@ -75,3 +75,8 @@ socket.on('newBeacon', (activeBeacon) => {
   }));
 });
 
+// socket.on('render all messages', (messages) => {
+//   this.setState({
+//     messages
+//   })
+// });
