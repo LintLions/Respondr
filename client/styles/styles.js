@@ -200,6 +200,11 @@ var styles = StyleSheet.create({
     fontSize: 18,
     color: 'white',
   },
+  item: {
+    padding: 10,
+    fontSize: 18,
+    height: 44,
+  },
 });
 
 export default styles;

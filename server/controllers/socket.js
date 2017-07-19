@@ -71,26 +71,20 @@ websocket.on('connection', (socket) => {
     
     const chatRoom = activeBeacon.id;
     socket.join(chatRoom);
-
-    // ============================================================
-    socket.emit('messages', activeBeaconSession.messages);
-    socket.on('messages', messages => {
-      this.props.displayMessages;
-    })
-
-    mapDispatchToProps = (dispatch) => ({
-      displayMessages: () => {
-        dispatch(displayMessages());
-      }
-    })
-    // ============================================================
-  
   });
 
   socket.on('acceptBeacon', (chatRoom) => {
     console.log('+++in socket.js - acceptBeacon - chatRoomID: ', chatRoom);
     activeBeaconSession.responder = socket.id; 
     socket.join(chatRoom);
+
+    websocket.to(chatRoom).emit('first message', 'first message sending');
+  })
+
+  socket.on('message', (message) => {
+    activeBeaconSession.messages.push();
+
+    socket.broadcast.emit('server:messages', activeBeaconSession.messages);
   })
 });
 
