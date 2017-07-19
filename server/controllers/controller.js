@@ -1,9 +1,11 @@
 const dynamicResponder = require('../db/models/dynamicResponders.js');
 const beacon = require('../db/models/beacons.js');
 const _ = require('lodash');
+const db = require('../db/db');
 const config = require('../config');
 const jwt = require('jsonwebtoken');
 const bcrypt = require('bcrypt-nodejs');
+const radius = 1207;
 
 function createIdToken(user) {
   return jwt.sign(_.omit(user, 'password'), config.secret, { expiresIn: 60*60*5 });
@@ -146,18 +148,32 @@ exports.getUser = (req, res) => {
     }));
 };
 
-exports.getUsers = function(req, res) {
-  dynamicResponder.findAll({})
+exports.getUsers = function (req, res) {
+  dynamicResponder.findAll({}) 
   .then((results) => {
     console.log(results);
     res.send(results);
   }).catch((err) => {
-    console.error( err + " on line 116")
-    res.sendStatus(500)
-  })
+    console.error(err, ' on line 116');
+    res.sendStatus(500);
+  });
 };
 
-exports.addBeacon = function(req, res) {
+exports.getNearbyResponders = function (req, res) {
+  const currentLocation = req.body.location;
+  console.log("currentLocation ", currentLocation);
+  db
+  .query(`select * from "dynamicResponders" WHERE ST_DWithin(geometry, ST_MakePoint(${currentLocation[0]}, ${currentLocation[1]})::geography, ${radius})`)
+  .then((results) => {
+    console.log("the first result is ", results[0]);
+    res.send(results[0]);
+  }).catch((err) => {
+    console.error(err, ' on line 116');
+    res.sendStatus(500);
+  });
+};
+
+exports.addBeacon = function (req, res) {
   beacon.create({
     currentLocation: [req.body.latitude, req.body.longitude],
   }).then((beacon) => {
@@ -170,12 +186,12 @@ exports.addBeacon = function(req, res) {
 };
 
 exports.deleteBeacon = function (req, res) {
-  console.log(req.body)
-  beacon.findOne({where: {currentLocation:[req.body.latitude, req.body.longitude]}})
-  .then(beacon => {
-    return beacon.destroy()
+  console.log(req.body);
+  beacon.findOne({ where: { currentLocation: [req.body.latitude, req.body.longitude] } })
+  .then((beacon) => {
+    return beacon.destroy();
   })
   .then(() => {
-    res.status(200).send('Beacon Destroyed')
-  })
-}
+    res.status(200).send('Beacon Destroyed');
+  });
+};

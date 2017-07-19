@@ -3,6 +3,7 @@ const initState = {
   location: null,
   isBeacon: false,
   route: null,
+  responders: [],
 };
 const userReducer = (state = initState, action) => {
   switch (action.type) {
@@ -14,6 +15,8 @@ const userReducer = (state = initState, action) => {
       return { ...state, isBeacon: false };
     case 'UPDATE_USER':
       return { ...state, ...action.options };
+    case 'UPDATE_RESPONDERS':
+      return { ...state, responders: [...action.responders] };
     default:
       return state;
   }
