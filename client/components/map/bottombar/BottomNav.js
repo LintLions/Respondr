@@ -1,13 +1,17 @@
 import React, { Component } from 'react';
 import { TabNavigator, NavigationActions } from 'react-navigation';
 import {
+  Animated,
   AlertIOS,
+  Keyboard,
 } from 'react-native';
 import { connect } from 'react-redux';
 import BottomBarAngel from './BottomBarAngel';
 import BottomChat from './BottomChat';
 import config from '../../config';
-import { signUp } from '../../../actions/actions'
+import { signUp } from '../../../actions/actions';
+import styles from '../../../styles/styles';
+
 
 const navScreens = {
   Main: { screen: BottomBarAngel },
@@ -35,9 +39,10 @@ class BottomNav extends Component {
   constructor(props) {
     super(props);
   }
-
   render() {
-    return <Navigator />;
+    return (
+      <Navigator style={styles.box1} />
+    );
   }
 
 }

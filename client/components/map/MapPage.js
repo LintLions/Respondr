@@ -2,6 +2,7 @@ import { connect } from 'react-redux';
 import React, { Component } from 'react';
 import {
   View,
+  KeyboardAvoidingView,
 } from 'react-native';
 import MapView from 'react-native-maps';
 import TopBar from './topbar/topBar';
@@ -41,12 +42,14 @@ class MapPage extends Component {
         <View style={[styles.row]}>
           <TopBar />
           {this.props.isLoggedIn &&
-            <AngelStatusIcon 
+            <AngelStatusIcon
             // switchIsOn={this.state.switchIsOn} handleSwitchIsOn={this.handleSwitchIsOn}
             />
           }
         </View>
-        <View style={[styles.column, styles.bottom]}>
+        <View
+          style={[styles.column, styles.bottom]}
+        >
           {this.props.beaconLocation &&
             <BottomNav />
           }
