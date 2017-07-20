@@ -22,6 +22,13 @@ var styles = StyleSheet.create({
     alignSelf: 'center',
     bottom: 0,
   },
+  bubble: {
+    flex: 1,
+    backgroundColor: 'rgba(255,255,255,0.7)',
+    paddingHorizontal: 18,
+    paddingVertical: 12,
+    borderRadius: 20,
+  },
   layoutTest: { // to test layout area
     backgroundColor: 'rgba(255, 255, 255, 0.8)',
     borderColor: 'red',
@@ -104,6 +111,12 @@ var styles = StyleSheet.create({
     borderRadius: 8,
     backgroundColor: 'white'
   },
+  button1: {
+    width: 80,
+    paddingHorizontal: 12,
+    alignItems: 'center',
+    marginHorizontal: 10,
+  },
   button: {
     padding: 4,
     height: 36,
@@ -165,7 +178,7 @@ var styles = StyleSheet.create({
   },
   // =============================
   toggleIcon: {
-    padding: 20
+    padding: 20,
   },
   box1: {
     flex: 1,
@@ -176,12 +189,33 @@ var styles = StyleSheet.create({
     borderColor: '#999999',
     backgroundColor: 'rgba(255, 255, 255, 0.8)'
   },
+  box2: {
+    flex: 1,
+    padding: 20,
+    height: 450,
+    bottom: 275,
+    justifyContent: 'center',
+    borderWidth: 1,
+    borderColor: '#999999',
+    backgroundColor: 'rgba(255, 255, 255, 0.8)'
+  },
+  box3: {
+    // flex: 1,
+    padding: 20,
+    height: 400,
+    // top: 50,
+    bottom: -120,
+    // justifyContent: 'center',
+    borderWidth: 1,
+    borderColor: '#999999',
+    backgroundColor: 'rgba(255, 255, 255, 0.8)'
+  },
   prompt: {
     fontSize: 18,
     padding: 5,
     textAlign: 'center',
     color: '#656565',
-    marginBottom: 20
+    marginBottom: 20,
   },
   missionButton: {
     flex: 1,
@@ -199,6 +233,11 @@ var styles = StyleSheet.create({
   missionButtonText: {
     fontSize: 18,
     color: 'white',
+  },
+  item: {
+    padding: 10,
+    fontSize: 18,
+    height: 44,
   },
 });
 

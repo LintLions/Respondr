@@ -4,8 +4,7 @@ import { AsyncStorage } from 'react-native';
 import SocketIOClient from 'socket.io-client';
 import { store } from '../index';
 import { url } from './config';
-import { updateBeacon } from '../actions/actions';
-
+import { updateBeacon, acceptBeacon } from '../actions/actions';
 
 export const decode = (t, e) => {
   // transforms something like this geocFltrhVvDsEtA}ApSsVrDaEvAcBSYOS_@...
@@ -61,15 +60,24 @@ export const updateToken =  async (value) => {
 export const getToken =  async () => AsyncStorage.getItem('id_token');
 
 export const socket = SocketIOClient(url);
-socket.on('newBeacon', (data) => {
-  console.log('hello', data);
+
+socket.on('newBeacon', (activeBeacon) => { 
+  console.log('+++helpers.js - rcvd newBeacon: ', activeBeacon);
   store.dispatch(updateBeacon({
-    location: data,
+    chatRoom: activeBeacon.id, 
+    location: activeBeacon.loc, 
     region: {
-      latitude: data[0],
-      longitude: data[1],
+      latitude: activeBeacon.loc[0], 
+      longitude: activeBeacon.loc[1], 
       latitudeDelta: 0.0922,
       longitudeDelta: 0.0421,
-    } }));
+    }
+  }));
 });
 
+socket.on('render all messages', (messages) => {
+  console.log('+++render all messages listening: ', messages);
+  store.dispatch(updateBeacon({
+    chatMessages: messages,
+  }))
+});

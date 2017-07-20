@@ -13,10 +13,11 @@ import beaconReducer from './beaconReducer.js';
     isBeacon: false
   }
   responder: {
-    location: 
-    email:this.props.navigation.state.params.email || '',
-    fName:'',
-    lName:'',
+    isLoggedIn: false,
+    location: null,
+    email: '',
+    fName: '',
+    lName: '',
     password: '',
     phone: '',
     organization: '',
@@ -25,9 +26,19 @@ import beaconReducer from './beaconReducer.js';
     city: '',
     state: '',
     zip: '',
-    address: ''  
+    address: '',
+    socket: '', 
   },
-  nav: some nutso thing
+  nav: {
+    some nutso thing
+  },
+  myBeacon: {
+    location: null,
+    isAssigned: false,
+    completed: false,
+    chatRoom: '',
+    chatMessages: []
+  }
 }
 
 */

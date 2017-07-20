@@ -6,6 +6,8 @@ const config = require('../config');
 const jwt = require('jsonwebtoken');
 const bcrypt = require('bcrypt-nodejs');
 const radius = 1207;
+const LATITUDE_DELTA = 0.0015;
+const LONGITUDE_DELTA = 0.0015;
 
 function createIdToken(user) {
   return jwt.sign(_.omit(user, 'password'), config.secret, { expiresIn: 60*60*5 });
@@ -149,7 +151,7 @@ exports.getUser = (req, res) => {
 };
 
 exports.getUsers = function (req, res) {
-  dynamicResponder.findAll({}) 
+  dynamicResponder.findAll({})
   .then((results) => {
     console.log(results);
     res.send(results);
@@ -178,7 +180,6 @@ exports.getNearbyResponders = function (req, res) {
   db
   .query(`select * from "dynamicResponders" WHERE ST_DWithin(geometry, ST_MakePoint(${currentLocation[0]}, ${currentLocation[1]})::geography, ${radius})`)
   .then((results) => {
-    console.log("the first result is ", results[0]);
     res.send(results[0]);
   }).catch((err) => {
     console.error(err, ' on line 116');
@@ -186,16 +187,47 @@ exports.getNearbyResponders = function (req, res) {
   });
 };
 
+exports.animateResponders = function (req, res) {
+  const currentLocation = req.body.location;
+  console.log('currentLocation ', currentLocation);
+  dynamicResponder.findAll({})
+  .then((responders) => {
+    responders.map((responder) => {
+      console.log("geometry is ", responder.geometry);
+      console.log("typoe of currentlocation is ", typeof responder.currentLocation[0]);
+      responder.currentLocation[0] += LATITUDE_DELTA / 2;
+      responder.currentLocation[1] += LONGITUDE_DELTA / 2;
+      responder.geometry.coordinates[0] +=  LATITUDE_DELTA / 2;
+      responder.geometry.coordinates[1] += LONGITUDE_DELTA / 2;
+      
+      responder.update({
+        currentLocation: responder.currentLocation,
+        geometry: responder.geometry,
+      });
+    });
+  })
+  .then(() => {
+    dynamicResponder.findAll({})
+    .then((results) => {
+      console.log(results);
+      res.send(results);
+    }).catch((err) => {
+      console.error(err, ' on line 116');
+      res.sendStatus(500);
+    });
+  }); //find again and return?
+};
+
 exports.addBeacon = function (req, res) {
   beacon.create({
     currentLocation: [req.body.latitude, req.body.longitude],
   }).then((beacon) => {
-    console.log('Beacon Created')
-    res.status(200).send(beacon)
+    console.log('Beacon Created');
+    res.status(200).send(beacon);
   }).catch((err) => {
-    console.error(err)
-    res.sendStatus(500)
-  })
+    console.error(err);
+    res.sendStatus(500);
+  });
 };
 
 exports.deleteBeacon = function (req, res) {

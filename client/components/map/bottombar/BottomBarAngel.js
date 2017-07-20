@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import {
   View,
 } from 'react-native';
+import { connect } from 'react-redux';
 import styles from '../../../styles/styles';
 import HelpRequest from './HelpRequest';
 import HelpRequestAccepted from './HelpRequestAccepted';
@@ -31,5 +32,14 @@ class BottomBarAngel extends Component {
     );
   }
 }
+
+const mapStateToProps = (state) => ({
+  isAssigned: state.myBeacon.isAssigned,
+})
+
+// const mapDispatchToProps = (dispatch) => ({
+// });
+
+BottomBarAngel = connect(mapStateToProps)(BottomBarAngel)
 
 export default BottomBarAngel;

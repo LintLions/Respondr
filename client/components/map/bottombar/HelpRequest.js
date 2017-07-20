@@ -5,8 +5,9 @@ import {
   Text,
   TouchableHighlight,
   StyleSheet,
+  FlatList
 } from 'react-native';
-import { drawRoute, updateBeacon } from '../../../actions/actions';
+import { drawRoute, updateBeacon, acceptBeacon } from '../../../actions/actions';
 
 import styles from '../../../styles/styles';
 
@@ -30,7 +31,7 @@ class HelpRequest extends Component {
             <TouchableHighlight 
               style={styles.missionButton}
               underlayColor='#99d9f4'
-              onPress={this.props.handleHelpRequestYes}
+              onPress={() => this.props.handleHelpRequestYes()}
               >
               <Text style={styles.missionButtonText}>Yes</Text>
             </TouchableHighlight>
@@ -48,57 +49,6 @@ class HelpRequest extends Component {
   }
 }
 
-var styleSheet = StyleSheet.create({
-  container: {
-    flex: 1
-  },
-  box1: {
-    flex: 1,
-    height: 222,
-    padding: 20,
-    justifyContent: 'center',
-    // borderWidth: 1,
-    // borderColor: '#999999',
-    // backgroundColor: 'rgba(255, 255, 255, 0.8)'
-  },
-  box2: {
-    flex: 2
-  },
-  bottomBox: {
-    position: 'absolute'
-  },
-  map: {
-    ...StyleSheet.absoluteFillObject,
-  },
-  prompt: {
-    fontSize: 18,
-    padding: 5,
-    textAlign: 'center',
-    color: '#656565',
-    marginBottom: 20
-  },
-  buttonDirection: {
-    flexDirection: 'row',
-  },
-  button: {
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-    
-    height: 36,
-    margin: 10,
-
-    backgroundColor: '#48BBEC',
-    borderColor: '#48BBEC',
-    borderWidth: 1,
-    borderRadius: 8,
-  },
-  buttonText: {
-    fontSize: 18,
-    color: 'white',
-  }
-});
-
 const mapStateToProps = (state) => ({
   firstName: state.responder.firstName,
   beaconLocation: state.myBeacon.location,
@@ -106,6 +56,7 @@ const mapStateToProps = (state) => ({
 
 const mapDispatchToProps = (dispatch) => ({
   handleHelpRequestYes: () => {
+    dispatch(acceptBeacon());
     dispatch(drawRoute());
     dispatch(updateBeacon({ isAssigned: true }));
   },
