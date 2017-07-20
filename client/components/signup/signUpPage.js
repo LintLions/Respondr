@@ -90,6 +90,7 @@ class SignUpPage extends Component {
 
     this.signup = () => {
       var userData = JSON.stringify(this.state);
+      console.log("userdata on signup is ", userData)
       this.props.handleSignUp(userData);
       this.props.goHome();
     };

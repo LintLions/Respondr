@@ -44,6 +44,7 @@ class MapPage extends Component {
 
             return (
               <MapView.Marker
+                key={marker.id}
                 coordinate={coordinates}
                 title={marker.fullName}
                 description={marker.organization}
