@@ -164,7 +164,7 @@ exports.getUsers = function (req, res) {
 // Controller for updating userLocation(geometry) field in DB. Needs location 
 // and user email from body.
 exports.updateLocation = function (req, res) {
-  // console.log('in updateLocation, location is: ', req.body.location);
+  console.log('in updateLocation controller, location is: ', req.body.location);
   dynamicResponder.findOne( {where: req.body.Email })
   .then((user) => {
     user.geometry.coordinates[0] = req.body.location[0];

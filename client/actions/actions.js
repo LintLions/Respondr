@@ -90,6 +90,7 @@ export const getCurrentLocation = location => ({
 // Action for updating Userlocation in DB. Will get called on 
 // App will mount and dispatches the getCurrentLocation action that updates userlocation in the redux store
 export const updateLocation = (location, Email) => (dispatch) => {
+  console.log('updateLocation Action triggered!')
   console.log('inUpdateLocation Action')
   const body = JSON.stringify({
     location,
