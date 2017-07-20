@@ -74,7 +74,7 @@ var styles = StyleSheet.create({
   loginModal:{
     flex: 1,
     flexDirection: 'column',
-    marginTop:65,
+    marginTop: 15,
     alignItems: 'center'
   },
   loginModalInner:{
