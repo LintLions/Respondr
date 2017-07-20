@@ -89,21 +89,22 @@ export const getCurrentLocation = location => ({
 
 // Action for updating Userlocation in DB. Will get called on 
 // App will mount and dispatches the getCurrentLocation action that updates userlocation in the redux store
-// export const updateLocation = (location, Email) => (dispatch) => {
-//   const body = JSON.stringify({
-//     location,
-//     Email
-//   })
-//   fetch(`${url}/users/location`, {
-//     method: 'POST',
-//     headers: {
-//       Accept: 'application/json',
-//       'content-type': 'application/json',
-//     },
-//     body,
-//   })
-//   dispatch(getCurrentLocation(location));
-// }
+export const updateLocation = (location, Email) => (dispatch) => {
+  console.log('inUpdateLocation Action')
+  const body = JSON.stringify({
+    location,
+    Email,
+  })
+  fetch(`${url}/users/location`, {
+    method: 'POST',
+    headers: {
+      Accept: 'application/json',
+      'content-type': 'application/json',
+    },
+    body,
+  })
+  dispatch(getCurrentLocation(location));
+}
 
 export const cancelHelp = () => ({
   type: 'CANCEL_HELP',

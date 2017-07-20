@@ -1,7 +1,7 @@
 import { connect } from 'react-redux';
 import React from 'react';
 import { StackNavigator, addNavigationHelpers } from 'react-navigation';
-import { getUserWithTokenAndSocket, getCurrentLocation, getResponders } from '../actions/actions';
+import { getUserWithTokenAndSocket, getCurrentLocation, getResponders, updateLocation } from '../actions/actions';
 import MapPage from './map/MapPage';
 import SignUpPage from './signup/signUpPage';
 
@@ -16,7 +16,7 @@ class App extends React.Component {
   }
   componentWillMount() {
     const locChange = ({ coords }) => {
-      this.props.setLocation([coords.latitude, coords.longitude]);
+      this.props.setLocation([coords.latitude, coords.longitude], this.props.Email);
       this.props.getResponders([coords.latitude, coords.longitude]);
     };
     navigator.geolocation.watchPosition(locChange, { timeout: 10 * 1000 });
@@ -39,14 +39,15 @@ class App extends React.Component {
 
 const mapStateToProps = state => ({
   nav: state.nav,
+  Email: state.user.email
 });
 
 const mapDispatchToProps = dispatch => ({
   getUserWithTokenAndSocket: () => {
     dispatch(getUserWithTokenAndSocket());
   },
-  setLocation: (location) => {
-    dispatch(getCurrentLocation(location));
+  setLocation: (location, Email) => {
+    dispatch(updateLocation(location, Email));
   },
   getResponders: (location) => {
     dispatch(getResponders(location));

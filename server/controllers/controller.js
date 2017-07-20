@@ -161,18 +161,23 @@ exports.getUsers = function (req, res) {
   });
 };
 
-//Controller for updating userLocation(geometry) field in DB. Needs location and user email from body.
-// exports.updateLocation = function (req, res) {
-//   dynamicResponder.findOne( {where: req.body.email} )
-//   .then((user) => {
-//     user.update({
-//       geometry: POINT(req.body.location)
-//     })
-//   })
-//   .then((updatedUser) => {
-//     res.status(200).send(updatedUser)
-//   }
-// }
+// Controller for updating userLocation(geometry) field in DB. Needs location 
+// and user email from body.
+exports.updateLocation = function (req, res) {
+  // console.log('in updateLocation, location is: ', req.body.location);
+  dynamicResponder.findOne( {where: req.body.Email })
+  .then((user) => {
+    user.geometry.coordinates[0] = req.body.location[0];
+    user.geometry.coordinates[1] = req.body.location[1];
+    user.update({
+      currentLocation: req.body.location,
+      geometry: user.geometry,
+    });
+  })
+  .then((updatedUser) => {
+    res.status(200).send(updatedUser);
+  });
+};
 
 exports.getNearbyResponders = function (req, res) {
   const currentLocation = req.body.location;
