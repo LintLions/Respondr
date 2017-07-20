@@ -18,11 +18,12 @@ class App extends React.Component {
   }
   componentWillMount() {
     const locChange = ({ coords }) => {
-      this.props.setLocation([coords.latitude, coords.longitude], this.props.Email);
+      this.props.setLocation([coords.latitude, coords.longitude], this.props.token);
       this.props.getResponders([coords.latitude, coords.longitude]);
     };
-    navigator.geolocation.watchPosition(locChange, { timeout: 10 * 1000 });
+    navigator.geolocation.watchPosition(locChange, { timeout: 5 * 1000, enableHighAccuracy: true });
     this.props.getUserWithTokenAndSocket();
+    // window.setInterval(function() { navigator.geolocation.getCurrentPosition(locChange)}, 5000);
   }
 
   render() {
@@ -41,15 +42,17 @@ class App extends React.Component {
 
 const mapStateToProps = state => ({
   nav: state.nav,
-  Email: state.user.email
+  isLoggedIn: state.responder.isLoggedIn,
+  Email: state.responder.email,
+  token: state.responder.token
 });
 
 const mapDispatchToProps = dispatch => ({
   getUserWithTokenAndSocket: () => {
     dispatch(getUserWithTokenAndSocket());
   },
-  setLocation: (location, Email) => {
-    dispatch(updateLocation(location, Email));
+  setLocation: (location, token) => {
+    dispatch(updateLocation(location, token));
   },
   getResponders: (location) => {
     dispatch(getResponders(location));
