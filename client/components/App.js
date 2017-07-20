@@ -16,6 +16,7 @@ class App extends React.Component {
   }
   componentWillMount() {
     const locChange = ({ coords }) => {
+      console.log('location changing!!! in watch position changing')
       this.props.setLocation([coords.latitude, coords.longitude], this.props.Email);
       this.props.getResponders([coords.latitude, coords.longitude]);
     };
