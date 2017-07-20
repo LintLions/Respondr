@@ -5,7 +5,7 @@ const db = require('../db/db');
 const config = require('../config');
 const jwt = require('jsonwebtoken');
 const bcrypt = require('bcrypt-nodejs');
-const radius = 1207;
+const radius = 3000;
 const LATITUDE_DELTA = 0.0015;
 const LONGITUDE_DELTA = 0.0015;
 
@@ -75,8 +75,8 @@ exports.addUser = function(req, res) { //add user
       organization: req.body.organization,
       email: req.body.email,
       password: dynamicResponder.generateHash(req.body.password),
-      public: req.body.public,
-      static: req.body.static,
+      privacy: !!req.body.privacy,
+      mobility: !!req.body.mobility,
       fullName: `${req.body.firstName} ${req.body.lName}`,
       token: createIdToken(req.body.email),
       socket: req.body.socket,

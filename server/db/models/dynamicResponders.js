@@ -36,7 +36,7 @@ const dynamicResponder = db.define('dynamicResponder', {
   status: {
     type: Sequelize.STRING, // if logged in or on a mission
   },
-  public: {
+  privacy: {
     type: Sequelize.BOOLEAN,
   },
   OS: {

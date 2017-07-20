@@ -17,9 +17,6 @@ class PersonalInfoScreen extends Component {
   render() {
     return ( 
     <View style={styles.container}>
-      <View style={styles.flowRightImage}>
-        <Image source={require('../../styles/assets/bigwing.png')}/>
-      </View>
       <View style={styles.flowRight}>
         <TextInput
           value={this.props.screenProps.firstName}

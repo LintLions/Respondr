@@ -6,7 +6,9 @@ import MapPage from './map/MapPage';
 import SignUpPage from './signup/signUpPage';
 
 export const Navigator = StackNavigator({
-  Home: { screen: MapPage },
+  Home: { screen: MapPage, navigationOptions: {
+    header: null },
+  },
   Signup: { screen: SignUpPage },
 });
 
