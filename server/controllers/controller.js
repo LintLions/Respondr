@@ -5,7 +5,7 @@ const db = require('../db/db');
 const config = require('../config');
 const jwt = require('jsonwebtoken');
 const bcrypt = require('bcrypt-nodejs');
-const radius = 1207;
+const radius = 3000;
 const LATITUDE_DELTA = 0.0015;
 const LONGITUDE_DELTA = 0.0015;
 
