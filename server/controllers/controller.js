@@ -167,7 +167,7 @@ exports.updateLocation = function (req, res) {
   dynamicResponder.findOne( { where: {token: req.body.token} })
   .then((user) => {
     if (user) {
-      console.log('email in updateLocationController is: ', user.token);
+      console.log('token in updateLocationController is: ', user.token);
       console.log('user.geometry in updateLocationController is: ', user.geometry)
       user.geometry.coordinates[0] = req.body.location[0];
       user.geometry.coordinates[1] = req.body.location[1];
