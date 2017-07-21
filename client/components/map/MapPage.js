@@ -41,14 +41,24 @@ class MapPage extends Component {
               latitude: marker.currentLocation[0],
               longitude: marker.currentLocation[1],
             };
-
+            if (marker.mobility === 1) {      
+              return (
+                <MapView.Marker
+                  key={marker.id}
+                  coordinate={coordinates}
+                  title={marker.fullName}
+                  description={marker.organization}
+                  image={require('../../styles/assets/wings.png')}
+                />
+              );
+            }
             return (
               <MapView.Marker
                 key={marker.id}
                 coordinate={coordinates}
                 title={marker.fullName}
                 description={marker.organization}
-                image={require('../../styles/assets/wings.png')}
+                image={require('../../styles/assets/beacon-static.png')}
               />
             );
           })}
@@ -93,8 +103,6 @@ class MapPage extends Component {
           {this.props.beaconLocation &&
             <BottomNav />
           }
-          
-
         </View>
 
         {this.props.isBeacon && 
@@ -102,10 +110,6 @@ class MapPage extends Component {
               <BottomChat />
             </View>
         }
-        
-
-
-
       </View>
     );
   }

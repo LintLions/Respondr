@@ -195,7 +195,8 @@ exports.getNearbyResponders = function (req, res) {
   const currentLocation = req.body.location;
   console.log("currentLocation ", currentLocation);
   db
-  .query(`select * from "dynamicResponders" WHERE ST_DWithin(geometry, ST_MakePoint(${currentLocation[0]}, ${currentLocation[1]})::geography, ${radius})`)
+  .query(`select "id", "fullName", "organization", "currentLocation", "mobility" from "dynamicResponders" WHERE ST_DWithin(geometry, ST_MakePoint(${currentLocation[0]}, ${currentLocation[1]})::geography, ${radius}) UNION select "id", "fullName", "organization", "location", "mobility" from "staticResponderIndividuals" WHERE ST_DWithin(geometry, ST_MakePoint(${currentLocation[0]}, ${currentLocation[1]})::geography, ${radius})
+    `)
   .then((results) => {
     res.send(results[0]);
   }).catch((err) => {
@@ -259,7 +260,7 @@ exports.deleteBeacon = function (req, res) {
 };
 
 exports.switchAvailability = function (req, res) {
-  console.log(req.body);
+  console.log("Req.boyd is in swtichAvailability is ", req.body);
   dynamicResponder.update(
     { available: req.body[0] },
     { where: { id: req.body[1] } },

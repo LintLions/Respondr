@@ -66,6 +66,9 @@ const staticResponderIndividual = db.define('staticResponderIndividual', {
   geometry: {
     type: Sequelize.GEOMETRY,
   },
+  mobility: {
+    type: Sequelize.INTEGER,
+  },
 });
 staticResponderIndividual.generateHash = password => bcrypt.hashSync(
   password,

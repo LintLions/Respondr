@@ -19,7 +19,7 @@ class StaticScreen extends Component {
         <View style={styles.toggle}>
           <SegmentedControlIOS
             style-={styles.header}
-            values={["Dynamic", "Static"]}
+            values={["Dynamic Individual", "Static Storefront"]}
             selectedIndex={this.props.screenProps.mobility}
             onChange={this.props.screenProps.onMobilityChange}
           />

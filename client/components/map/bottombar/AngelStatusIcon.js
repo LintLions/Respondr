@@ -15,11 +15,11 @@ class AngelStatusIcon extends React.Component {
       <View style={styles.toggleIcon}>
         <Text>Online</Text>
         <Switch
-          onValueChange={e => {
-            this.props.switchAvailability(!e, this.props.id)}
+          onValueChange={() => {
+            this.props.switchAvailability(!this.props.available, this.props.id)}
           } 
           onTintColor='#ea8078'
-          value={this.props.available}
+          value={this.props.available} 
         />
       </View>
     );
@@ -31,8 +31,9 @@ const mapStateToProps = state => ({
   id: state.responder.id,
 });
 const mapDispatchToProps = dispatch => ({
-  switchAvailability: (e, id) => {
-    dispatch(switchAvailability(e, id));
+  switchAvailability: (available, id) => {
+    console.log("available is ", available);
+    dispatch(switchAvailability(available, id));
   },
 });
 

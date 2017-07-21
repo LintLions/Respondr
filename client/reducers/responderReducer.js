@@ -14,7 +14,7 @@ const initState = {
   zip: '',
   address: '',
   socket: '',
-  availability: '',
+  available: '',
 };
 
 const responderReducer = (state = initState, action) => {
@@ -23,9 +23,9 @@ const responderReducer = (state = initState, action) => {
     //   return { ...state, isBeacon:true };
     // case 'CANCEL_HELP':
     //   return { ...state, isBeacon:false };
-    case 'UPDATE_AVAILABIIITY':
+    case 'CHANGE_AVAILABILITY':
       return { ...state,
-        availability: action.availability,
+        available: action.available,
       }
     case 'LOGIN_SUCCESS':
       return { ...state,

@@ -267,9 +267,9 @@ export const getResponders = location => (dispatch) => {
 };
 
 
-export const changeAvailability = availability => ({
+export const changeAvailability = available => ({
   type: 'CHANGE_AVAILABILITY',
-  availability,
+  available,
 });
 
 export const switchAvailability = (availability, id) => (dispatch) => {

@@ -46,6 +46,7 @@ class SignUpPage extends Component {
       address: '',
       zip: '',
       fullName: '',
+      state: '',
     };
 
     this.onEmailChange = (e) => {
