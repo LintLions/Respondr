@@ -3,7 +3,7 @@ import {
   googleMapsDirectionsApiKey as APIKEY,
   url,
  } from '../components/config';
-import { updateToken, socket, decode } from '../components/helpers';
+import { updateToken, socket, decode, startLocationUpdate } from '../components/helpers';
 import { store } from '../index';
 
 export const animateSuccess = responders => ({
@@ -90,13 +90,11 @@ export const getCurrentLocation = location => ({
 // Action for updating Userlocation in DB. Will get called on 
 // App will mount and dispatches the getCurrentLocation action that updates userlocation in the redux store
 export const updateLocation = (location, token) => (dispatch) => {
- if(token) {
-    console.log('updateLocation Action triggered!')
-    console.log('inUpdateLocation Action')
+  if (token) {
     const body = JSON.stringify({
       location,
       token,
-    })
+    });
     fetch(`${url}/users/location`, {
       method: 'POST',
       headers: {
@@ -104,13 +102,10 @@ export const updateLocation = (location, token) => (dispatch) => {
         'content-type': 'application/json',
       },
       body,
-    })
-    .then(() => dispatch(getCurrentLocation(location)))
-    .then(() => dispatch(getResponders(location)));
-    
-  } else {
-    console.log('not logged in no need to check')
+    });
   }
+  dispatch(getCurrentLocation(location));
+  dispatch(getResponders(location));
 }
 export const cancelHelp = () => ({
   type: 'CANCEL_HELP',
@@ -168,6 +163,11 @@ export const logOut = () => (dispatch) => {
    });
 };
 
+export const updateIntervalID = intervalID => ({
+  type: 'UPDATE_INTERVALID',
+  intervalID
+})
+
 // App mounts
 // Getuserwithtokenandsocket dispatches,
 
@@ -193,14 +193,9 @@ export const getUserWithTokenAndSocket = () => (dispatch) => {
         console.log(data);
         dispatch(updateUser(data)); // {socket: ________}
       }
+      // Set property on store that is the return of startLocationUpdate.
+      // on log in, call clear interval with this return val, and run startLocationUpdate with new token val
 
-      const intervalCB = () => {
-        const locChange = ({ coords }) => {
-          dispatch(updateLocation([coords.latitude, coords.longitude], value))
-        }
-        navigator.geolocation.getCurrentPosition(locChange, error => console.log('error watching position', error))
-      }
-      setInterval(intervalCB, 3000);
     })
   });
 };
