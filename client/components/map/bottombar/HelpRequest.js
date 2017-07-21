@@ -18,7 +18,7 @@ class HelpRequest extends Component {
 
 
   render() {
-    console.log('+++HelpRequest.js');
+    console.log('+++in HelpRequest.js');
     
     return (
       <View style={[styles.container]}>
@@ -50,14 +50,14 @@ class HelpRequest extends Component {
 
 const mapStateToProps = (state) => ({
   firstName: state.responder.firstName,
-  beaconLocation: state.myBeacon.location,
+  // beaconLocation: state.myBeacon.location,
 });
 
 const mapDispatchToProps = (dispatch) => ({
   handleHelpRequestYes: () => {
     dispatch(acceptBeacon());
     dispatch(drawRoute());
-    dispatch(updateBeacon({ isAssigned: true }));
+    // dispatch(updateBeacon({ isAssigned: true }));
   },
   handleHelpRequestNo: () => {
     dispatch(updateBeacon({ location: null }));

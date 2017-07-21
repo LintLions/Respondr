@@ -17,14 +17,16 @@ class BottomBarAngel extends Component {
   }
 
   render() {
+    console.log('+++in BottomBarAngel.js')
+    console.log('+++in BottomBarAngel.js - chatRoom: ', this.props.chatRoom);
+    
     let Page = null;
-    if (!this.props.isAssigned) {
+    if (!this.props.chatRoom) {
       Page = <HelpRequest />;
-    } else if (this.props.isAssigned) {
-      if (this.props.isAssigned) {
-        Page = <HelpRequestAccepted />;
-      }
-    }
+    } else if (this.props.chatRoom) {
+      Page = <HelpRequestAccepted />;
+    }    
+    
     return (
       <View style={styles.container}>
         {Page}
@@ -34,7 +36,8 @@ class BottomBarAngel extends Component {
 }
 
 const mapStateToProps = (state) => ({
-  isAssigned: state.myBeacon.isAssigned,
+  // isAssigned: state.myBeacon.isAssigned,
+  chatRoom: state.myBeacon.chatRoom,
 })
 
 // const mapDispatchToProps = (dispatch) => ({

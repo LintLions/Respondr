@@ -1,7 +1,7 @@
 const initState = {
   name: null,
   location: null,
-  chatRoom: '',
+  chatRoom: null,
   chatMessages: [],
 };
 export default (state = initState, action) => {

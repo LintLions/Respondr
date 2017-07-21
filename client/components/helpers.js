@@ -64,7 +64,7 @@ export const socket = SocketIOClient(url);
 socket.on('newBeacon', (activeBeaconSession) => { 
   console.log('+++helpers.js - rcvd newBeacon: ', activeBeaconSession);
   store.dispatch(updateBeacon({
-    chatRoom: activeBeaconSession.chatRoom, 
+    // chatRoom: activeBeaconSession.chatRoom, 
     location: activeBeaconSession.beaconLocation, 
     region: {
       latitude: activeBeaconSession.beaconLocation[0], 
@@ -83,9 +83,18 @@ socket.on('render all messages', (messages) => {
 });
 
 socket.on('verifyResponder', (myResponder) => {
+  console.log('+++helpers.js - verifyResponder - myResponder: ', myResponder);
   store.dispatch(updateMyResponder({ 
     name: myResponder.name,
     location: myResponder.location,
     chatRoom: myResponder.chatRoom,
    }));
+})
+
+socket.on('verifyBeacon', (myBeacon) => {
+  console.log('+++helpers.js - verifyBeacon - myBeacon: ', myBeacon);
+  store.dispatch(updateBeacon({
+    chatRoom: myBeacon.chatRoom, 
+    location: myBeacon.location,
+  }))
 })

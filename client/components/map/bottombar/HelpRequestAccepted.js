@@ -15,6 +15,7 @@ class HelpRequestAccepted extends Component {
   }
 
   render() {
+    console.log('+++in HelpRequestAccepted.js');
     return (
       <View style={styles.container}>
         <View style={[styles.container, styles.box1]}>
