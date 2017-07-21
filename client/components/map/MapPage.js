@@ -87,25 +87,16 @@ class MapPage extends Component {
           {!this.props.isLoggedIn &&
           <HelpButton />}
         </View>
-        <View
-          style={[styles.column, styles.bottom]}
-        >
+        <View style={[styles.column, styles.bottom]}>
           {this.props.beaconLocation &&
             <BottomNav />
           }
-          
-
         </View>
-
         {this.props.isBeacon && 
             <View style={styles.box3}>
               <BottomChat />
             </View>
         }
-        
-
-
-
       </View>
     );
   }

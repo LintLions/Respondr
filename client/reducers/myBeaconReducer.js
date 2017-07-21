@@ -1,7 +1,7 @@
 const initState = {
   location: null,
   isAssigned: false,
-  completed: false,
+  isCompleted: false,
   chatRoom: '',
   chatMessages: [], // individual msgs live on component's lcoal state 
   region: null,

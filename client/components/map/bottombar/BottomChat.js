@@ -67,7 +67,7 @@ class BottomChat extends React.Component {
           onSend={(messages) => this.onSend(messages)}
           renderChatFooter={() => null}
           user={{
-            _id: 1,
+            _id: this.props.socket,
             name: this.props.name === ' ' ? null : this.props.name,
           }}
         />
@@ -81,6 +81,7 @@ const mapStateToProps = (state) => ({
   chatRoom: state.myBeacon.chatRoom,
   messages: state.myBeacon.chatMessages,
   name: state.responder.fullName,
+  socket: state.user.socket,
 });
 
 const mapDispatchToProps = (dispatch) => ({

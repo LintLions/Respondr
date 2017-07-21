@@ -7,7 +7,7 @@ import {
   StyleSheet,
   FlatList
 } from 'react-native';
-import { drawRoute, updateBeacon, acceptBeacon } from '../../../actions/actions';
+import { drawRoute, updateBeacon, acceptBeacon, updateUser } from '../../../actions/actions';
 
 import styles from '../../../styles/styles';
 
@@ -22,7 +22,6 @@ class HelpRequest extends Component {
     
     return (
       <View style={[styles.container]}>
-        
         <View style={[styles.container, styles.box1]}>
           <Text style={styles.prompt}>
             Hi {this.props.firstName}, there's a beacon, would you be able to assist?

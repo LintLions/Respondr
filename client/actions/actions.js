@@ -73,13 +73,26 @@ export const getHelp = () => (dispatch) => {
 export const acceptBeacon = () => (dispatch) => {
   console.log('+++in actions.js - acceptBeacon');
   const isBeaconTaken = store.getState().myBeacon.isAssigned;
-  const chatRoom = store.getState().myBeacon.chatRoom;
+
+  const responder = {
+    responderId: socket.id,
+    responderName: store.getState().responder.fullName,
+    responderLocation: store.getState().responder.currentLocation,
+  }
   if(!isBeaconTaken) {
-    socket.emit('acceptBeacon', chatRoom);
+    socket.emit('acceptBeacon', responder);
     dispatch(updateBeacon({ isAssigned: true }));
   } else {
-    dispatch(updateBeacon({ location: null, completed: true }));
+    dispatch(updateBeacon({ isCompleted: true })); 
   }
+}
+
+export const verifyResponder = () => {
+  console.log('+++in actions.js - verifyResponder');
+}
+
+export const verifyBeacon = () => {
+  console.log('+++in actions.js - verifyBeacon');
 }
 
 export const getCurrentLocation = location => ({

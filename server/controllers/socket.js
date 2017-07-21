@@ -6,11 +6,17 @@ const dynamicResponder = require('../db/models/dynamicResponders');
 const beacon = require('../db/models/beacons');
 
 const websocket = socketio(server);
+
+let UID = 0; // unique ID for each activeBeaconSession 
 const activeBeaconSession = {
+  chatRoom: UID,
   beacon: '',
+  beaconLocation: '',
   responder: '',
-  chatRoom: '',
+  responderName: '',
+  responderLocation: '',
   messages: [],
+  blacklist: [],
 };
 
 websocket.on('connection', (socket) => {
@@ -50,20 +56,22 @@ websocket.on('connection', (socket) => {
   socket.on('getHelp', (activeBeacon) => {
     console.log('+++server rcvd help request, activeBeacon: ', activeBeacon); 
     activeBeaconSession.beacon = activeBeacon.id;
+    activeBeaconSession.beaconLocation = activeBeacon.loc;
+    UID++;
 
     dynamicResponder.findAll()
       .then((responders) => {
         if (Array.isArray(responders)) {
           responders.forEach((responder) => {
             console.log('+++responder.socekt: ', responder.socket);
-            if (responder.socket !== socket.id) { // OR responder.socket !== activeBeacon.id ???
-              socket.to(responder.socket).emit('newBeacon', activeBeacon);
+            if (responder.socket !== socket.id) { 
+              socket.to(responder.socket).emit('newBeacon', activeBeaconSession);
             }
           });
         } else if (responders) {
           console.log(responders.id);
           if (responders.socket !== socket.id) { // OR responder.socket !== activeBeacon.id ???
-            socket.to(responders.socket).emit('newBeacon', activeBeacon);
+            socket.to(responders.socket).emit('newBeacon', activeBeaconSession);
           }
         } else {
           console.log('no responder for gethelp');
@@ -74,14 +82,30 @@ websocket.on('connection', (socket) => {
     // socket.join(chatRoom);
   });
 
-  socket.on('acceptBeacon', (chatRoom) => {
-    console.log('+++in socket.js - acceptBeacon - chatRoomID: ', chatRoom);
-    activeBeaconSession.responder = socket.id; 
-    activeBeaconSession.chatRoom = chatRoom; 
-    console.log('+++in socket.js - activeBeacon object: ', activeBeaconSession);
-    socket.join(chatRoom);
+  socket.on('acceptBeacon', (responder) => {
+    console.log('+++in socket.js - acceptBeacon - responder: ', responder);
+    activeBeaconSession.responder = responder.responderId; 
+    activeBeaconSession.responderName = responder.responderName; 
+    activeBeaconSession.responderLocation = responder.responderLocation;
+    console.log('+++in socket.js - activeBeacon - activeBeaconSession: ', activeBeaconSession);
+    
+    let myResponder = {
+      chatRoom: activeBeaconSession.chatRoom,
+      name: activeBeaconSession.responderName,
+      location: activeBeaconSession.responderLocation,
+    }
+    let myBeacon = {
+      chatRoom: activeBeaconSession.chatRoom,
+      location: activeBeaconSession.beaconLocation,
+    }
 
-    socket.to(chatRoom).emit('render all messages', activeBeaconSession.messages);
+    socket.to(activeBeaconSession.beacon).emit('verifyResponder', myResponder);
+    socket.to(activeBeaconSession.responder).emit('verifyBeacon', myBeacon);
+
+    // socket.to(activeBeaconSession.beacon).emit('beacon accepted');
+    // socket.join(chatRoom);
+
+    // socket.to(chatRoom).emit('render all messages', activeBeaconSession.messages);
   })
 
   socket.on('new message', (eachMessage) => {

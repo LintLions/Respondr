@@ -6,7 +6,7 @@ import {
   TouchableHighlight,
   StyleSheet,
 } from 'react-native';
-import { updateBeacon } from '../../../actions/actions';
+import { updateBeacon, updateUser } from '../../../actions/actions';
 import styles from '../../../styles/styles';
 
 class HelpRequestAccepted extends Component {
@@ -30,35 +30,22 @@ class HelpRequestAccepted extends Component {
               <Text style={styles.missionButtonText}>Mission Complete</Text>
             </TouchableHighlight>
           </View>
+
+          <View>
+            <TouchableHighlight
+              style={styles.missionButton}
+              underlayColor='#99d9f4'
+              onPress={this.props.handleCancelMission}
+            >
+              <Text style={styles.missionButtonText}>Cancel Mission</Text>
+            </TouchableHighlight>
+          </View>
+
         </View>
       </View>
     );
   }
 }
-
-// this.handleHelpRequestYes = (e) => {
-//   e.preventDefault();
-//   this.setState({
-//     helpRequestStatus: 'yes',
-//   });
-//   this.props.drawRoute(this.props.beaconLocation);
-// };
-
-// this.handleHelpRequestNo = async (e) => {
-//   e.preventDefault();
-//   this.setState({
-//     helpRequestStatus: 'no',
-//   });
-//   this.props.screenProps.methods.updateState({ beaconLocation: null });
-// };
-
-// this.handleHelpRequestCancel = (e) => {
-//   e.preventDefault();
-//   this.setState({
-//     helpRequestCancel: true,
-//   });
-//   this.props.screenProps.methods.updateState({ beaconLocation: null });
-// };
 
 const mapStateToProps = (state) => ({
   firstName: state.responder.firstName,
@@ -67,8 +54,12 @@ const mapStateToProps = (state) => ({
 
 const mapDispatchToProps = (dispatch) => ({
   handleHelpRequestComplete: () => {
-    dispatch(updateBeacon({ location: null, completed: true })); 
+    dispatch(updateBeacon({ location: null, isCompleted: true })); 
   },
+  handleCancelMission: () => {
+    // dispatch(updateBeacon({ isAssigned: false }));
+    // dispatch(updateUser({ isBeaconAndReceivedHelp: false }));
+  }
 });
 
 HelpRequestAccepted = connect(mapStateToProps, mapDispatchToProps)(HelpRequestAccepted);
