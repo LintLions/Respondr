@@ -1,4 +1,32 @@
 language: node_js
 node_js:
-  - '6.10.2'
-  - '0.10'
+- '6'
+services:
+  - postgresql
+cache:
+  directories:
+    - node_modules
+deploy:
+- provider: s3
+  access_key_id: $AWS_ACCESS_KEY
+  secret_access_key: $AWS_SECRET_KEY
+  local_dir: dpl_cd_upload
+  skip_cleanup: true
+  on: &2
+    repo: LintLions/Respondr
+  bucket: respondr
+  region: us-east-1
+- provider: codedeploy
+  access_key_id: $AWS_ACCESS_KEY
+  secret_access_key: $AWS_SECRET_KEY
+  bucket: respondr
+  key: latest.zip
+  bundle_type: zip
+  application: respondr
+  deployment_group: respondr
+  region: us-east-1
+  on: *2
+script:
+  - zip -r latest *
+  - mkdir -p dpl_cd_upload
+  - mv latest.zip dpl_cd_upload/latest.zip
