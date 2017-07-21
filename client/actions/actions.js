@@ -105,7 +105,9 @@ export const updateLocation = (location, token) => (dispatch) => {
       },
       body,
     })
-    dispatch(getCurrentLocation(location));
+    .then(() => dispatch(getCurrentLocation(location)))
+    .then(() => dispatch(getResponders(location)));
+    
   } else {
     console.log('not logged in no need to check')
   }
@@ -166,6 +168,12 @@ export const logOut = () => (dispatch) => {
    });
 };
 
+// App mounts
+// Getuserwithtokenandsocket dispatches,
+
+// that dispatches updateLocation(location, token) with setInterval
+// UpdateLocation dispatches getResponders.
+
 export const getUserWithTokenAndSocket = () => (dispatch) => {
   AsyncStorage.getItem('id_token', (err, value) => {
     if (err) {
@@ -185,7 +193,15 @@ export const getUserWithTokenAndSocket = () => (dispatch) => {
         console.log(data);
         dispatch(updateUser(data)); // {socket: ________}
       }
-    });
+
+      const intervalCB = () => {
+        const locChange = ({ coords }) => {
+          dispatch(updateLocation([coords.latitude, coords.longitude], value))
+        }
+        navigator.geolocation.getCurrentPosition(locChange, error => console.log('error watching position', error))
+      }
+      setInterval(intervalCB, 3000);
+    })
   });
 };
 
