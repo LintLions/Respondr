@@ -1,14 +1,10 @@
 import React, { Component } from 'react';
 import { TabNavigator, NavigationActions } from 'react-navigation';
-import {
-  AlertIOS,
-} from 'react-native';
 import { connect } from 'react-redux';
 import PersonalInfoScreen from './PersonalInfo';
 import PublicScreen from './Public';
 import StaticScreen from './Static';
-import config from '../config';
-import { signUp } from '../../actions/actions'
+import { signUp } from '../../actions/actions';
 
 const navScreens = {
   Personal: { screen: PersonalInfoScreen },
@@ -31,8 +27,8 @@ const navOptions = {
 const SignUpNavigator = TabNavigator(navScreens, navOptions);
 
 class SignUpPage extends Component {
-  static navigationOptions = ({ navigation }) => ({
-    title: `Signup`,
+  static navigationOptions = () => ({
+    title: 'Signup',
   });
   constructor(props) {
     super(props);
@@ -47,50 +43,68 @@ class SignUpPage extends Component {
       privacy: '',
       mobility: '',
       city: '',
-      state: '',
-      zip: '',
       address: '',
+      zip: '',
+      fullName: '',
     };
 
     this.onEmailChange = (e) => {
-      let email = e.nativeEvent.text
-      this.setState({email:email});
-    }
+      const email = e.nativeEvent.text;
+      this.setState({ email });
+    };
     this.onFNameChange = (e) => {
-      console.log(e.nativeEvent)
-      let firstName = e.nativeEvent.text
-      this.setState( {firstName:firstName} );
-    }
+      console.log(e.nativeEvent);
+      const firstName = e.nativeEvent.text;
+      this.setState({ firstName });
+    };
     this.onLNameChange = (e) => {
-      let lastName = e.nativeEvent.text
-      this.setState( {lastName:lastName} );
-    }
+      const lastName = e.nativeEvent.text;
+      this.setState({ lastName });
+    };
     this.onPasswordChange = (e) => {
-      let password = e.nativeEvent.text
-      this.setState( {password: password});
-    }
+      const password = e.nativeEvent.text;
+      this.setState({ password });
+    };
     this.onPhoneChange = (e) => {
-      let phone = e.nativeEvent.text
-      this.setState( {phone:phone} );
-    }
+      const phone = e.nativeEvent.text;
+      this.setState({ phone });
+    };
     this.onOrganizationChange = (e) => {
-      let organization = e.nativeEvent.text
-      this.setState({organization:organization});
-    }
+      const organization = e.nativeEvent.text;
+      this.setState({ organization });
+    };
     this.onPrivacyChange = (e) => {
-      let privacy = e.nativeEvent.selectedSegmentIndex
-      console.log("privacy is ", privacy);
-      this.setState({privacy:privacy});
-    }
+      const privacy = e.nativeEvent.selectedSegmentIndex;
+      this.setState({ privacy });
+    };
     this.onMobilityChange = (e) => {
-      let mobility = e.nativeEvent.selectedSegmentIndex
+      const mobility = e.nativeEvent.selectedSegmentIndex;
       console.log("mobility is ", mobility);
-      this.setState({mobility:mobility} )
-    }
-
+      this.setState({ mobility });
+    };
+    this.onfullNameChange = (e) => {
+      const fullName = e.nativeEvent.text;
+      this.setState({ fullName });
+    };
+    this.onAddressChange = (e) => {
+      const address = e.nativeEvent.text;
+      this.setState({ address });
+    };
+    this.onCityChange = (e) => {
+      const city = e.nativeEvent.text;
+      this.setState({ city });
+    };
+    this.onStateChange = (e) => {
+      const state = e.nativeEvent.text;
+      this.setState({ state });
+    };
+    this.onZipChange = (e) => {
+      const zip = e.nativeEvent.text;
+      this.setState({ zip });
+    };
     this.signup = () => {
-      var userData = JSON.stringify(this.state);
-      console.log("userdata on signup is ", userData)
+      const userData = this.state;
+      console.log('userdata on signup is ', userData);
       this.props.handleSignUp(userData);
       this.props.goHome();
     };
@@ -110,6 +124,8 @@ class SignUpPage extends Component {
       city: this.city,
       state: this.state,
       zip: this.zip,
+      fullName: this.fullName,
+      onfullNameChange: this.onfullNameChange,
       onEmailChange: this.onEmailChange,
       onFNameChange: this.onFNameChange,
       onLNameChange: this.onLNameChange,
@@ -128,18 +144,18 @@ class SignUpPage extends Component {
   }
 
 }
-const mapStatetoProps = (state) => ({
+const mapStatetoProps = state => ({
   nav: state.nav,
   socket: state.user.socket,
 });
-const mapDispatchToProps = (dispatch) => ({
+const mapDispatchToProps = dispatch => ({
   handleSignUp: (userData) => {
     dispatch(signUp(userData));
   },
   goHome: () => {
-    dispatch(NavigationActions.navigate({ routeName: 'Home' }))
-  }
+    dispatch(NavigationActions.navigate({ routeName: 'Home' }));
+  },
 });
 
-SignUpPage = connect(mapStatetoProps, mapDispatchToProps)(SignUpPage)
+SignUpPage = connect(mapStatetoProps, mapDispatchToProps)(SignUpPage);
 export default SignUpPage;

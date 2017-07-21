@@ -22,13 +22,13 @@ class PersonalInfoScreen extends Component {
           value={this.props.screenProps.firstName}
           style={styles.searchInput}
           onChange={this.props.screenProps.onfirstNameChange}
-          placeholder='first name'
+          placeholder='first name (optional)'
         />
         <TextInput
           value={this.props.screenProps.lName}
           style={styles.searchInput}
           onChange={this.props.screenProps.onLNameChange}
-          placeholder='last name'
+          placeholder='last name (optional)'
         />
       </View>
       <View style={styles.flowRight}>

@@ -7,10 +7,10 @@ const staticResponderIndividual = db.define('staticResponderIndividual', {
     type: Sequelize.STRING,
   },
   firstName: {
-    type: Sequelize.STRING, allowNull: false,
+    type: Sequelize.STRING,
   },
   lastName: {
-    type: Sequelize.STRING, allowNull: false,
+    type: Sequelize.STRING,
   },
   fullName: {
     type: Sequelize.STRING, allowNull: false,
@@ -45,7 +45,7 @@ const staticResponderIndividual = db.define('staticResponderIndividual', {
   status: {
     type: Sequelize.STRING, // if logged in or on a mission
   },
-  public: {
+  privacy: {
     type: Sequelize.BOOLEAN,
   },
   hours: {
@@ -62,7 +62,10 @@ const staticResponderIndividual = db.define('staticResponderIndividual', {
   },
   device: {
     type: Sequelize.STRING,
-  }
+  },
+  geometry: {
+    type: Sequelize.GEOMETRY,
+  },
 });
 staticResponderIndividual.generateHash = password => bcrypt.hashSync(
   password,
