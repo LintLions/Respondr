@@ -6,7 +6,6 @@ import {
   TouchableHighlight,
   StyleSheet,
 } from 'react-native';
-import { updateBeacon, updateUser, newGetHelp } from '../../../actions/actions';
 import styles from '../../../styles/styles';
 
 class HelpRequestAccepted extends Component {
@@ -36,7 +35,7 @@ class HelpRequestAccepted extends Component {
             <TouchableHighlight
               style={styles.missionButton}
               underlayColor='#99d9f4'
-              onPress={this.props.handleCancelMission}
+              onPress={() => this.props.handleCancelMission(options)} // this.props.UID 
             >
               <Text style={styles.missionButtonText}>Cancel Mission</Text>
             </TouchableHighlight>
@@ -47,24 +46,6 @@ class HelpRequestAccepted extends Component {
     );
   }
 }
-
-const mapStateToProps = (state) => ({
-  firstName: state.responder.firstName,
-  beaconLocation: state.myBeacon.location,
-});
-
-const mapDispatchToProps = (dispatch) => ({
-  handleHelpRequestComplete: () => {
-    dispatch(updateBeacon({ location: null, isCompleted: true })); 
-  },
-  handleCancelMission: () => {
-    // dispatch(updateBeacon({ isAssigned: false }));
-    dispatch(newGetHelp());
-    dispatch(updateBeacon({ location: null}))
-  }
-});
-
-HelpRequestAccepted = connect(mapStateToProps, mapDispatchToProps)(HelpRequestAccepted);
 
 module.exports = HelpRequestAccepted;
 

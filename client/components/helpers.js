@@ -61,14 +61,14 @@ export const getToken =  async () => AsyncStorage.getItem('id_token');
 
 export const socket = SocketIOClient(url);
 
-socket.on('newBeacon', (activeBeaconSession) => { 
-  console.log('+++helpers.js - rcvd newBeacon: ', activeBeaconSession);
+socket.on('newBeacon', (currentSession) => { 
+  console.log('+++helpers.js - rcvd newBeacon: ', currentSession);
   store.dispatch(updateBeacon({
-    // chatRoom: activeBeaconSession.chatRoom, 
-    location: activeBeaconSession.beaconLocation, 
+    chatRoom: currentSession.chatRoom, 
+    location: currentSession.beaconLocation, 
     region: {
-      latitude: activeBeaconSession.beaconLocation[0], 
-      longitude: activeBeaconSession.beaconLocation[1], 
+      latitude: currentSession.beaconLocation[0], 
+      longitude: currentSession.beaconLocation[1], 
       latitudeDelta: 0.0922,
       longitudeDelta: 0.0421,
     }
@@ -94,7 +94,10 @@ socket.on('verifyResponder', (myResponder) => {
 socket.on('verifyBeacon', (myBeacon) => {
   console.log('+++helpers.js - verifyBeacon - myBeacon: ', myBeacon);
   store.dispatch(updateBeacon({
-    chatRoom: myBeacon.chatRoom, 
+    isAssigned: true,
+    isCompleted: false,
     location: myBeacon.location,
+    chatRoom: myBeacon.chatRoom, 
+    chatMessages: myBeacon.chatMessages,
   }))
 })

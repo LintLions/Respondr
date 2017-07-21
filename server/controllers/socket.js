@@ -12,12 +12,12 @@ let UID = 1; // unique ID for each activeBeaconSession
 class ActiveBeaconSession {
   constructor(UID, socket, location) {
     this.chatRoom = UID;
+    this.chatMessages = [];
     this.beacon = socket;
     this.beaconLocation = location;
     this.responder = '';
     this.responderName = '';
     this.responderLocation = '';
-    this.messages = [];
     this.blacklist = [];
   }
 }
@@ -58,8 +58,9 @@ websocket.on('connection', (socket) => {
     .then(rows => console.log(`deleted ${rows} rows`));
   });
 
-  socket.on('getHelp', (activeBeacon) => {
-    console.log('+++server rcvd help request, activeBeacon: ', activeBeacon); 
+  socket.on('getHelp', (options) => {
+    console.log('+++server rcvd help request, options: ', options); 
+    // console.log('+++server rcvd help request, activeBeacon: ', activeBeacon); 
     // socket server storage
     // activeBeaconSessions[UID] = {};
     // activeBeaconSessions[UID].beacon = activeBeacon.id;
@@ -69,11 +70,11 @@ websocket.on('connection', (socket) => {
     
     let currentSession = {};
 
-    if(activeBeacon.UID) {
-      currentSession = activeBeaconSessions[activeBeacon.UID];
+    if(options.UID) {
+      currentSession = activeBeaconSessions[options.UID];
     } else {
-      currentSession = new ActiveBeaconSession(UID, socket.id, activeBeacon.loc);
-      // activeBeaconSessions[UID++] = currentSession;
+      currentSession = new ActiveBeaconSession(UID, socket.id, options.location); 
+      activeBeaconSessions[UID++] = currentSession; 
     }
     console.log('+++socket.js - getHelp - currentSession: ', currentSession);
 
@@ -107,23 +108,32 @@ websocket.on('connection', (socket) => {
   });
 
   socket.on('acceptBeacon', (responder) => {
-    
-    UID++;
-
     console.log('+++in socket.js - acceptBeacon - responder: ', responder);
-    activeBeaconSession.responder = responder.responderId; 
-    activeBeaconSession.responderName = responder.responderName; 
-    activeBeaconSession.responderLocation = responder.responderLocation;
-    console.log('+++in socket.js - acceptBeacon - activeBeaconSession: ', activeBeaconSession);
+    // activeBeaconSession.responder = responder.responderId; 
+    // activeBeaconSession.responderName = responder.responderName; 
+    // activeBeaconSession.responderLocation = responder.responderLocation;
+    // console.log('+++in socket.js - acceptBeacon - activeBeaconSession: ', activeBeaconSession);
     
+    let UID = responder.UID;
+    activeBeaconSessions[UID].responder = responder.responderId;
+
+  // store.dispatch(updateBeacon({
+  //   isAssigned: true,
+  //   isCompleted: false,
+  //   location: myBeacon.location,
+  //   chatRoom: myBeacon.chatRoom, 
+  //   chatMessages: myBeacon.chatMessages,
+  // }))
+
+    const myBeacon = {
+      location: activeBeaconSession[UID].beaconLocation,
+      chatRoom: activeBeaconSessions[UID].chatRoom,
+      chatMessages: activeBeaconSessions[UID].chatMessages,
+    }    
     const myResponder = {
       chatRoom: activeBeaconSession.chatRoom,
       name: activeBeaconSession.responderName,
       location: activeBeaconSession.responderLocation,
-    }
-    const myBeacon = {
-      chatRoom: activeBeaconSession.chatRoom,
-      location: activeBeaconSession.beaconLocation,
     }
 
     // socket.join(activeBeaconSession.chatRoom);
@@ -132,8 +142,8 @@ websocket.on('connection', (socket) => {
     // websocket.to(activeBeaconSession.beacon).emit('verifyResponder', myResponder);
     // websocket.to(activeBeaconSession.responder).emit('verifyBeacon', myBeacon);
 
-    socket.to(activeBeaconSession.beacon).emit('verifyResponder', myResponder);
     socket.emit('verifyBeacon', myBeacon);
+    socket.to(activeBeaconSession.beacon).emit('verifyResponder', myResponder);
   })
 
   socket.on('newGetHelp', (responderId) => {
