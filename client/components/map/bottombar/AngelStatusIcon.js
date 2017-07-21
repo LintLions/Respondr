@@ -1,45 +1,41 @@
-'use strict';
-
-import React, { Component } from 'react'
+import React from 'react';
+import { connect } from 'react-redux';
 import {
   View,
   Text,
-  TouchableHighlight,
-  StyleSheet,
-  Switch
+  Switch,
 } from 'react-native';
-
+import { switchAvailability } from '../../../actions/actions';
 import styles from '../../../styles/styles';
 
 class AngelStatusIcon extends React.Component {
-  constructor(props) {
-    super(props)
-    this.state = {
 
-    }
-  }
   render() {
-    // let switchComponentStyle;
-    // if(this.props.switchIsOn === true) {
-    //   switchComponentStyle = styles.containerInner
-    // } else {
-    //   switchComponentStyle = styles.container
-    // }
-    return(
+    return (
       <View style={styles.toggleIcon}>
         <Text>Online</Text>
         <Switch
-          onValueChange={(e) => this.props.handleSwitchIsOn(e)}
-          value={this.props.switchIsOn} />
+          onValueChange={e => {
+            this.props.switchAvailability(!e, this.props.id)}
+          } 
+          onTintColor='#ea8078'
+          value={this.props.available}
+        />
       </View>
-    )
+    );
   }
 }
 
-var styleSheet = StyleSheet.create({
-  toggleIcon: {
-    padding: 20
-  }
-})
+const mapStateToProps = state => ({
+  available: state.responder.available,
+  id: state.responder.id,
+});
+const mapDispatchToProps = dispatch => ({
+  switchAvailability: (e, id) => {
+    dispatch(switchAvailability(e, id));
+  },
+});
 
-module.exports = AngelStatusIcon;
+const AngelStatusIconConnected = connect(mapStateToProps, mapDispatchToProps)(AngelStatusIcon);
+
+module.exports = AngelStatusIconConnected;

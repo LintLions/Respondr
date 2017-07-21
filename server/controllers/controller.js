@@ -257,3 +257,14 @@ exports.deleteBeacon = function (req, res) {
     res.status(200).send('Beacon Destroyed');
   });
 };
+
+exports.switchAvailability = function (req, res) {
+  console.log(req.body);
+  dynamicResponder.update(
+    { available: req.body[0] },
+    { where: { id: req.body[1] } },
+  )
+  .then(() => {
+    res.status(200).send('Availability Switched');
+  });
+};

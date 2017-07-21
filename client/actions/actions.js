@@ -257,7 +257,7 @@ export const getResponders = location => (dispatch) => {
       'Accept': 'application/json',
       'Content-Type': 'application/json',
     },
-    body: body,
+    body,
   })
     .then(response => response.json())
     .then((responseJson) => {
@@ -265,3 +265,27 @@ export const getResponders = location => (dispatch) => {
     })
     .catch(e => console.warn(e));
 };
+
+
+export const changeAvailability = availability => ({
+  type: 'CHANGE_AVAILABILITY',
+  availability,
+});
+
+export const switchAvailability = (availability, id) => (dispatch) => {
+  console.log("availability is ", availability);
+
+  fetch(`${url}/users/online`, {
+    method: 'PUT',
+    headers: {
+      'Accept': 'application/json',
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify([availability, id]),
+  })
+  .then(() => {
+    dispatch(changeAvailability(availability));
+  })
+  .catch(e => console.warn("error updating availabity ", e));
+};
+
