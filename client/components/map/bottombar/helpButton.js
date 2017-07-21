@@ -29,15 +29,14 @@ class HelpButton extends Component {
             <Text style={styles.helpButtonText}>HELP</Text>
           </TouchableHighlight>
         </View>) :
-        (<View>
-          
+        (<View>          
           <TouchableHighlight
             style={styles.button}
             underlayColor='#b22222'
             onPress={() => this.props.handleCancelButtonPress()}>
             <Text style={styles.buttonText}>Cancel Help Request</Text>
           </TouchableHighlight>
-          {this.props.isBeaconAndReceivedHelp === false ? 
+          {this.props.myResponder === null ? 
             (<Text style={styles.prompt}>We're looking for help for you, hold tight...</Text>):
             (<Text style={styles.prompt}>Your responder is on his/her way!</Text>)
           }
@@ -53,7 +52,7 @@ class HelpButton extends Component {
 
 const mapStateToProps = (state) => ({
   isBeacon: state.user.isBeacon,
-  isBeaconAndReceivedHelp: state.user.isBeaconAndReceivedHelp
+  myResponder: state.myResponder.name,
 })
 
 const mapDispatchToProps = (dispatch) => ({

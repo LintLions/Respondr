@@ -6,10 +6,8 @@ const initState = {
 };
 export default (state = initState, action) => {
   switch (action.type) {
-    // case 'UPDATE_RESPONDER':
-    //   return { ...state, ...action.options };
-    // case 'SET_CHAT_ROOM': 
-    //   return { ...state, chatRoom: action.chatRoom };
+    case 'UPDATE_MY_RESPONDER':
+      return { ...state, ...action.options };
     default:
       return state;
   }

@@ -4,7 +4,7 @@ import { AsyncStorage } from 'react-native';
 import SocketIOClient from 'socket.io-client';
 import { store } from '../index';
 import { url } from './config';
-import { updateBeacon, acceptBeacon, updateUser } from '../actions/actions';
+import { updateBeacon, acceptBeacon, updateUser, updateMyResponder } from '../actions/actions';
 
 export const decode = (t, e) => {
   // transforms something like this geocFltrhVvDsEtA}ApSsVrDaEvAcBSYOS_@...
@@ -82,8 +82,10 @@ socket.on('render all messages', (messages) => {
   }))
 });
 
-socket.on('beacon accepted', () => {
-  store.dispatch(updateUser({
-    isBeaconAndReceivedHelp: true,
-  }))
+socket.on('verifyResponder', (myResponder) => {
+  store.dispatch(updateMyResponder({ 
+    name: myResponder.name,
+    location: myResponder.location,
+    chatRoom: myResponder.chatRoom,
+   }));
 })

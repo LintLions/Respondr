@@ -58,7 +58,6 @@ const mapDispatchToProps = (dispatch) => ({
   },
   handleCancelMission: () => {
     // dispatch(updateBeacon({ isAssigned: false }));
-    // dispatch(updateUser({ isBeaconAndReceivedHelp: false }));
   }
 });
 

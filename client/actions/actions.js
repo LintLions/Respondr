@@ -33,9 +33,14 @@ export const animate = location => (dispatch) => {
 };
 
 export const updateBeacon = options => ({
-  type: 'UPDATE_BEACON',
+  type: 'UPDATE_MY_BEACON',
   options,
 });
+
+export const updateMyResponder = options => ({
+  type: 'UPDATE_MY_RESPONDER',
+  options,
+})
 
 export const updateUser = options => ({
   type: 'UPDATE_USER',
@@ -58,8 +63,8 @@ export const updateHelp = () => ({
 export const getHelp = () => (dispatch) => {
   const activeBeaconSocketID = store.getState().user.socket;
   const activeBeaconLoc = store.getState().user.location;
-  console.log('+++actions.js - getHelp - activeBeaconSocketId: ', activeBeaconSocketID);
-  console.log('+++actions.js - getHelp - activeBeaconLoc: ', activeBeaconLoc);
+  console.log('+++in actions.js - getHelp - activeBeaconSocketId: ', activeBeaconSocketID);
+  console.log('+++in actions.js - getHelp - activeBeaconLoc: ', activeBeaconLoc);
 
   const activeBeacon = {
     id: activeBeaconSocketID, 
@@ -87,11 +92,7 @@ export const acceptBeacon = () => (dispatch) => {
   }
 }
 
-export const verifyResponder = () => {
-  console.log('+++in actions.js - verifyResponder');
-}
-
-export const verifyBeacon = () => {
+export const verifyBeacon = (myBeacon) => {
   console.log('+++in actions.js - verifyBeacon');
 }
 

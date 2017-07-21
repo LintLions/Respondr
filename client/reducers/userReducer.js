@@ -2,7 +2,6 @@ const initState = {
   socket: '',
   location: null,
   isBeacon: false,
-  isBeaconAndReceivedHelp: false,
   route: null,
   responders: [],
 };

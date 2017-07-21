@@ -99,13 +99,8 @@ websocket.on('connection', (socket) => {
       location: activeBeaconSession.beaconLocation,
     }
 
-    socket.to(activeBeaconSession.beacon).emit('verifyResponder', myResponder);
-    socket.to(activeBeaconSession.responder).emit('verifyBeacon', myBeacon);
-
-    // socket.to(activeBeaconSession.beacon).emit('beacon accepted');
-    // socket.join(chatRoom);
-
-    // socket.to(chatRoom).emit('render all messages', activeBeaconSession.messages);
+    websocket.to(activeBeaconSession.beacon).emit('verifyResponder', myResponder);
+    websocket.to(activeBeaconSession.responder).emit('verifyBeacon', myBeacon);
   })
 
   socket.on('new message', (eachMessage) => {
