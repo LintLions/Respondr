@@ -6,7 +6,7 @@ import {
   TouchableHighlight,
   StyleSheet,
 } from 'react-native';
-import { updateBeacon, updateUser } from '../../../actions/actions';
+import { updateBeacon, updateUser, newGetHelp } from '../../../actions/actions';
 import styles from '../../../styles/styles';
 
 class HelpRequestAccepted extends Component {
@@ -59,6 +59,8 @@ const mapDispatchToProps = (dispatch) => ({
   },
   handleCancelMission: () => {
     // dispatch(updateBeacon({ isAssigned: false }));
+    dispatch(newGetHelp());
+    dispatch(updateBeacon({ location: null}))
   }
 });
 

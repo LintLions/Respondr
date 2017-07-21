@@ -92,6 +92,13 @@ export const acceptBeacon = () => (dispatch) => {
   }
 }
 
+export const newGetHelp = () => (dispatch) => {
+  console.log('+++in actions.js - newGetHelp');
+  
+  socket.emit('newGetHelp', socket.id);
+  dispatch(updateBeacon( { isAssigned: true }));
+}
+
 export const getCurrentLocation = location => ({
   type: 'GET_CURRENT_LOCATION',
   location,

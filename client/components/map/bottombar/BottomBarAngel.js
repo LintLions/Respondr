@@ -6,6 +6,9 @@ import { connect } from 'react-redux';
 import styles from '../../../styles/styles';
 import HelpRequest from './HelpRequest';
 import HelpRequestAccepted from './HelpRequestAccepted';
+import HelpRequestNotNeeded from './HelpRequestNotNeeded';
+import { updateBeacon, updateUser, newGetHelp } from '../../../actions/actions';
+
 
 class BottomBarAngel extends Component {
   constructor(props) {
@@ -21,11 +24,18 @@ class BottomBarAngel extends Component {
     console.log('+++in BottomBarAngel.js - chatRoom: ', this.props.chatRoom);
     
     let Page = null;
-    if (!this.props.chatRoom) {
+    if (this.props.isCompleted) {
+      Page = <HelpRequestNotNeeded />
+    } else if (!this.props.chatRoom) {
       Page = <HelpRequest />;
     } else if (this.props.chatRoom) {
-      Page = <HelpRequestAccepted />;
-    }    
+      Page = <HelpRequestAccepted
+        firstName={this.props.firstName}
+        beaconLocation={this.props.beaconLocation}
+        handleHelpRequestComplete={this.props.handleHelpRequestComplete}
+        handleCancelMission={this.props.handleHelpRequestComplete}
+      />;
+    } 
     
     return (
       <View style={styles.container}>
@@ -38,11 +48,22 @@ class BottomBarAngel extends Component {
 const mapStateToProps = (state) => ({
   // isAssigned: state.myBeacon.isAssigned,
   chatRoom: state.myBeacon.chatRoom,
+  isCompleted: state.myBeacon.isCompleted,
+  firstName: state.responder.firstName,
+  beaconLocation: state.myBeacon.location,
 })
 
-// const mapDispatchToProps = (dispatch) => ({
-// });
+const mapDispatchToProps = (dispatch) => ({
+  handleHelpRequestComplete: () => {
+    dispatch(updateBeacon({ location: null, isCompleted: true })); 
+  },
+  handleCancelMission: () => {
+    // dispatch(updateBeacon({ isAssigned: false }));
+    dispatch(newGetHelp());
+    dispatch(updateBeacon({ location: null}))
+  }
+});
 
-BottomBarAngel = connect(mapStateToProps)(BottomBarAngel)
+BottomBarAngel = connect(mapStateToProps, mapDispatchToProps)(BottomBarAngel)
 
 export default BottomBarAngel;
