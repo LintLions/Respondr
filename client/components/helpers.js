@@ -84,7 +84,9 @@ socket.on('render all messages', (messages) => {
 
 
 export const startLocationUpdate = (token) => {
+  let counter = 0;
   return () => {
+    console.log(counter++);
     console.log('intervalCB looping')
     const locChange = ({ coords }) => {
       console.log(coords.latitude)
