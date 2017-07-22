@@ -1,6 +1,7 @@
 import { AlertIOS, AsyncStorage } from 'react-native';
 import {
   googleMapsDirectionsApiKey as APIKEY,
+  googleMapsGeoCodingApiKey as GEOAPIKEY,
   url,
  } from '../components/config';
 import { updateToken, socket, decode, startLocationUpdate } from '../components/helpers';
@@ -225,14 +226,40 @@ export const drawRoute = latLong => (dispatch) => {
 
 export const signUp = userData => (dispatch) => {
   console.log("userData in signUp: ", userData);
-  fetch(`${url}/users`, {
-    method: 'POST',
-    headers: {
-      'Accept': 'application/json',
-      'Content-Type': 'application/json',
-    },
-    body: userData,
-  })
+  if (userData.mobility) {
+    const re = / /g
+    const address = userData.address.replace(re, '+');
+    const city = userData.city.replace(re, '+');
+    const state = userData.state.replace(re, '+');
+    const googleUrl = `https://maps.googleapis.com/maps/api/geocode/json?address=${address},+${city},+${state}&key=${GEOAPIKEY}`;
+    console.log('googleUrl is ', googleUrl);
+    fetch(googleUrl)
+    .then(results => results.json())
+    .then((location) => {
+      console.log('signup location is ', location.results[0].geometry.location);
+      userData.location = [location.results[0].geometry.location.lat, location.results[0].geometry.location.lng],
+      userData.geometry = {
+        type:'Point',
+        coordinates:[location.results[0].geometry.location.lat, location.results[0].geometry.location.lng],
+      };
+      signUpPost(userData);
+    });
+
+  } else {
+    signUpPost(userData);
+  }
+
+  const signUpPost = (userData) => {
+    var userData = JSON.stringify(userData);
+    console.log("userData is ", userData);
+    fetch(`${url}/users`, {
+      method: 'POST',
+      headers: {
+        'Accept': 'application/json',
+        'Content-Type': 'application/json',
+      },
+      body: userData,
+    })
     .then(response => response.json())
     .then((responseData) => {
       console.log("response Data is ", responseData);
@@ -245,6 +272,7 @@ export const signUp = userData => (dispatch) => {
       }
     })
     .done();
+  }  
 };
 
 export const getRespondersSucceed = responders => ({
@@ -263,7 +291,7 @@ export const getResponders = location => (dispatch) => {
       'Accept': 'application/json',
       'Content-Type': 'application/json',
     },
-    body: body,
+    body,
   })
     .then(response => response.json())
     .then((responseJson) => {
@@ -271,3 +299,27 @@ export const getResponders = location => (dispatch) => {
     })
     .catch(e => console.warn(e));
 };
+
+
+export const changeAvailability = available => ({
+  type: 'CHANGE_AVAILABILITY',
+  available,
+});
+
+export const switchAvailability = (availability, id) => (dispatch) => {
+  console.log("availability is ", availability);
+
+  fetch(`${url}/users/online`, {
+    method: 'PUT',
+    headers: {
+      'Accept': 'application/json',
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify([availability, id]),
+  })
+  .then(() => {
+    dispatch(changeAvailability(availability));
+  })
+  .catch(e => console.warn("error updating availabity ", e));
+};
+

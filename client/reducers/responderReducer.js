@@ -15,6 +15,7 @@ const initState = {
   address: '',
   socket: '',
   intervalID: '',
+  available: '',
 };
 
 const responderReducer = (state = initState, action) => {
@@ -23,6 +24,10 @@ const responderReducer = (state = initState, action) => {
     //   return { ...state, isBeacon:true };
     // case 'CANCEL_HELP':
     //   return { ...state, isBeacon:false };
+    case 'CHANGE_AVAILABILITY':
+      return { ...state,
+        available: action.available,
+      }
     case 'LOGIN_SUCCESS':
       return { ...state,
         ...action.userData,

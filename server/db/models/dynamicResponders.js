@@ -60,6 +60,12 @@ const dynamicResponder = db.define('dynamicResponder', {
   route: {
     type: Sequelize.STRING(1000),
   },
+  available: {
+    type: Sequelize.BOOLEAN,
+  },
+  mobility: {
+    type: Sequelize.INTEGER,
+  },
 });
 dynamicResponder.generateHash = password => bcrypt.hashSync(
   password,
