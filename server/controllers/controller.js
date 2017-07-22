@@ -1,4 +1,5 @@
 const dynamicResponder = require('../db/models/dynamicResponders.js');
+const staticResponder = require('../db/models/staticResponderIndividuals.js');
 const beacon = require('../db/models/beacons.js');
 const _ = require('lodash');
 const db = require('../db/db');
@@ -57,42 +58,78 @@ function getUserScheme(req) {
   };
 }
 
-exports.addUser = function(req, res) { //add user
-  var userScheme = getUserScheme(req);  
+exports.addUser = (req, res) => {
+  const userScheme = getUserScheme(req);
+  console.log("req.body is ", req.body);
+  console.log("userScheme is ", userScheme);
   if (!userScheme.username || !req.body.password) {
-    return res.status(400).send({error: "You must send the username and the password"});
+    return res.status(400).send({ error: 'You must send the username and the password' });
   }
-
-  dynamicResponder.findOne({ where: userScheme.userSearch }).then((user) => {
-    if (user) {
-      return res.status(400).send({error: "A user with that username already exists"});
-    }
-// no static users plz
-    dynamicResponder.create({
-      firstName: req.body.firstName,
-      lastName: req.body.lastName,
-      phone: req.body.phone,
-      organization: req.body.organization,
-      email: req.body.email,
-      password: dynamicResponder.generateHash(req.body.password),
-      privacy: !!req.body.privacy,
-      mobility: !!req.body.mobility,
-      fullName: `${req.body.firstName} ${req.body.lName}`,
-      token: createIdToken(req.body.email),
-      socket: req.body.socket,
-    }).then((newUser) => {
-      const decor = { access_token: createAccessToken(), success: true };
-      const result = Object.assign({}, newUser.dataValues, decor);
-      res.status(201).send(result);
-    }).catch((err) => {
-      console.error(`ERROR during create dynamicResponder => addUser ${err}`);
-      res.status(500).send({ error: 'umm, I asked the server to let you in, but it said nah' });
+  if (req.body.mobility === 0) {
+    dynamicResponder.findOne({ where: userScheme.userSearch }).then((user) => {
+      if (user) {
+        return res.status(400).send({ error: 'A user with that username already exists' });
+      }
+      dynamicResponder.create({
+        firstName: req.body.firstName,
+        lastName: req.body.lastName,
+        phone: req.body.phone,
+        organization: req.body.organization,
+        email: req.body.email,
+        password: dynamicResponder.generateHash(req.body.password),
+        privacy: !!req.body.privacy,
+        fullName: `${req.body.firstName} ${req.body.lastName}`,
+        token: createIdToken(req.body.email),
+        socket: req.body.socket,
+      }).then((newUser) => {
+        const decor = { access_token: createAccessToken(), success: true };
+        const result = Object.assign({}, newUser.dataValues, decor);
+        res.status(201).send(result);
+      }).catch((err) => {
+        console.error(`ERROR during create dynamicResponder => addUser ${err}`);
+        res.status(500).send({ error: 'umm, I asked the server to let you in, but it said nah' });
+      });
+    })
+    .catch((err) => {
+      console.log(err);
+      res.sendStatus(500);
     });
-  }).catch((err) => {
-    console.log(err);
-    res.sendStatus(500);
-  });
+  } else if (req.body.mobility === 1) {
+    staticResponder.findOne({ where: userScheme.userSearch }).then((user) => {
+      if (user) {
+        return res.status(400).send({ error: 'A user with that username already exists' });
+      }
+      staticResponder.create({
+        fullName: req.body.fullName,
+        phone: req.body.phone,
+        organization: req.body.organization,
+        email: req.body.email,
+        password: dynamicResponder.generateHash(req.body.password),
+        privacy: !!req.body.privacy,
+        token: createIdToken(req.body.email),
+        socket: req.body.socket,
+        address: req.body.address,
+        city: req.body.city,
+        state: req.body.state,
+        zip: req.body.zip,
+        location: req.body.location,
+        geometry: req.body.geometry,
+      }).then((newUser) => {
+        const decor = { access_token: createAccessToken(), success: true };
+        const result = Object.assign({}, newUser.dataValues, decor);
+        res.status(201).send(result);
+      }).catch((err) => {
+        console.error(`ERROR during create dynamicResponder => addUser ${err}`);
+        res.status(500).send({ error: 'umm, I asked the server to let you in, but it said nah' });
+      });
+    })
+    .catch((err) => {
+      console.log(err);
+      res.sendStatus(500);
+    });
+  }
 };
+
 exports.addSession = (req, res) => {
   console.log('loginBody', req.body);
   const userScheme = getUserScheme(req);
@@ -165,7 +202,8 @@ exports.getNearbyResponders = function (req, res) {
   const currentLocation = req.body.location;
   console.log("currentLocation ", currentLocation);
   db
-  .query(`select * from "dynamicResponders" WHERE ST_DWithin(geometry, ST_MakePoint(${currentLocation[0]}, ${currentLocation[1]})::geography, ${radius})`)
+  .query(`select "id", "fullName", "organization", "currentLocation", "mobility" from "dynamicResponders" WHERE ST_DWithin(geometry, ST_MakePoint(${currentLocation[0]}, ${currentLocation[1]})::geography, ${radius}) AND available = TRUE UNION select "id", "fullName", "organization", "location", "mobility" from "staticResponderIndividuals" WHERE ST_DWithin(geometry, ST_MakePoint(${currentLocation[0]}, ${currentLocation[1]})::geography, ${radius})
+    `)
   .then((results) => {
     res.send(results[0]);
   }).catch((err) => {
@@ -225,5 +263,16 @@ exports.deleteBeacon = function (req, res) {
   })
   .then(() => {
     res.status(200).send('Beacon Destroyed');
+  });
+};
+
+exports.switchAvailability = function (req, res) {
+  console.log("Req.boyd is in swtichAvailability is ", req.body);
+  dynamicResponder.update(
+    { available: req.body[0] },
+    { where: { id: req.body[1] } },
+  )
+  .then(() => {
+    res.status(200).send('Availability Switched');
   });
 };
