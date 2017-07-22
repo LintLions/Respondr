@@ -20,23 +20,30 @@ class HelpButton extends Component {
   
   }
   render() {
+    let options = {
+      location: this.props.location,
+    }
+
     const btnOrModal = this.props.isBeacon === false ?
       (<View style={[styles.helpButtonContainer]}>
           <TouchableHighlight
             style={[styles.helpButton]}
             underlayColor='#48BBEC'
-            onPress={() => this.props.handleHelpButtonPress()}>
+            onPress={() => this.props.handleHelpButtonPress(options)}>
             <Text style={styles.helpButtonText}>HELP</Text>
           </TouchableHighlight>
         </View>) :
-        (<View>
-          <Text style={styles.prompt}>Help is on the way</Text>
+        (<View>          
           <TouchableHighlight
             style={styles.button}
             underlayColor='#b22222'
             onPress={() => this.props.handleCancelButtonPress()}>
             <Text style={styles.buttonText}>Cancel Help Request</Text>
           </TouchableHighlight>
+          {this.props.myResponder === null ? 
+            (<Text style={styles.prompt}>We're looking for help for you, hold tight...</Text>):
+            (<Text style={styles.prompt}>Your responder is on his/her way!</Text>)
+          }
         </View>);
     
     return (
@@ -48,12 +55,14 @@ class HelpButton extends Component {
 }
 
 const mapStateToProps = (state) => ({
-  isBeacon: state.user.isBeacon 
+  isBeacon: state.user.isBeacon,
+  location: state.user.location,
+  myResponder: state.myResponder.name,
 })
 
 const mapDispatchToProps = (dispatch) => ({
-  handleHelpButtonPress: () => {
-    dispatch(getHelp());
+  handleHelpButtonPress: (options) => {
+    dispatch(getHelp(options));
   },
   handleCancelButtonPress: () => {
     dispatch(cancelHelp());

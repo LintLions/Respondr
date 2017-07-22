@@ -7,7 +7,7 @@ import {
   StyleSheet,
   FlatList
 } from 'react-native';
-import { drawRoute, updateBeacon, acceptBeacon } from '../../../actions/actions';
+import { drawRoute, updateBeacon, acceptBeacon, updateUser } from '../../../actions/actions';
 
 import styles from '../../../styles/styles';
 
@@ -18,11 +18,14 @@ class HelpRequest extends Component {
 
 
   render() {
-    console.log('+++HelpRequest.js');
+    console.log('+++in HelpRequest.js');
+    let options = {
+      UID: this.props.chatRoom,
+      location: this.props.location,
+    }
     
     return (
       <View style={[styles.container]}>
-        
         <View style={[styles.container, styles.box1]}>
           <Text style={styles.prompt}>
             Hi {this.props.firstName}, there's a beacon, would you be able to assist?
@@ -31,7 +34,7 @@ class HelpRequest extends Component {
             <TouchableHighlight 
               style={styles.missionButton}
               underlayColor='#99d9f4'
-              onPress={() => this.props.handleHelpRequestYes()}
+              onPress={() => this.props.handleHelpRequestYes(options)}
               >
               <Text style={styles.missionButtonText}>Yes</Text>
             </TouchableHighlight>
@@ -51,14 +54,16 @@ class HelpRequest extends Component {
 
 const mapStateToProps = (state) => ({
   firstName: state.responder.firstName,
-  beaconLocation: state.myBeacon.location,
+  // beaconLocation: state.myBeacon.location,
+  chatRoom: state.myBeacon.chatRoom,
+  location: state.myBeacon.location,
 });
 
 const mapDispatchToProps = (dispatch) => ({
   handleHelpRequestYes: () => {
-    dispatch(acceptBeacon());
+    dispatch(acceptBeacon(options));
     dispatch(drawRoute());
-    dispatch(updateBeacon({ isAssigned: true }));
+    // dispatch(updateBeacon({ isAssigned: true }));
   },
   handleHelpRequestNo: () => {
     dispatch(updateBeacon({ location: null }));

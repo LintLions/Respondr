@@ -34,9 +34,14 @@ export const animate = location => (dispatch) => {
 };
 
 export const updateBeacon = options => ({
-  type: 'UPDATE_BEACON',
+  type: 'UPDATE_MY_BEACON',
   options,
 });
+
+export const updateMyResponder = options => ({
+  type: 'UPDATE_MY_RESPONDER',
+  options,
+})
 
 export const updateUser = options => ({
   type: 'UPDATE_USER',
@@ -56,31 +61,49 @@ export const updateHelp = () => ({
   isBeacon: true,
 });
 
-export const getHelp = () => (dispatch) => {
-  const activeBeaconSocketID = store.getState().user.socket;
-  const activeBeaconLoc = store.getState().user.location;
-  console.log('+++actions.js - getHelp - activeBeaconSocketId: ', activeBeaconSocketID);
-  console.log('+++actions.js - getHelp - activeBeaconLoc: ', activeBeaconLoc);
+export const getHelp = (options) => (dispatch) => { // add options object
+  // delete 65-73
+  // emit getHelp with passed in options object
+  // const activeBeaconSocketID = store.getState().user.socket;
+  // const activeBeaconLoc = store.getState().user.location;
+  // console.log('+++in actions.js - getHelp - activeBeaconSocketId: ', activeBeaconSocketID);
+  // console.log('+++in actions.js - getHelp - activeBeaconLoc: ', activeBeaconLoc);
 
-  const activeBeacon = {
-    id: activeBeaconSocketID, 
-    loc: activeBeaconLoc
-  }
-  socket.emit('getHelp', activeBeacon);
+  // const activeBeacon = {
+  //   id: activeBeaconSocketID, 
+  //   loc: activeBeaconLoc
+  // }
+  // socket.emit('getHelp', activeBeacon);
+
+  console.log('+++actions.js - getHelp - options: ', options);
+  socket.emit('getHelp', options);
 
   dispatch(updateHelp());
 };
 
-export const acceptBeacon = () => (dispatch) => {
+export const acceptBeacon = (options) => (dispatch) => {
   console.log('+++in actions.js - acceptBeacon');
   const isBeaconTaken = store.getState().myBeacon.isAssigned;
-  const chatRoom = store.getState().myBeacon.chatRoom;
-  if(!isBeaconTaken) {
-    socket.emit('acceptBeacon', chatRoom);
-    dispatch(updateBeacon({ isAssigned: true }));
-  } else {
-    dispatch(updateBeacon({ location: null, completed: true }));
+
+  const responder = {
+    UID: options.UID,
+    responderId: socket.id,
+    responderName: store.getState().responder.fullName,
+    responderLocation: store.getState().responder.currentLocation,
   }
+  if(!isBeaconTaken) {
+    socket.emit('acceptBeacon', responder);
+    // dispatch(updateBeacon({ isAssigned: true }));
+  } else {
+    dispatch(updateBeacon({ isCompleted: true })); 
+  }
+}
+
+export const newGetHelp = () => (dispatch) => {
+  console.log('+++in actions.js - newGetHelp');
+  
+  socket.emit('newGetHelp', socket.id);
+  dispatch(updateBeacon( { isAssigned: true }));
 }
 
 export const getCurrentLocation = location => ({
@@ -213,11 +236,11 @@ export const drawRoute = latLong => (dispatch) => {
     ? `${latLong[0]},${latLong[1]}`
     : store.getState().myBeacon.location.join(',');
   const googleUrl = `https://maps.googleapis.com/maps/api/directions/json?origin=${origin}&destination=${dest}&key=${APIKEY}&mode=${mode}`;
-  console.log('googleUrl in drawRoute is: ', googleUrl)
+  console.log('+++actions.js - drawRoute - googleUrl: ', googleUrl)
   fetch(googleUrl)
     .then(response => response.json())
     .then((responseJson) => {
-      console.log('responsein DrawRoute: ', responseJson)
+      console.log('+++actions.js - drawRoute - responseJson: ', responseJson)
       if (responseJson.routes.length) {
         dispatch(updateRoute(decode(responseJson.routes[0].overview_polyline.points)));
       }

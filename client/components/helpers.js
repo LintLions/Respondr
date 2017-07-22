@@ -4,7 +4,7 @@ import { AsyncStorage } from 'react-native';
 import SocketIOClient from 'socket.io-client';
 import { store } from '../index';
 import { url } from './config';
-import { updateBeacon, acceptBeacon, updateLocation } from '../actions/actions';
+import { updateBeacon, acceptBeacon, updateUser, updateMyResponder, updateLocation } from '../actions/actions';
 
 export const decode = (t, e) => {
   // transforms something like this geocFltrhVvDsEtA}ApSsVrDaEvAcBSYOS_@...
@@ -61,14 +61,14 @@ export const getToken =  async () => AsyncStorage.getItem('id_token');
 
 export const socket = SocketIOClient(url);
 
-socket.on('newBeacon', (activeBeacon) => { 
-  console.log('+++helpers.js - rcvd newBeacon: ', activeBeacon);
+socket.on('newBeacon', (currentSession) => { 
+  console.log('+++helpers.js - rcvd newBeacon: ', currentSession);
   store.dispatch(updateBeacon({
-    chatRoom: activeBeacon.id, 
-    location: activeBeacon.loc, 
+    chatRoom: currentSession.chatRoom, 
+    location: currentSession.beaconLocation, 
     region: {
-      latitude: activeBeacon.loc[0], 
-      longitude: activeBeacon.loc[1], 
+      latitude: currentSession.beaconLocation[0], 
+      longitude: currentSession.beaconLocation[1], 
       latitudeDelta: 0.0922,
       longitudeDelta: 0.0421,
     }
@@ -82,6 +82,7 @@ socket.on('render all messages', (messages) => {
   }))
 });
 
+<<<<<<< HEAD
 
 export const startLocationUpdate = (token) => {
   let counter = 0;
@@ -95,3 +96,24 @@ export const startLocationUpdate = (token) => {
     navigator.geolocation.getCurrentPosition(locChange, error => console.log('error watching position', error), { maximumAge: 1000 });
   };
 }
+=======
+socket.on('verifyBeacon', (myBeacon) => {
+  console.log('+++helpers.js - verifyBeacon - myBeacon: ', myBeacon);
+  store.dispatch(updateBeacon({
+    isAssigned: true,
+    isCompleted: false,
+    location: myBeacon.location,
+    chatRoom: myBeacon.chatRoom, 
+    chatMessages: myBeacon.chatMessages,
+  }))
+})
+
+socket.on('verifyResponder', (myResponder) => {
+  console.log('+++helpers.js - verifyResponder - myResponder: ', myResponder);
+  store.dispatch(updateMyResponder({ 
+    name: myResponder.name,
+    location: myResponder.location,
+    chatRoom: myResponder.chatRoom,
+   }));
+})
+>>>>>>> 31e1c8d03f80743a55cc27c1164036d248acf24a

@@ -1,9 +1,9 @@
 import { combineReducers } from 'redux';
-// import all reducer files here
 import navReducer from './navReducer.js';
 import userReducer from './userReducer.js';
 import responderReducer from './responderReducer.js';
-import beaconReducer from './beaconReducer.js';
+import myBeaconReducer from './myBeaconReducer.js';
+import myResponderReducer from './myResponderReducer.js';
 
 /* APP STATE
 
@@ -38,17 +38,20 @@ import beaconReducer from './beaconReducer.js';
     completed: false,
     chatRoom: '',
     chatMessages: []
+  },
+  myResponder: {
+    
   }
 }
 
 */
 
 const rootReducer = combineReducers({
-  // include all reducers here
+  nav: navReducer,
   user: userReducer,
   responder: responderReducer,
-  nav: navReducer,
-  myBeacon: beaconReducer,
+  myBeacon: myBeaconReducer,
+  myResponder: myResponderReducer,
 });
 
 export default rootReducer;
