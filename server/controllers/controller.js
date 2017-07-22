@@ -198,9 +198,34 @@ exports.getUsers = function (req, res) {
   });
 };
 
+// Controller for updating userLocation(geometry) field in DB. Needs location 
+// and user email from body.
+exports.updateLocation = function (req, res) {
+  // console.log('req.body in updateLocation is: ', req.body)
+  dynamicResponder.findOne( { where: {token: req.body.token} })
+  .then((user) => {
+    if (user) {
+      console.log('token in updateLocationController is: ', user.token);
+      // console.log('user.geometry in updateLocationController is: ', user.geometry)
+      user.geometry.coordinates[0] = req.body.location[0];
+      user.geometry.coordinates[1] = req.body.location[1];
+      return user.update({
+        currentLocation: req.body.location,
+        geometry: user.geometry,
+      })
+      .then((updatedUser) => {
+        console.log('updatedUserGeometry is: ', updatedUser.geometry)
+        res.status(200).send(updatedUser);
+      });
+    } else {
+      console.log('User not found in UpdateLocationController')
+    }
+  })
+};
+
 exports.getNearbyResponders = function (req, res) {
   const currentLocation = req.body.location;
-  console.log("currentLocation ", currentLocation);
+  // console.log("currentLocation in getNearBy Responders", currentLocation);
   db
   .query(`select "id", "fullName", "organization", "currentLocation", "mobility" from "dynamicResponders" WHERE ST_DWithin(geometry, ST_MakePoint(${currentLocation[0]}, ${currentLocation[1]})::geography, ${radius}) AND available = TRUE UNION select "id", "fullName", "organization", "location", "mobility" from "staticResponderIndividuals" WHERE ST_DWithin(geometry, ST_MakePoint(${currentLocation[0]}, ${currentLocation[1]})::geography, ${radius})
     `)
@@ -214,7 +239,7 @@ exports.getNearbyResponders = function (req, res) {
 
 exports.animateResponders = function (req, res) {
   const currentLocation = req.body.location;
-  console.log('currentLocation ', currentLocation);
+  // console.log('currentLocation ', currentLocation);
   dynamicResponder.findAll({})
   .then((responders) => {
     responders.map((responder) => {

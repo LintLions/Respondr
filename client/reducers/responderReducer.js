@@ -14,6 +14,7 @@ const initState = {
   zip: '',
   address: '',
   socket: '',
+  intervalID: '',
   available: '',
 };
 
@@ -34,6 +35,8 @@ const responderReducer = (state = initState, action) => {
       };
     case 'LOGOUT':
       return initState;
+    case 'UPDATE_INTERVALID':
+      return { ...state, intervalID: action.intervalID };
     default:
       return state;
   }

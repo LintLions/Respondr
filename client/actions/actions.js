@@ -4,7 +4,7 @@ import {
   googleMapsGeoCodingApiKey as GEOAPIKEY,
   url,
  } from '../components/config';
-import { updateToken, socket, decode } from '../components/helpers';
+import { updateToken, socket, decode, startLocationUpdate } from '../components/helpers';
 import { store } from '../index';
 
 export const animateSuccess = responders => ({
@@ -88,6 +88,26 @@ export const getCurrentLocation = location => ({
   location,
 });
 
+// Action for updating Userlocation in DB. Will get called on 
+// App will mount and dispatches the getCurrentLocation action that updates userlocation in the redux store
+export const updateLocation = (location, token) => (dispatch) => {
+  if (token) {
+    const body = JSON.stringify({
+      location,
+      token,
+    });
+    fetch(`${url}/users/location`, {
+      method: 'POST',
+      headers: {
+        Accept: 'application/json',
+        'content-type': 'application/json',
+      },
+      body,
+    });
+  }
+  dispatch(getCurrentLocation(location));
+  dispatch(getResponders(location));
+}
 export const cancelHelp = () => ({
   type: 'CANCEL_HELP',
   isBeacon: false,
@@ -144,6 +164,17 @@ export const logOut = () => (dispatch) => {
    });
 };
 
+export const updateIntervalID = intervalID => ({
+  type: 'UPDATE_INTERVALID',
+  intervalID
+})
+
+// App mounts
+// Getuserwithtokenandsocket dispatches,
+
+// that dispatches updateLocation(location, token) with setInterval
+// UpdateLocation dispatches getResponders.
+
 export const getUserWithTokenAndSocket = () => (dispatch) => {
   AsyncStorage.getItem('id_token', (err, value) => {
     if (err) {
@@ -163,7 +194,10 @@ export const getUserWithTokenAndSocket = () => (dispatch) => {
         console.log(data);
         dispatch(updateUser(data)); // {socket: ________}
       }
-    });
+      // Set property on store that is the return of startLocationUpdate.
+      // on log in, call clear interval with this return val, and run startLocationUpdate with new token val
+
+    })
   });
 };
 

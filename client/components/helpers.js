@@ -4,7 +4,7 @@ import { AsyncStorage } from 'react-native';
 import SocketIOClient from 'socket.io-client';
 import { store } from '../index';
 import { url } from './config';
-import { updateBeacon, acceptBeacon } from '../actions/actions';
+import { updateBeacon, acceptBeacon, updateLocation } from '../actions/actions';
 
 export const decode = (t, e) => {
   // transforms something like this geocFltrhVvDsEtA}ApSsVrDaEvAcBSYOS_@...
@@ -81,3 +81,17 @@ socket.on('render all messages', (messages) => {
     chatMessages: messages,
   }))
 });
+
+
+export const startLocationUpdate = (token) => {
+  let counter = 0;
+  return () => {
+    console.log(counter++);
+    console.log('intervalCB looping')
+    const locChange = ({ coords }) => {
+      console.log(coords.latitude)
+      store.dispatch(updateLocation([coords.latitude, coords.longitude], token))
+    };
+    navigator.geolocation.getCurrentPosition(locChange, error => console.log('error watching position', error), { maximumAge: 1000 });
+  };
+}
