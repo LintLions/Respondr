@@ -114,6 +114,13 @@ exports.addUser = (req, res) => {
         zip: req.body.zip,
         location: req.body.location,
         geometry: req.body.geometry,
+      }).then((newUser) => {
+        const decor = { access_token: createAccessToken(), success: true };
+        const result = Object.assign({}, newUser.dataValues, decor);
+        res.status(201).send(result);
+      }).catch((err) => {
+        console.error(`ERROR during create dynamicResponder => addUser ${err}`);
+        res.status(500).send({ error: 'umm, I asked the server to let you in, but it said nah' });
       });
     })
     .catch((err) => {
@@ -195,7 +202,7 @@ exports.getNearbyResponders = function (req, res) {
   const currentLocation = req.body.location;
   console.log("currentLocation ", currentLocation);
   db
-  .query(`select "id", "fullName", "organization", "currentLocation", "mobility" from "dynamicResponders" WHERE ST_DWithin(geometry, ST_MakePoint(${currentLocation[0]}, ${currentLocation[1]})::geography, ${radius}) UNION select "id", "fullName", "organization", "location", "mobility" from "staticResponderIndividuals" WHERE ST_DWithin(geometry, ST_MakePoint(${currentLocation[0]}, ${currentLocation[1]})::geography, ${radius})
+  .query(`select "id", "fullName", "organization", "currentLocation", "mobility" from "dynamicResponders" WHERE ST_DWithin(geometry, ST_MakePoint(${currentLocation[0]}, ${currentLocation[1]})::geography, ${radius}) AND available = TRUE UNION select "id", "fullName", "organization", "location", "mobility" from "staticResponderIndividuals" WHERE ST_DWithin(geometry, ST_MakePoint(${currentLocation[0]}, ${currentLocation[1]})::geography, ${radius})
     `)
   .then((results) => {
     res.send(results[0]);

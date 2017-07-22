@@ -1,6 +1,8 @@
 const app = require('../../index.js');
 const server = require('http').createServer(app);
 const socketio = require('socket.io');
+const db = require('../db/db');
+const radius = 3000;
 
 const dynamicResponder = require('../db/models/dynamicResponders');
 const beacon = require('../db/models/beacons');
@@ -48,11 +50,13 @@ websocket.on('connection', (socket) => {
   });
 
   socket.on('getHelp', (activeBeacon) => {
-    console.log('+++server rcvd help request, activeBeacon: ', activeBeacon); 
+    console.log('+++server rcvd help request, activeBeacon: ', activeBeacon);
+    //need current location
+    const currentLocation = [40.697222, -73.934465];
     activeBeaconSession.beacon = activeBeacon.id;
-
-    dynamicResponder.findAll()
-      .then((responders) => {
+    db
+    .query(`select "socket" from "dynamicResponders" WHERE ST_DWithin(geometry, ST_MakePoint(${currentLocation[0]}, ${currentLocation[1]})::geography, ${radius}) AND available = TRUE ORDER BY geometry <-> 'Point(${currentLocation[0]} ${currentLocation[1]})'::geometry`)
+    .then((responders) => {
         if (Array.isArray(responders)) {
           responders.forEach((responder) => {
             console.log('+++responder.socekt: ', responder.socket);
@@ -69,7 +73,6 @@ websocket.on('connection', (socket) => {
           console.log('no responder for gethelp');
         }
       });
-    
     // const chatRoom = activeBeacon.id;
     // socket.join(chatRoom);
   });
