@@ -52,14 +52,15 @@ websocket.on('connection', (socket) => {
   socket.on('getHelp', (activeBeacon) => {
     console.log('+++server rcvd help request, activeBeacon: ', activeBeacon);
     //need current location
-    const currentLocation = [40.697222, -73.934465];
+    const currentLocation = [activeBeacon.loc[0], activeBeacon.loc[1]];
     activeBeaconSession.beacon = activeBeacon.id;
     db
     .query(`select "socket" from "dynamicResponders" WHERE ST_DWithin(geometry, ST_MakePoint(${currentLocation[0]}, ${currentLocation[1]})::geography, ${radius}) AND available = TRUE ORDER BY geometry <-> 'Point(${currentLocation[0]} ${currentLocation[1]})'::geometry`)
     .then((responders) => {
+      console.log("responders are ", responders);
         if (Array.isArray(responders)) {
           responders.forEach((responder) => {
-            console.log('+++responder.socekt: ', responder.socket);
+            console.log('+++responder.socket: ', responder.socket);
             if (responder.socket !== socket.id) { // OR responder.socket !== activeBeacon.id ???
               socket.to(responder.socket).emit('newBeacon', activeBeacon);
             }
