@@ -7,7 +7,7 @@ import styles from '../../../styles/styles';
 import HelpRequest from './HelpRequest';
 import HelpRequestAccepted from './HelpRequestAccepted';
 import HelpRequestNotNeeded from './HelpRequestNotNeeded';
-import { updateBeacon, updateUser, getHelp, newGetHelp } from '../../../actions/actions';
+import { updateBeacon, updateUser, getHelp } from '../../../actions/actions';
 
 
 class BottomBarAngel extends Component {
@@ -21,15 +21,19 @@ class BottomBarAngel extends Component {
 
   render() {
     console.log('+++in BottomBarAngel.js')
-    console.log('+++in BottomBarAngel.js - chatRoom: ', this.props.chatRoom);
+    console.log('+++in BottomBarAngel.js - isAssigned: ', this.props.isAssigned);
     
     let Page = null;
     if (this.props.isCompleted) {
       Page = <HelpRequestNotNeeded />
-    } else if (!this.props.chatRoom) {
+    } else if (!this.props.isAssigned) { 
       Page = <HelpRequest />;
-    } else if (this.props.chatRoom) {
+    } else if (this.props.isAssigned) { 
       Page = <HelpRequestAccepted
+        UID={this.props.UID}
+        responderId={this.props.responderId}
+        responderLocation={this.props.responderLocation}
+
         firstName={this.props.firstName}
         beaconLocation={this.props.beaconLocation}
         chatRoom={this.props.chatRoom}
@@ -47,21 +51,26 @@ class BottomBarAngel extends Component {
 }
 
 const mapStateToProps = (state) => ({
-  // isAssigned: state.myBeacon.isAssigned,
-  chatRoom: state.myBeacon.chatRoom,
+  isAssigned: state.myBeacon.isAssigned,
+  // chatRoom: state.myBeacon.chatRoom,
   isCompleted: state.myBeacon.isCompleted,
   firstName: state.responder.firstName,
   beaconLocation: state.myBeacon.location,
+
+  UID: state.myBeacon.UID,
+  responderId: state.user.socket,
+  responderLocation: state.user.location,
 })
 
 const mapDispatchToProps = (dispatch) => ({
   handleHelpRequestComplete: () => {
     dispatch(updateBeacon({ location: null, isCompleted: true })); 
   },
-  handleCancelMission: (options) => {
+  
+  handleCancelMission: (responder) => {
+    dispatch(getHelp(responder));
+    
     // dispatch(updateBeacon({ isAssigned: false }));
-    dispatch(getHelp(options));
-    // dispatch(newGetHelp());
     dispatch(updateBeacon({ location: null}))
   }
 });

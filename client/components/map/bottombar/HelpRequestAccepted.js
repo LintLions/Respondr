@@ -15,8 +15,10 @@ class HelpRequestAccepted extends Component {
 
   render() {
     console.log('+++in HelpRequestAccepted.js');
-    let options = {
-      UID: this.props.chatRoom,
+    let responder = {
+      UID: this.props.UID,
+      responderId: this.props.responderId,
+      responderLocation: this.props.responderLocation,
     }
 
     return (
@@ -39,7 +41,7 @@ class HelpRequestAccepted extends Component {
             <TouchableHighlight
               style={styles.missionButton}
               underlayColor='#99d9f4'
-              onPress={() => this.props.handleCancelMission(options)} // this.props.UID 
+              onPress={() => this.props.handleCancelMission(responder)} 
             >
               <Text style={styles.missionButtonText}>Cancel Mission</Text>
             </TouchableHighlight>

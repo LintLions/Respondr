@@ -60,42 +60,37 @@ export const updateHelp = () => ({
   isBeacon: true,
 });
 
-export const getHelp = (options) => (dispatch) => { // add options object
-  // delete 65-73
-  // emit getHelp with passed in options object
-  // const activeBeaconSocketID = store.getState().user.socket;
-  // const activeBeaconLoc = store.getState().user.location;
-  // console.log('+++in actions.js - getHelp - activeBeaconSocketId: ', activeBeaconSocketID);
-  // console.log('+++in actions.js - getHelp - activeBeaconLoc: ', activeBeaconLoc);
-
-  // const activeBeacon = {
-  //   id: activeBeaconSocketID, 
-  //   loc: activeBeaconLoc
-  // }
-  // socket.emit('getHelp', activeBeacon);
-
-  console.log('+++actions.js - getHelp - options: ', options);
-  socket.emit('getHelp', options);
-
+export const getHelp = (beacon) => (dispatch) => {
+  console.log('+++actions.js - getHelp - beacon: ', beacon);
+  
   dispatch(updateHelp());
+  
+  socket.emit('getHelp', beacon);
+  
 };
 
-export const acceptBeacon = (options) => (dispatch) => {
-  console.log('+++in actions.js - acceptBeacon');
-  const isBeaconTaken = store.getState().myBeacon.isAssigned;
+export const acceptBeacon = (responder) => (dispatch) => { //  (dispatch) =>
+  console.log('+++in actions.js - acceptBeacon - responder: ', responder);
 
-  const responder = {
-    UID: options.UID,
-    responderId: socket.id,
-    responderName: store.getState().responder.fullName,
-    responderLocation: store.getState().responder.currentLocation,
-  }
-  if(!isBeaconTaken) {
-    socket.emit('acceptBeacon', responder);
-    // dispatch(updateBeacon({ isAssigned: true }));
-  } else {
-    dispatch(updateBeacon({ isCompleted: true })); 
-  }
+  
+  socket.emit('acceptBeacon', responder); 
+
+  // console.log('+++in actions.js - acceptBeacon');
+  // const isBeaconTaken = store.getState().myBeacon.isAssigned;
+  // console.log('+++in actions.js - acceptBeacon - isBeaconTaken: ', isBeaconTaken);
+
+  // const responder = {
+  //   // UID: options.UID,
+  //   responderId: socket.id,
+  //   responderName: store.getState().responder.fullName,
+  //   responderLocation: store.getState().responder.currentLocation,
+  // }
+  // if(!isBeaconTaken) {
+  //   socket.emit('acceptBeacon', responder);
+  //   // dispatch(updateBeacon({ isAssigned: true }));
+  // } else {
+  //   dispatch(updateBeacon({ isCompleted: true })); 
+  // }
 }
 
 export const newGetHelp = () => (dispatch) => {

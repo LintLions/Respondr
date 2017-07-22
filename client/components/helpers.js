@@ -62,9 +62,9 @@ export const getToken =  async () => AsyncStorage.getItem('id_token');
 export const socket = SocketIOClient(url);
 
 socket.on('newBeacon', (currentSession) => { 
-  console.log('+++helpers.js - rcvd newBeacon: ', currentSession);
+  console.log('+++helpers.js - newBeacon - currentSession: ', currentSession);
   store.dispatch(updateBeacon({
-    chatRoom: currentSession.chatRoom, 
+    UID: currentSession.chatRoom,
     location: currentSession.beaconLocation, 
     region: {
       latitude: currentSession.beaconLocation[0], 
@@ -75,22 +75,32 @@ socket.on('newBeacon', (currentSession) => {
   }));
 });
 
-socket.on('render all messages', (messages) => {
-  console.log('+++render all messages listening: ', messages);
-  store.dispatch(updateBeacon({
-    chatMessages: messages,
-  }))
-});
+socket.on('verifyBeacon', (currentSession) => {
+  console.log('+++helpers.js - verifyBeacon - currentSession: ', currentSession);
 
-socket.on('verifyBeacon', (myBeacon) => {
-  console.log('+++helpers.js - verifyBeacon - myBeacon: ', myBeacon);
-  store.dispatch(updateBeacon({
-    isAssigned: true,
-    isCompleted: false,
-    location: myBeacon.location,
-    chatRoom: myBeacon.chatRoom, 
-    chatMessages: myBeacon.chatMessages,
+  if(currentSession.responder === socket.id) {
+    store.dispatch(updateBeacon({
+      isAssigned: true,
+      isCompleted: false,
+      location: currentSession.beaconLocation,
+      chatRoom: currentSession.chatRoom, 
+      chatMessages: currentSession.chatMessages, 
+    }))  
+  } else {
+    store.dispatch(updateBeacon({
+      isAssigned: false,
+      location: null,
+    }))  
+  }
+
+  store.dispatch(updateMyResponder({
+    name: currentSession.responderName,
+    location: currentSession.responderLocation,
+    chatRoom: currentSession.chatRoom,
+    chatMessages: currentSession.chatMessages,
   }))
+  console.log('+++helpers.js - verifyBeacon - myBeacon: ', store.getState().myBeacon);
+  console.log('+++helpers.js - verifyBeacon - myResponder: ', store.getState().myResponder);
 })
 
 socket.on('verifyResponder', (myResponder) => {
@@ -101,3 +111,10 @@ socket.on('verifyResponder', (myResponder) => {
     chatRoom: myResponder.chatRoom,
    }));
 })
+
+socket.on('render all messages', (messages) => {
+  console.log('+++render all messages listening: ', messages);
+  store.dispatch(updateBeacon({
+    chatMessages: messages,
+  }))
+});

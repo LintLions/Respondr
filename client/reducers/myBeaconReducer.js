@@ -1,4 +1,5 @@
 const initState = {
+  UID: null, 
   location: null,
   isAssigned: false,
   isCompleted: false,

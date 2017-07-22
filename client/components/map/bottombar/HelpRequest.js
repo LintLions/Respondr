@@ -19,10 +19,12 @@ class HelpRequest extends Component {
 
   render() {
     console.log('+++in HelpRequest.js');
-    let options = {
-      UID: this.props.chatRoom,
-      location: this.props.location,
+    let responder = {
+      UID: this.props.UID,
+      responderId: this.props.responderId,
+      responderLocation: this.props.responderLocation,
     }
+    console.log('+++in HelpRequest.js - responder: ', responder)
     
     return (
       <View style={[styles.container]}>
@@ -34,7 +36,7 @@ class HelpRequest extends Component {
             <TouchableHighlight 
               style={styles.missionButton}
               underlayColor='#99d9f4'
-              onPress={() => this.props.handleHelpRequestYes(options)}
+              onPress={() => this.props.handleHelpRequestYes(responder)}
               >
               <Text style={styles.missionButtonText}>Yes</Text>
             </TouchableHighlight>
@@ -54,16 +56,15 @@ class HelpRequest extends Component {
 
 const mapStateToProps = (state) => ({
   firstName: state.responder.firstName,
-  // beaconLocation: state.myBeacon.location,
-  chatRoom: state.myBeacon.chatRoom,
-  location: state.myBeacon.location,
+  UID: state.myBeacon.UID,
+  responderId: state.user.socket,
+  responderLocation: state.user.location,
 });
 
 const mapDispatchToProps = (dispatch) => ({
-  handleHelpRequestYes: () => {
-    dispatch(acceptBeacon(options));
+  handleHelpRequestYes: (responder) => {
+    dispatch(acceptBeacon(responder));
     dispatch(drawRoute());
-    // dispatch(updateBeacon({ isAssigned: true }));
   },
   handleHelpRequestNo: () => {
     dispatch(updateBeacon({ location: null }));

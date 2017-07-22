@@ -15,9 +15,9 @@ class ActiveBeaconSession {
     this.chatMessages = [];
     this.beacon = socket;
     this.beaconLocation = location;
-    this.responder = '';
-    this.responderName = '';
-    this.responderLocation = '';
+    this.responder = null;
+    this.responderName = null;
+    this.responderLocation = [];
     this.blacklist = [];
   }
 }
@@ -58,122 +58,97 @@ websocket.on('connection', (socket) => {
     .then(rows => console.log(`deleted ${rows} rows`));
   });
 
-  socket.on('getHelp', (options) => {
-    console.log('+++server rcvd help request, options: ', options); 
-    // console.log('+++server rcvd help request, activeBeacon: ', activeBeacon); 
-    // socket server storage
-    // activeBeaconSessions[UID] = {};
-    // activeBeaconSessions[UID].beacon = activeBeacon.id;
-    // activeBeaconSessions[UID].beaconLocation = activeBeacon.loc;
-    // activeBeaconSessions[UID].chatRoom = UID;
-    // console.log('+++socket.js - getHelp - activeBeaconSessions[UID]: ', activeBeaconSessions[UID]); 
+  socket.on('getHelp', (beacon) => {
+    console.log('+++socket.js - getHelp (server rcvd help request) - beacon: ', beacon); 
     
     let currentSession = {};
 
-    if(options.UID) {
-      currentSession = activeBeaconSessions[options.UID];
+    if(beacon.UID) { 
+      currentSession = activeBeaconSessions[beacon.UID];
       blacklistedResponder = currentSession.responder
-      currentSession.responder = '',
+      currentSession.responder = null,
+      currentSession.responderLocation = [],
       currentSession.blacklist.push(blacklistedResponder)
-    } else {
-      currentSession = new ActiveBeaconSession(UID, socket.id, options.location); 
+      console.log('+++socket.js - getHelp - currentSession(CANCELED): ', currentSession);
+    } else { 
+      currentSession = new ActiveBeaconSession(UID, beacon.socket, beacon.location); 
       activeBeaconSessions[UID++] = currentSession; 
+      console.log('+++socket.js - getHelp - currentSession(NEW): ', currentSession);
     }
-    console.log('+++socket.js - getHelp - currentSession: ', currentSession);
-
-    // activeBeaconSession.beacon = activeBeacon.id;
-    // activeBeaconSession.beaconLocation = activeBeacon.loc;
-    // activeBeaconSession.chatRoom = UID;
-    // activeBeaconSessions.push(activeBeaconSession);
-    // UID++;
 
     dynamicResponder.findAll()
       .then((responders) => {
         if (Array.isArray(responders)) {
-          responders.forEach((responder) => {
-            console.log('+++responder.socket: ', responder.socket);
-            if (responder.socket !== socket.id) { 
+          responders.forEach((responder) => {            
+            // if (responder.socket !== socket.id) { 
+            // if (responder.socket !== socket.id && activeBeaconSession.blacklist.indexOf(responder.socket) === -1) {
+            if(responder.socket !== currentSession.beacon && currentSession.blacklist.indexOf(responder.socket) === -1) {  
+              console.log('+++responder.socket: ', responder.socket);
               socket.to(responder.socket).emit('newBeacon', currentSession);
             }
           });
         } else if (responders) {
           console.log(responders.id);
-          if (responders.socket !== socket.id) { 
+          if(responder.socket !== currentSession.beacon && currentSession.blacklist.indexOf(responder.socket) === -1) {  
             socket.to(responders.socket).emit('newBeacon', currentSession);
           }
         } else {
           console.log('no responder for gethelp');
         }
       });
-    
-    // const chatRoom = activeBeacon.id;
-    // socket.join(chatRoom);
   });
 
   socket.on('acceptBeacon', (responder) => {
     console.log('+++in socket.js - acceptBeacon - responder: ', responder);
-    // activeBeaconSession.responder = responder.responderId; 
-    // activeBeaconSession.responderName = responder.responderName; 
-    // activeBeaconSession.responderLocation = responder.responderLocation;
-    // console.log('+++in socket.js - acceptBeacon - activeBeaconSession: ', activeBeaconSession);
-    
-    let UID = responder.UID;
-    activeBeaconSessions[UID].responder = responder.responderId;
 
-  // store.dispatch(updateBeacon({
-  //   isAssigned: true,
-  //   isCompleted: false,
-  //   location: myBeacon.location,
-  //   chatRoom: myBeacon.chatRoom, 
-  //   chatMessages: myBeacon.chatMessages,
-  // }))
-
-    const myBeacon = {
-      location: activeBeaconSession[UID].beaconLocation,
-      chatRoom: activeBeaconSessions[UID].chatRoom,
-      chatMessages: activeBeaconSessions[UID].chatMessages,
-    }    
-    const myResponder = {
-      chatRoom: activeBeaconSession.chatRoom,
-      name: activeBeaconSession.responderName,
-      location: activeBeaconSession.responderLocation,
+    if(!activeBeaconSessions[responder.UID].responder) {
+      // this is when the beacon HAS NOT BEEN taken yet
+      activeBeaconSessions[responder.UID].responder = responder.responderId;
+      activeBeaconSessions[responder.UID].responderLocation = responder.responderLocation;
+      console.log('+++in socket.js - acceptBeacon - activeBeaconSessions[responder.UID]', activeBeaconSessions[responder.UID]);
+      
+      socket.emit('verifyBeacon', activeBeaconSessions[responder.UID]);
+    } else {
+      // this is when the beacon is ALREADY taken 
+      socket.emit('verifyBeacon', activeBeaconSessions[responder.UID]);
     }
 
-    // socket.join(activeBeaconSession.chatRoom);
-    // websocket.to(activeBeaconSession.chatRoom).emit('verifyBeacon', myBeacon);
+  //   console.log('+++in socket.js - acceptBeacon - responder: ', responder);
+  //   // activeBeaconSession.responder = responder.responderId; 
+  //   // activeBeaconSession.responderName = responder.responderName; 
+  //   // activeBeaconSession.responderLocation = responder.responderLocation;
+  //   // console.log('+++in socket.js - acceptBeacon - activeBeaconSession: ', activeBeaconSession);
+    
+  //   let UID = responder.UID;
+  //   activeBeaconSessions[UID].responder = responder.responderId;
 
-    // websocket.to(activeBeaconSession.beacon).emit('verifyResponder', myResponder);
-    // websocket.to(activeBeaconSession.responder).emit('verifyBeacon', myBeacon);
+  // // store.dispatch(updateBeacon({
+  // //   isAssigned: true,
+  // //   isCompleted: false,
+  // //   location: myBeacon.location,
+  // //   chatRoom: myBeacon.chatRoom, 
+  // //   chatMessages: myBeacon.chatMessages,
+  // // }))
 
-    socket.emit('verifyBeacon', myBeacon);
-    socket.to(activeBeaconSession.beacon).emit('verifyResponder', myResponder);
-  })
+  //   const myBeacon = {
+  //     location: activeBeaconSession[UID].beaconLocation,
+  //     chatRoom: activeBeaconSessions[UID].chatRoom,
+  //     chatMessages: activeBeaconSessions[UID].chatMessages,
+  //   }    
+  //   const myResponder = {
+  //     chatRoom: activeBeaconSession.chatRoom,
+  //     name: activeBeaconSession.responderName,
+  //     location: activeBeaconSession.responderLocation,
+  //   }
 
-  socket.on('newGetHelp', (responderId) => {
-    activeBeaconSession.responder = 'null';
-    console.log('+++in socket.js - newGetHelp - responderId: ', responderId);
-    activeBeaconSession.blacklist.push(responderId);
-    console.log('+++in socket.js - newGetHelp - blacklist: ', activeBeaconSession.blacklist);
+  //   // socket.join(activeBeaconSession.chatRoom);
+  //   // websocket.to(activeBeaconSession.chatRoom).emit('verifyBeacon', myBeacon);
 
-    dynamicResponder.findAll()
-      .then((responders) => {
-        if (Array.isArray(responders)) {
-          responders.forEach((responder) => {
-            console.log('+++responder.socket: ', responder.socket);
-            if (responder.socket !== socket.id && activeBeaconSession.blacklist.indexOf(responder.socket) === -1) { 
-              console.log('+++in socket.js - newGetHelp - new responders: ', responder.socket);
-              socket.to(responder.socket).emit('newBeacon', activeBeaconSession);
-            }
-          });
-        } else if (responders) {
-          if (responder.socket !== socket.id && activeBeaconSession.blacklist.indexOf(responder.socket) === -1) {
-            socket.to(responders.socket).emit('newBeacon', activeBeaconSession);
-          }
-        } else {
-          console.log('no responder for gethelp');
-        }
-      });
+  //   // websocket.to(activeBeaconSession.beacon).emit('verifyResponder', myResponder);
+  //   // websocket.to(activeBeaconSession.responder).emit('verifyBeacon', myBeacon);
 
+  //   socket.emit('verifyBeacon', myBeacon);
+  //   socket.to(activeBeaconSession.beacon).emit('verifyResponder', myResponder);
   })
 
   socket.on('new message', (eachMessage) => {

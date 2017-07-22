@@ -20,7 +20,8 @@ class HelpButton extends Component {
   
   }
   render() {
-    let options = {
+    let beacon = {
+      socket: this.props.socket,
       location: this.props.location,
     }
 
@@ -29,7 +30,7 @@ class HelpButton extends Component {
           <TouchableHighlight
             style={[styles.helpButton]}
             underlayColor='#48BBEC'
-            onPress={() => this.props.handleHelpButtonPress(options)}>
+            onPress={() => this.props.handleHelpButtonPress(beacon)}>
             <Text style={styles.helpButtonText}>HELP</Text>
           </TouchableHighlight>
         </View>) :
@@ -40,7 +41,7 @@ class HelpButton extends Component {
             onPress={() => this.props.handleCancelButtonPress()}>
             <Text style={styles.buttonText}>Cancel Help Request</Text>
           </TouchableHighlight>
-          {this.props.myResponder === null ? 
+          {(!this.props.myResponder) ? 
             (<Text style={styles.prompt}>We're looking for help for you, hold tight...</Text>):
             (<Text style={styles.prompt}>Your responder is on his/her way!</Text>)
           }
@@ -56,13 +57,14 @@ class HelpButton extends Component {
 
 const mapStateToProps = (state) => ({
   isBeacon: state.user.isBeacon,
+  socket: state.user.socket,
   location: state.user.location,
-  myResponder: state.myResponder.name,
+  myResponder: state.myResponder.location,
 })
 
 const mapDispatchToProps = (dispatch) => ({
-  handleHelpButtonPress: (options) => {
-    dispatch(getHelp(options));
+  handleHelpButtonPress: (beacon) => {
+    dispatch(getHelp(beacon));
   },
   handleCancelButtonPress: () => {
     dispatch(cancelHelp());
