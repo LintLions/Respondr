@@ -15,6 +15,10 @@ class HelpRequestAccepted extends Component {
 
   render() {
     console.log('+++in HelpRequestAccepted.js');
+    let options = {
+      UID: this.props.chatRoom,
+    }
+
     return (
       <View style={styles.container}>
         <View style={[styles.container, styles.box1]}>

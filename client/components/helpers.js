@@ -82,15 +82,6 @@ socket.on('render all messages', (messages) => {
   }))
 });
 
-socket.on('verifyResponder', (myResponder) => {
-  console.log('+++helpers.js - verifyResponder - myResponder: ', myResponder);
-  store.dispatch(updateMyResponder({ 
-    name: myResponder.name,
-    location: myResponder.location,
-    chatRoom: myResponder.chatRoom,
-   }));
-})
-
 socket.on('verifyBeacon', (myBeacon) => {
   console.log('+++helpers.js - verifyBeacon - myBeacon: ', myBeacon);
   store.dispatch(updateBeacon({
@@ -100,4 +91,13 @@ socket.on('verifyBeacon', (myBeacon) => {
     chatRoom: myBeacon.chatRoom, 
     chatMessages: myBeacon.chatMessages,
   }))
+})
+
+socket.on('verifyResponder', (myResponder) => {
+  console.log('+++helpers.js - verifyResponder - myResponder: ', myResponder);
+  store.dispatch(updateMyResponder({ 
+    name: myResponder.name,
+    location: myResponder.location,
+    chatRoom: myResponder.chatRoom,
+   }));
 })

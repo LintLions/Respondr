@@ -72,6 +72,9 @@ websocket.on('connection', (socket) => {
 
     if(options.UID) {
       currentSession = activeBeaconSessions[options.UID];
+      blacklistedResponder = currentSession.responder
+      currentSession.responder = '',
+      currentSession.blacklist.push(blacklistedResponder)
     } else {
       currentSession = new ActiveBeaconSession(UID, socket.id, options.location); 
       activeBeaconSessions[UID++] = currentSession; 

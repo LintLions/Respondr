@@ -32,8 +32,9 @@ class BottomBarAngel extends Component {
       Page = <HelpRequestAccepted
         firstName={this.props.firstName}
         beaconLocation={this.props.beaconLocation}
+        chatRoom={this.props.chatRoom}
         handleHelpRequestComplete={this.props.handleHelpRequestComplete}
-        handleCancelMission={this.props.handleHelpRequestComplete}
+        handleCancelMission={this.props.handleCancelMission}
       />;
     } 
     
@@ -60,7 +61,7 @@ const mapDispatchToProps = (dispatch) => ({
   handleCancelMission: (options) => {
     // dispatch(updateBeacon({ isAssigned: false }));
     dispatch(getHelp(options));
-    dispatch(newGetHelp());
+    // dispatch(newGetHelp());
     dispatch(updateBeacon({ location: null}))
   }
 });
