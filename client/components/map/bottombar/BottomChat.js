@@ -53,8 +53,8 @@ class BottomChat extends React.Component {
 
     var eachMessage = {
       ...messages[0],
-      chatRoom: this.props.chatRoom
-    }
+      chatRoom: this.props.chatRoom,
+    };
     socket.emit('new message', eachMessage);
   }
 

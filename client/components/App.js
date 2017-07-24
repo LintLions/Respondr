@@ -44,12 +44,11 @@ class App extends React.Component {
     // get nearbyResponders
     // if (nextProps.token)
       // then update responder info in DB
-    
     if (nextProps.token !== this.props.token) {
       if (this.props.intervalID && !nextProps.token) {
         clearInterval(this.props.intervalID);
       }
-      if (nextProps.token) { 
+      if (nextProps.token) {
         this.state.interval = setInterval(startLocationUpdate(nextProps.token), 5000);
         clearInterval(this.props.intervalID);
         this.props.updateIntervalID(this.state.interval);
@@ -57,7 +56,7 @@ class App extends React.Component {
         this.state.interval = setInterval(startLocationUpdate(), 5000);
         clearInterval(this.props.intervalID);
         this.props.updateIntervalID(this.state.interval);
-      }  
+      }
     } else if (nextProps.socket !== this.props.socket) {
         this.state.interval = setInterval(startLocationUpdate(), 5000);
         clearInterval(this.props.intervalID);

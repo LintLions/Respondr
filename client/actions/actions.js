@@ -70,7 +70,7 @@ export const getHelp = (options) => (dispatch) => { // add options object
   // console.log('+++in actions.js - getHelp - activeBeaconLoc: ', activeBeaconLoc);
 
   // const activeBeacon = {
-  //   id: activeBeaconSocketID, 
+  //   id: activeBeaconSocketID,
   //   loc: activeBeaconLoc
   // }
   // socket.emit('getHelp', activeBeacon);
@@ -219,8 +219,7 @@ export const getUserWithTokenAndSocket = () => (dispatch) => {
       }
       // Set property on store that is the return of startLocationUpdate.
       // on log in, call clear interval with this return val, and run startLocationUpdate with new token val
-
-    })
+    });
   });
 };
 
