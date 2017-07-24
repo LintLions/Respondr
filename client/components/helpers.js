@@ -55,7 +55,7 @@ export const updateToken =  async (value) => {
   } catch (error) {
     console.log(`AsyncStorage error: ${error.message}`);
   }
-}
+};
 
 export const getToken =  async () => AsyncStorage.getItem('id_token');
 

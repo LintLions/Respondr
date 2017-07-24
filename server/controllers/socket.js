@@ -70,6 +70,7 @@ websocket.on('connection', (socket) => {
     console.log('+++socket.js - getHelp (server rcvd help request) - beacon: ', beacon); 
     
     let currentSession = {};
+    let currentLocation;
 
     if(beacon.UID) { 
       currentSession = activeBeaconSessions[beacon.UID];
@@ -82,18 +83,23 @@ websocket.on('connection', (socket) => {
       // to update beacon after mission canceled
       websocket.to(currentSession.beacon).emit('updateBeacon', currentSession);
       console.log('+++socket.js - getHelp - currentSession.beacon(CANCELED): ', currentSession.beacon);
+
+      currentLocation = [currentSession.beaconLocation[0], currentSession.beaconLocation[1]];
     } else { 
       currentSession = new ActiveBeaconSession(UID, beacon.socket, beacon.location); 
       activeBeaconSessions[UID++] = currentSession; 
       console.log('+++socket.js - getHelp - currentSession(NEW): ', currentSession);
+      currentLocation = [beacon.location[0], beacon.location[1]];
     }
 
-    dynamicResponder.findAll()
-      .then((responders) => {
-        if (Array.isArray(responders)) {
-          responders.forEach((responder) => {            
-            if(responder.socket !== currentSession.beacon && currentSession.blacklist.indexOf(responder.socket) === -1) {  
-              console.log('+++responder.socket: ', responder.socket);
+    db
+    .query(`select "socket", st_distance_sphere(geometry, ST_MakePoint(${currentLocation[0]}, ${currentLocation[1]})) from "dynamicResponders" WHERE ST_DWithin(geometry, ST_MakePoint(${currentLocation[0]}, ${currentLocation[1]})::geography, ${radius}) AND available = TRUE ORDER BY geometry <-> 'Point(${currentLocation[0]} ${currentLocation[1]})'::geometry`)
+    .then((responders) => {
+      console.log("responders are ", responders);
+        if (Array.isArray(responders[0])) {
+          responders[0].forEach((responder) => {
+            console.log('+++responder.socket: ', responder.socket);
+            if (responder.socket !== currentSession.beacon && currentSession.blacklist.indexOf(responder.socket) === -1) { // OR responder.socket !== activeBeacon.id ???
               socket.to(responder.socket).emit('newBeacon', currentSession);
             }
           });
@@ -123,14 +129,6 @@ websocket.on('connection', (socket) => {
       // this is when the beacon is ALREADY taken 
       socket.emit('verifyBeacon', activeBeaconSessions[responder.UID]);
     }
-  })
-
-  socket.on('new message', (eachMessage) => {
-    console.log('+++in socket.js - new message - message: ', eachMessage.message);
-    activeBeaconSession.messages.unshift(eachMessage);
-    console.log('+++in socket.js - PUSH - messages: ', activeBeaconSession.messages);
-    websocket.to(activeBeaconSession.beacon).emit('render all messages', activeBeaconSession.messages);
-    websocket.to(activeBeaconSession.responder).emit('render all messages', activeBeaconSession.messages);
   })
 
   socket.on('get all messages', () => {
@@ -187,16 +185,20 @@ websocket.on('connection', (socket) => {
   socket.on('new message', (eachMessage) => {
     console.log('+++in socket.js - new message - message: ', eachMessage.message);
     const activeBeaconSession = activeBeaconSessions[eachMessage.chatRoom];
-    activeBeaconSession.messages.unshift(eachMessage);
-    console.log('+++in socket.js - PUSH - messages: ', activeBeaconSession.messages);
-    websocket.to(activeBeaconSession.beacon).emit('render all messages', activeBeaconSession.messages);
-    websocket.to(activeBeaconSession.responder).emit('render all messages', activeBeaconSession.messages);
-
-    // socket.emit('render all messages', activeBeaconSession.messages);
-    // websocket.to(eachMessage.chatRoom).emit('render all messages', activeBeaconSession.messages);
-    // socket.broadcast.emit('render all messages', activeBeaconSession.messages); // ???
-    // socket.to(eachMessage.chatRoom).emit('render all messages', activeBeaconSession.messages);
+    activeBeaconSession.chatMessages.unshift(eachMessage);
+    console.log('+++in socket.js - PUSH - messages: ', activeBeaconSession.chatMessages);
+    websocket.to(activeBeaconSession.beacon).emit('render all messages', activeBeaconSession.chatMessages);
+    websocket.to(activeBeaconSession.responder).emit('render all messages', activeBeaconSession.chatMessages);
   });
+
+
+  // socket.on('new message', (eachMessage) => {
+  //   console.log('+++in socket.js - new message - message: ', eachMessage.message);
+  //   activeBeaconSession.messages.unshift(eachMessage);
+  //   console.log('+++in socket.js - PUSH - messages: ', activeBeaconSession.messages);
+  //   websocket.to(activeBeaconSession.beacon).emit('render all messages', activeBeaconSession.messages);
+  //   websocket.to(activeBeaconSession.responder).emit('render all messages', activeBeaconSession.messages);
+  // })
 
   socket.on('get all messages', () => {
     console.log('+++in socket.js - get all messages - messages: ', activeBeaconSession.messages);

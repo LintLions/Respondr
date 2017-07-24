@@ -7,7 +7,7 @@ import styles from '../../../styles/styles';
 import HelpRequest from './HelpRequest';
 import HelpRequestAccepted from './HelpRequestAccepted';
 import HelpRequestNotNeeded from './HelpRequestNotNeeded';
-import { updateBeacon, updateUser, getHelp, missionComplete } from '../../../actions/actions';
+import { updateBeacon, updateUser, getHelpAgain, missionComplete } from '../../../actions/actions';
 
 
 class BottomBarAngel extends Component {
@@ -70,16 +70,7 @@ const mapDispatchToProps = (dispatch) => ({
   },
   
   handleCancelMission: (responder) => {
-    dispatch(getHelp(responder));
-    dispatch(updateBeacon({ 
-      UID: null,
-      location: null,
-      isAssigned: false,
-      isCompleted: false, 
-      chatRoom: null,
-      chatMessages: [],
-      region: null,
-    }))
+    dispatch(getHelpAgain(responder));
   },
 });
 

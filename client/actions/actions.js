@@ -68,6 +68,22 @@ export const getHelp = (beacon) => (dispatch) => {
   
 };
 
+export const getHelpAgain = (responder) => (dispatch) => {
+  console.log('+++actions.js - getHelp - responder: ', responder);
+
+  socket.emit('getHelp', responder);
+  
+  dispatch(updateBeacon({
+    UID: null,
+    location: null,
+    isAssigned: false,
+    isCompleted: false, 
+    chatRoom: null,
+    chatMessages: [],
+    region: null,
+  }))
+}
+
 export const acceptBeacon = (responder) => (dispatch) => { //  (dispatch) =>
   console.log('+++in actions.js - acceptBeacon - responder: ', responder);
 
@@ -98,6 +114,10 @@ export const updateLocation = (location, token) => (dispatch) => {
   }
   dispatch(getCurrentLocation(location));
   dispatch(getResponders(location));
+  const beaconLocation = store.getState().myBeacon.location;
+  if (beaconLocation) {
+    dispatch(drawRoute());
+  }
 }
 export const cancelHelp = () => ({
   type: 'CANCEL_HELP',
