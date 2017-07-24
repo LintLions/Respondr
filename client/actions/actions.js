@@ -94,7 +94,7 @@ export const deleteSession = (beacon) => (dispatch) => {
     chatRoom: null,
     chatMessages: [],
     reAssigned: false,
-    // missionComplete: true,
+    missionComplete: false,
   }))
   
   socket.emit('deleteSession', beacon);

@@ -26,7 +26,8 @@ class BottomBarAngel extends Component {
     let Page = null;
     if (this.props.isCompleted) {
       Page = <HelpRequestNotNeeded />
-    } else if (!this.props.isAssigned) { 
+    } else 
+    if (!this.props.isAssigned) { 
       Page = <HelpRequest />;
     } else if (this.props.isAssigned) { 
       Page = <HelpRequestAccepted
@@ -70,10 +71,16 @@ const mapDispatchToProps = (dispatch) => ({
   
   handleCancelMission: (responder) => {
     dispatch(getHelp(responder));
-    dispatch(updateBeacon({ location: null}))
-    // dispatch(updateBeacon({ isAssigned: false }));
-    
-  }
+    dispatch(updateBeacon({ 
+      UID: null,
+      location: null,
+      isAssigned: false,
+      isCompleted: false, 
+      chatRoom: null,
+      chatMessages: [],
+      region: null,
+    }))
+  },
 });
 
 BottomBarAngel = connect(mapStateToProps, mapDispatchToProps)(BottomBarAngel)

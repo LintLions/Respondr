@@ -65,6 +65,8 @@ socket.on('newBeacon', (currentSession) => {
   console.log('+++helpers.js - newBeacon - currentSession: ', currentSession);
   store.dispatch(updateBeacon({
     UID: currentSession.chatRoom,
+    isAssigned: false,
+    isCompleted: false,
     location: currentSession.beaconLocation, 
     region: {
       latitude: currentSession.beaconLocation[0], 
@@ -146,3 +148,4 @@ socket.on('missionComplete', () => {
 
   console.log('+++helpers.js - missionComplete - myResponder: ', store.getState().myResponder);
 })
+

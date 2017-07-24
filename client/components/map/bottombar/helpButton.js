@@ -38,7 +38,7 @@ class HelpButton extends Component {
           </TouchableHighlight>
         </View>
       )
-    } else {
+    } else if(this.props.isBeacon === true && !this.props.missionComplete) {
       helpButton = (
         <View style={[styles.helpButtonContainer]}>          
             <TouchableHighlight
@@ -52,10 +52,27 @@ class HelpButton extends Component {
     }
 
     let helpStatus = null;
-    if(this.props.isBeacon) {
-      if(this.props.missionComplete) {
-        helpStatus = (<Text style={styles.prompt}>Your responder marked the mission as COMPLETE</Text>); 
-      } else if(!this.props.foundResponder) {
+    if(this.props.missionComplete && this.props.isBeacon) {
+      helpStatus = (
+        <View>
+          <Text style={styles.prompt}>Your responder marked the mission as COMPLETE, are you good?</Text> 
+          <TouchableHighlight
+            style={[styles.goodButton]}
+            underlayColor='#48BBEC'
+            onPress={() => this.props.handleCancelButtonPress(beacon)}>
+            <Text style={styles.helpButtonText}>I'm GOOD</Text>
+          </TouchableHighlight>    
+          <TouchableHighlight
+            style={[styles.helpButton]}
+            underlayColor='#48BBEC'
+            onPress={() => this.props.handleStillNeedHelp(beacon)}>
+            <Text style={styles.helpButtonText}>HELP</Text>
+          </TouchableHighlight>     
+        </View>
+      );
+    } 
+    else if(this.props.isBeacon) {
+      if(!this.props.foundResponder) {
         if(this.props.reAssigned) {
           helpStatus = (<Text style={styles.prompt}>Your responder couldn't make it anymore, but we're looking for new help for you, hold tight...</Text>); 
         } else {
@@ -144,6 +161,10 @@ const mapDispatchToProps = (dispatch) => ({
     dispatch(cancelHelp());
     dispatch(deleteSession(beacon));
   },
+  handleStillNeedHelp: (beacon) => {
+    dispatch(deleteSession(beacon));
+    dispatch(getHelp(beacon));
+  }
 });
 
 HelpButton = connect(mapStateToProps, mapDispatchToProps)(HelpButton)
