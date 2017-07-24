@@ -73,6 +73,7 @@ const mapStateToProps = state => ({
   token: state.responder.token,
   intervalID: state.responder.intervalID,
   socket: state.user.socket,
+  beaconLocation: state.myBeacon.location,
 });
 
 const mapDispatchToProps = dispatch => ({
