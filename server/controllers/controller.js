@@ -295,7 +295,7 @@ exports.switchAvailability = function (req, res) {
   console.log("Req.boyd is in swtichAvailability is ", req.body);
   dynamicResponder.update(
     { available: req.body[0] },
-    { where: { id: req.body[1] } },
+    { where: { id: req.body[1] } }
   )
   .then(() => {
     res.status(200).send('Availability Switched');
