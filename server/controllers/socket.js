@@ -1,13 +1,15 @@
 const app = require('../../index.js');
 const server = require('http').createServer(app);
 const socketio = require('socket.io');
+const db = require('../db/db');
+const radius = 3000;
 
 const dynamicResponder = require('../db/models/dynamicResponders');
 const beacon = require('../db/models/beacons');
 
 const websocket = socketio(server);
 
-let UID = 1; // unique ID for each activeBeaconSession 
+let UID = 1; // unique ID for each activeBeaconSession
 
 class ActiveBeaconSession {
   constructor(UID, socket, location) {
@@ -26,10 +28,9 @@ const activeBeaconSessions = {};
 
 websocket.on('connection', (socket) => {
   console.log('+++A client just joined on socket.id:', socket.id);
-  
   beacon.create({
-    socket: socket.id
-  });  
+    socket: socket.id,
+  });
 
   socket.on('updateUser', (options) => {
     console.log('+++options.query: ', options.query);
@@ -44,6 +45,14 @@ websocket.on('connection', (socket) => {
       });
   });
 
+  socket.on('update location', (chatroom, location) => {
+    const activeBeaconSession = activeBeaconSessions[chatroom];
+
+    socket.to(activeBeaconSession.beacon).emit('update location', chatroom, location);
+    socket.to(activeBeaconSession.responder).emit('update location', chatroom, location);
+
+  });
+
   socket.on('disconnect', () => {
     // check if socket is in a beacon session
       // if yes and isResponder -> ask beacon if they still need help
@@ -52,7 +61,6 @@ websocket.on('connection', (socket) => {
       // if yes and isBeacon ->
         // remove session
           // update responder
-
     // remove from beacon store
     beacon.destroy({ where: { socket: socket.id } })
     .then(rows => console.log(`deleted ${rows} rows`));
@@ -175,6 +183,26 @@ websocket.on('connection', (socket) => {
     console.log('+++in socket.js - missionComplete - beacon: ', beacon);
     websocket.to(beacon).emit('missionComplete');
   })
+
+  socket.on('new message', (eachMessage) => {
+    console.log('+++in socket.js - new message - message: ', eachMessage.message);
+    const activeBeaconSession = activeBeaconSessions[eachMessage.chatRoom];
+    activeBeaconSession.messages.unshift(eachMessage);
+    console.log('+++in socket.js - PUSH - messages: ', activeBeaconSession.messages);
+    websocket.to(activeBeaconSession.beacon).emit('render all messages', activeBeaconSession.messages);
+    websocket.to(activeBeaconSession.responder).emit('render all messages', activeBeaconSession.messages);
+
+    // socket.emit('render all messages', activeBeaconSession.messages);
+    // websocket.to(eachMessage.chatRoom).emit('render all messages', activeBeaconSession.messages);
+    // socket.broadcast.emit('render all messages', activeBeaconSession.messages); // ???
+    // socket.to(eachMessage.chatRoom).emit('render all messages', activeBeaconSession.messages);
+  });
+
+  socket.on('get all messages', () => {
+    console.log('+++in socket.js - get all messages - messages: ', activeBeaconSession.messages);
+    socket.emit('render all messages', activeBeaconSession.messages);
+  });
+
 });
 
 module.exports = {

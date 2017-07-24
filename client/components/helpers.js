@@ -4,7 +4,7 @@ import { AsyncStorage } from 'react-native';
 import SocketIOClient from 'socket.io-client';
 import { store } from '../index';
 import { url } from './config';
-import { updateBeacon, acceptBeacon, updateUser, updateMyResponder } from '../actions/actions';
+import { updateBeacon, acceptBeacon, updateUser, updateMyResponder, updateLocation } from '../actions/actions';
 
 export const decode = (t, e) => {
   // transforms something like this geocFltrhVvDsEtA}ApSsVrDaEvAcBSYOS_@...
@@ -61,6 +61,28 @@ export const getToken =  async () => AsyncStorage.getItem('id_token');
 
 export const socket = SocketIOClient(url);
 
+export const startLocationUpdate = (token) => {
+  const chatroom = store.getState().myBeacon.chatRoom || store.getState().myResponder.chatRoom;
+  if (chatroom !== null) {
+    const emitLocChange = ({ coords }) => {
+      console.log(coords.latitude);
+      socket.emit('update location', chatroom, [coords.latitude, coords.longitude]);
+    };
+    navigator.geolocation.getCurrentPosition(emitLocChange, error => console.log('error watching position', error), { maximumAge: 1000 });
+  } else {
+    let counter = 0;
+    return () => {
+      console.log(counter++);
+      console.log('intervalCB looping');
+      const locChange = ({ coords }) => {
+        console.log(coords.latitude);
+        store.dispatch(updateLocation([coords.latitude, coords.longitude], token));
+      };
+      navigator.geolocation.getCurrentPosition(locChange, error => console.log('error watching position', error), { maximumAge: 1000 });
+    };
+  }
+};
+
 socket.on('newBeacon', (currentSession) => { 
   console.log('+++helpers.js - newBeacon - currentSession: ', currentSession);
   store.dispatch(updateBeacon({
@@ -69,11 +91,11 @@ socket.on('newBeacon', (currentSession) => {
     isCompleted: false,
     location: currentSession.beaconLocation, 
     region: {
-      latitude: currentSession.beaconLocation[0], 
-      longitude: currentSession.beaconLocation[1], 
+      latitude: currentSession.beaconLocation[0],
+      longitude: currentSession.beaconLocation[1],
       latitudeDelta: 0.0922,
       longitudeDelta: 0.0421,
-    }
+    },
   }));
 });
 
@@ -147,5 +169,17 @@ socket.on('missionComplete', () => {
   }))
 
   console.log('+++helpers.js - missionComplete - myResponder: ', store.getState().myResponder);
-})
+});
+
+socket.on('update location', (chatroom, location) => {
+  if (store.getState().user.isBeacon) {
+    store.dispatch(updateMyResponder({
+      location,
+    }));
+  } else {
+    store.dispatch(updateBeacon({
+      location,
+    }));
+  }
+});
 

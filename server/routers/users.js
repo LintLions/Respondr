@@ -22,4 +22,8 @@ router.post('', controller.addUser);
 
 router.post('/sessions/create', controller.addSession);
 
+router.post('/location', controller.updateLocation);
+
+router.put('/online', controller.switchAvailability);
+
 module.exports = router;

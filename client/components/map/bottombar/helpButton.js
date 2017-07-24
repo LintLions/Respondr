@@ -96,51 +96,13 @@ class HelpButton extends Component {
       } 
     }
    
-
-    const btnOrModal = this.props.isBeacon === false ?
-      (<View style={[styles.helpButtonContainer]}>
-          <TouchableHighlight
-            style={[styles.helpButton]}
-            underlayColor='#48BBEC'
-            onPress={() => this.props.handleHelpButtonPress(beacon)}>
-            <Text style={styles.helpButtonText}>HELP</Text>
-          </TouchableHighlight>
-        </View>) :
-        (<View>          
-          <TouchableHighlight
-            style={styles.button}
-            underlayColor='#b22222'
-            onPress={() => this.props.handleCancelButtonPress()}>
-            <Text style={styles.buttonText}>Cancel Help Request</Text>
-          </TouchableHighlight>
-          {(!this.props.foundResponder) ? 
-            (<Text style={styles.prompt}>We're looking for help for you, hold tight...</Text>)
-            :
-            (<View>
-              <Text style={styles.prompt}>Your responder is on his/her way!</Text>
-              <Text style={styles.prompt}>ETA: ______ minutes</Text>
-              <Text style={styles.prompt}>Chat with your responder below:</Text>
-              <View style={styles.container}>
-                {this.props.isBeacon &&
-                  <View>
-                    <BottomChat />
-                  </View>
-                }
-              </View>
-            </View>)
-          }
-        </View>);
-    
-    console.log('+++in HelpButton.js - foundResponder: ', this.props.foundResponder);
-    console.log('+++in HelpButton.js - reAssigned: ', this.props.reAssigned, this.props.isBeacon, this.props.foundResponder);
-    
     return (
       <View style={styles.container}>
         {helpButton}
         {helpStatus}
       </View>
-    )    
-  }    
+    );
+  }
 }
 
 const mapStateToProps = (state) => ({
@@ -150,7 +112,7 @@ const mapStateToProps = (state) => ({
   foundResponder: state.myResponder.location,
   reAssigned: state.myResponder.reAssigned,
   missionComplete: state.myResponder.missionComplete,
-})
+});
 
 const mapDispatchToProps = (dispatch) => ({
   handleHelpButtonPress: (beacon) => {
@@ -167,6 +129,6 @@ const mapDispatchToProps = (dispatch) => ({
   }
 });
 
-HelpButton = connect(mapStateToProps, mapDispatchToProps)(HelpButton)
+HelpButton = connect(mapStateToProps, mapDispatchToProps)(HelpButton);
 
-module.exports = HelpButton
+module.exports = HelpButton;
