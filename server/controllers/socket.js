@@ -58,8 +58,8 @@ websocket.on('connection', (socket) => {
     .query(`select "socket" from "dynamicResponders" WHERE ST_DWithin(geometry, ST_MakePoint(${currentLocation[0]}, ${currentLocation[1]})::geography, ${radius}) AND available = TRUE ORDER BY geometry <-> 'Point(${currentLocation[0]} ${currentLocation[1]})'::geometry`)
     .then((responders) => {
       console.log("responders are ", responders);
-        if (Array.isArray(responders)) {
-          responders.forEach((responder) => {
+        if (Array.isArray(responders[0])) {
+          responders[0].forEach((responder) => {
             console.log('+++responder.socket: ', responder.socket);
             if (responder.socket !== socket.id) { // OR responder.socket !== activeBeacon.id ???
               socket.to(responder.socket).emit('newBeacon', activeBeacon);
