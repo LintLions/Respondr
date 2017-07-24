@@ -55,7 +55,7 @@ websocket.on('connection', (socket) => {
     const currentLocation = [activeBeacon.loc[0], activeBeacon.loc[1]];
     activeBeaconSession.beacon = activeBeacon.id;
     db
-    .query(`select "socket" from "dynamicResponders" WHERE ST_DWithin(geometry, ST_MakePoint(${currentLocation[0]}, ${currentLocation[1]})::geography, ${radius}) AND available = TRUE ORDER BY geometry <-> 'Point(${currentLocation[0]} ${currentLocation[1]})'::geometry`)
+    .query(`select "socket", st_distance_sphere(geometry, ST_MakePoint(${currentLocation[0]}, ${currentLocation[1]})) from "dynamicResponders" WHERE ST_DWithin(geometry, ST_MakePoint(${currentLocation[0]}, ${currentLocation[1]})::geography, ${radius}) AND available = TRUE ORDER BY geometry <-> 'Point(${currentLocation[0]} ${currentLocation[1]})'::geometry`)
     .then((responders) => {
       console.log("responders are ", responders);
         if (Array.isArray(responders[0])) {
