@@ -27,7 +27,7 @@ class MapPage extends Component {
     return (
       <View style={styles.container}>
         <MapView
-          region={this.props.region}
+          // region={this.props.region}
           style={styles.map}
           showsUserLocation
           followsUserLocation

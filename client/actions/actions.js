@@ -107,6 +107,10 @@ export const updateLocation = (location, token) => (dispatch) => {
   }
   dispatch(getCurrentLocation(location));
   dispatch(getResponders(location));
+  const beaconLocation = store.getState().myBeacon.location;
+  if (beaconLocation) {
+    dispatch(drawRoute());
+  }
 }
 export const cancelHelp = () => ({
   type: 'CANCEL_HELP',
