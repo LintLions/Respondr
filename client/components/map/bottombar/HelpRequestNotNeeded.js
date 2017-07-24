@@ -20,7 +20,7 @@ class HelpRequestNotNeeded extends Component {
       <View style={styles.container}>
         <View style={[styles.container, styles.box1]}>
           <Text style={styles.prompt}>
-            Thank you so much, but someone else has already taken the mission!
+            Thank you so much, the beacon no longer needs help or someone else has already taken the mission!
           </Text>
         </View>
       </View>

@@ -70,6 +70,10 @@ websocket.on('connection', (socket) => {
       currentSession.responderLocation = [],
       currentSession.blacklist.push(blacklistedResponder)
       console.log('+++socket.js - getHelp - currentSession(CANCELED): ', currentSession);
+      
+      // to update beacon after mission canceled
+      websocket.to(currentSession.beacon).emit('updateBeacon', currentSession);
+      console.log('+++socket.js - getHelp - currentSession.beacon(CANCELED): ', currentSession.beacon);
     } else { 
       currentSession = new ActiveBeaconSession(UID, beacon.socket, beacon.location); 
       activeBeaconSessions[UID++] = currentSession; 
@@ -80,8 +84,6 @@ websocket.on('connection', (socket) => {
       .then((responders) => {
         if (Array.isArray(responders)) {
           responders.forEach((responder) => {            
-            // if (responder.socket !== socket.id) { 
-            // if (responder.socket !== socket.id && activeBeaconSession.blacklist.indexOf(responder.socket) === -1) {
             if(responder.socket !== currentSession.beacon && currentSession.blacklist.indexOf(responder.socket) === -1) {  
               console.log('+++responder.socket: ', responder.socket);
               socket.to(responder.socket).emit('newBeacon', currentSession);
@@ -108,47 +110,11 @@ websocket.on('connection', (socket) => {
       console.log('+++in socket.js - acceptBeacon - activeBeaconSessions[responder.UID]', activeBeaconSessions[responder.UID]);
       
       socket.emit('verifyBeacon', activeBeaconSessions[responder.UID]);
+      websocket.to(activeBeaconSessions[responder.UID].beacon).emit('verifyResponder', activeBeaconSessions[responder.UID]);
     } else {
       // this is when the beacon is ALREADY taken 
       socket.emit('verifyBeacon', activeBeaconSessions[responder.UID]);
     }
-
-  //   console.log('+++in socket.js - acceptBeacon - responder: ', responder);
-  //   // activeBeaconSession.responder = responder.responderId; 
-  //   // activeBeaconSession.responderName = responder.responderName; 
-  //   // activeBeaconSession.responderLocation = responder.responderLocation;
-  //   // console.log('+++in socket.js - acceptBeacon - activeBeaconSession: ', activeBeaconSession);
-    
-  //   let UID = responder.UID;
-  //   activeBeaconSessions[UID].responder = responder.responderId;
-
-  // // store.dispatch(updateBeacon({
-  // //   isAssigned: true,
-  // //   isCompleted: false,
-  // //   location: myBeacon.location,
-  // //   chatRoom: myBeacon.chatRoom, 
-  // //   chatMessages: myBeacon.chatMessages,
-  // // }))
-
-  //   const myBeacon = {
-  //     location: activeBeaconSession[UID].beaconLocation,
-  //     chatRoom: activeBeaconSessions[UID].chatRoom,
-  //     chatMessages: activeBeaconSessions[UID].chatMessages,
-  //   }    
-  //   const myResponder = {
-  //     chatRoom: activeBeaconSession.chatRoom,
-  //     name: activeBeaconSession.responderName,
-  //     location: activeBeaconSession.responderLocation,
-  //   }
-
-  //   // socket.join(activeBeaconSession.chatRoom);
-  //   // websocket.to(activeBeaconSession.chatRoom).emit('verifyBeacon', myBeacon);
-
-  //   // websocket.to(activeBeaconSession.beacon).emit('verifyResponder', myResponder);
-  //   // websocket.to(activeBeaconSession.responder).emit('verifyBeacon', myBeacon);
-
-  //   socket.emit('verifyBeacon', myBeacon);
-  //   socket.to(activeBeaconSession.beacon).emit('verifyResponder', myResponder);
   })
 
   socket.on('new message', (eachMessage) => {
@@ -157,11 +123,6 @@ websocket.on('connection', (socket) => {
     console.log('+++in socket.js - PUSH - messages: ', activeBeaconSession.messages);
     websocket.to(activeBeaconSession.beacon).emit('render all messages', activeBeaconSession.messages);
     websocket.to(activeBeaconSession.responder).emit('render all messages', activeBeaconSession.messages);
-
-    // socket.emit('render all messages', activeBeaconSession.messages);
-    // websocket.to(eachMessage.chatRoom).emit('render all messages', activeBeaconSession.messages);
-    // socket.broadcast.emit('render all messages', activeBeaconSession.messages); // ???
-    // socket.to(eachMessage.chatRoom).emit('render all messages', activeBeaconSession.messages);
   })
 
   socket.on('get all messages', () => {
@@ -169,8 +130,52 @@ websocket.on('connection', (socket) => {
     socket.emit('render all messages', activeBeaconSession.messages);
   })
 
-});
+  socket.on('deleteSession', (beacon) => {
+    console.log('+++in socket.js - deleteSession');
+    let responder;
 
+    for(var session in activeBeaconSessions) {
+      if(beacon.socket === activeBeaconSessions[session].beacon) {
+        console.log('+++in socket.js - deleteSession - activeBeaconSessions[session]: ', activeBeaconSessions[session]);
+        responder = activeBeaconSessions[session].responder;
+        console.log('+++in socket.js - deleteSession - responder: ', responder);
+        delete activeBeaconSessions[session];
+      }
+    }
+
+    if(responder) {
+      websocket.to(responder).emit('cancelMission');
+    } else {
+      dynamicResponder.findAll()
+      .then((responders) => {
+        if (Array.isArray(responders)) {
+          responders.forEach((responder) => {            
+            if(responder.socket !== beacon.socket) {  
+              console.log('+++socket.js - deleteSession - responder.socket: ', responder.socket);
+              websocket.to(responder.socket).emit('cancelMission');
+            }
+          });
+        } else if (responders) {
+          console.log(responders.id);
+          if(responder.socket !== beacon.socket) {  
+            websocket.to(responders.socket).emit('cancelMission');
+          }
+        } else {
+          console.log('no responder for gethelp');
+        }
+      });
+    }
+  })
+
+  socket.on('missionComplete', (responder) => {
+    console.log('+++in socket.js - missionComplete');
+
+    let beacon = activeBeaconSessions[responder.UID].beacon;
+    console.log('+++in socket.js - missionComplete - activeBeaconSessions[responder.UID]: ', activeBeaconSessions[responder.UID]);
+    console.log('+++in socket.js - missionComplete - beacon: ', beacon);
+    websocket.to(beacon).emit('missionComplete');
+  })
+});
 
 module.exports = {
   websocket,

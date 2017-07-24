@@ -81,35 +81,53 @@ socket.on('verifyBeacon', (currentSession) => {
   if(currentSession.responder === socket.id) {
     store.dispatch(updateBeacon({
       isAssigned: true,
-      isCompleted: false,
-      location: currentSession.beaconLocation,
+      // isCompleted: false,
+      // location: currentSession.beaconLocation,
       chatRoom: currentSession.chatRoom, 
       chatMessages: currentSession.chatMessages, 
     }))  
   } else {
     store.dispatch(updateBeacon({
-      isAssigned: false,
+      // isAssigned: false,
       location: null,
     }))  
   }
 
-  store.dispatch(updateMyResponder({
+  console.log('+++helpers.js - verifyBeacon - myBeacon: ', store.getState().myBeacon);
+})
+
+socket.on('verifyResponder', (currentSession) => {
+  console.log('+++helpers.js - verifyResponder - currentSession: ', currentSession);
+
+  store.dispatch(updateMyResponder({ 
     name: currentSession.responderName,
     location: currentSession.responderLocation,
     chatRoom: currentSession.chatRoom,
     chatMessages: currentSession.chatMessages,
-  }))
-  console.log('+++helpers.js - verifyBeacon - myBeacon: ', store.getState().myBeacon);
+   }));
   console.log('+++helpers.js - verifyBeacon - myResponder: ', store.getState().myResponder);
 })
 
-socket.on('verifyResponder', (myResponder) => {
-  console.log('+++helpers.js - verifyResponder - myResponder: ', myResponder);
-  store.dispatch(updateMyResponder({ 
-    name: myResponder.name,
-    location: myResponder.location,
-    chatRoom: myResponder.chatRoom,
-   }));
+socket.on('updateBeacon', (currentSession) => {
+  console.log('+++helpers.js - updateBeacon - currentSession: ', currentSession);
+
+  store.dispatch(updateMyResponder({
+    reAssigned: true,
+    name: null,
+    location: null,
+    chatRoom: null,
+    chatMessages: null,
+  }))
+  console.log('+++helpers.js - updateBeacon - myResponder: ', store.getState().myResponder);
+})
+
+socket.on('cancelMission', () => {
+  console.log('+++helpers.js - cancelMission');
+
+  store.dispatch(updateBeacon({
+    isAssigned: false,
+    isCompleted: true,
+  }))
 })
 
 socket.on('render all messages', (messages) => {
@@ -118,3 +136,13 @@ socket.on('render all messages', (messages) => {
     chatMessages: messages,
   }))
 });
+
+socket.on('missionComplete', () => {
+  console.log('+++helpers.js - missionComplete');
+
+  store.dispatch(updateMyResponder({
+    missionComplete: true,
+  }))
+
+  console.log('+++helpers.js - missionComplete - myResponder: ', store.getState().myResponder);
+})

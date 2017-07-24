@@ -63,7 +63,7 @@ export const updateHelp = () => ({
 export const getHelp = (beacon) => (dispatch) => {
   console.log('+++actions.js - getHelp - beacon: ', beacon);
   
-  dispatch(updateHelp());
+  // dispatch(updateHelp());
   
   socket.emit('getHelp', beacon);
   
@@ -72,32 +72,7 @@ export const getHelp = (beacon) => (dispatch) => {
 export const acceptBeacon = (responder) => (dispatch) => { //  (dispatch) =>
   console.log('+++in actions.js - acceptBeacon - responder: ', responder);
 
-  
   socket.emit('acceptBeacon', responder); 
-
-  // console.log('+++in actions.js - acceptBeacon');
-  // const isBeaconTaken = store.getState().myBeacon.isAssigned;
-  // console.log('+++in actions.js - acceptBeacon - isBeaconTaken: ', isBeaconTaken);
-
-  // const responder = {
-  //   // UID: options.UID,
-  //   responderId: socket.id,
-  //   responderName: store.getState().responder.fullName,
-  //   responderLocation: store.getState().responder.currentLocation,
-  // }
-  // if(!isBeaconTaken) {
-  //   socket.emit('acceptBeacon', responder);
-  //   // dispatch(updateBeacon({ isAssigned: true }));
-  // } else {
-  //   dispatch(updateBeacon({ isCompleted: true })); 
-  // }
-}
-
-export const newGetHelp = () => (dispatch) => {
-  console.log('+++in actions.js - newGetHelp');
-  
-  socket.emit('newGetHelp', socket.id);
-  dispatch(updateBeacon( { isAssigned: true }));
 }
 
 export const getCurrentLocation = location => ({
@@ -109,6 +84,21 @@ export const cancelHelp = () => ({
   type: 'CANCEL_HELP',
   isBeacon: false,
 });
+
+export const deleteSession = (beacon) => (dispatch) => {
+  console.log('+++in actions.js - deleteSession - beacon: ', beacon);
+  
+  dispatch(updateMyResponder({
+    name: null,
+    location: null,
+    chatRoom: null,
+    chatMessages: [],
+    reAssigned: false,
+    // missionComplete: true,
+  }))
+  
+  socket.emit('deleteSession', beacon);
+}
 
 export const logInSuccess = (userData) => {
   console.log('userData in logInSuccess: ', userData);
@@ -255,3 +245,9 @@ export const getResponders = location => (dispatch) => {
     })
     .catch(e => console.warn(e));
 };
+
+export const missionComplete = (responder) => (dispatch) => {
+  console.log('+++in actions.js - missionComplete')
+  
+  socket.emit('missionComplete', responder);
+}

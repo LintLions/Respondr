@@ -31,7 +31,7 @@ class HelpRequestAccepted extends Component {
             <TouchableHighlight
               style={styles.missionButton}
               underlayColor='#99d9f4'
-              onPress={this.props.handleHelpRequestComplete}
+              onPress={() => this.props.handleHelpRequestComplete(responder)}
             >
               <Text style={styles.missionButtonText}>Mission Complete</Text>
             </TouchableHighlight>

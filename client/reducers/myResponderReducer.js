@@ -3,6 +3,8 @@ const initState = {
   location: null,
   chatRoom: null,
   chatMessages: [],
+  reAssigned: false,
+  missionComplete: false,
 };
 export default (state = initState, action) => {
   switch (action.type) {

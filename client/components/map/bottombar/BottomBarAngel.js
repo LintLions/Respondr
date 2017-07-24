@@ -7,7 +7,7 @@ import styles from '../../../styles/styles';
 import HelpRequest from './HelpRequest';
 import HelpRequestAccepted from './HelpRequestAccepted';
 import HelpRequestNotNeeded from './HelpRequestNotNeeded';
-import { updateBeacon, updateUser, getHelp } from '../../../actions/actions';
+import { updateBeacon, updateUser, getHelp, missionComplete } from '../../../actions/actions';
 
 
 class BottomBarAngel extends Component {
@@ -63,15 +63,16 @@ const mapStateToProps = (state) => ({
 })
 
 const mapDispatchToProps = (dispatch) => ({
-  handleHelpRequestComplete: () => {
-    dispatch(updateBeacon({ location: null, isCompleted: true })); 
+  handleHelpRequestComplete: (responder) => {
+    dispatch(missionComplete(responder));
+    dispatch(updateBeacon({ location: null, isCompleted: true }));
   },
   
   handleCancelMission: (responder) => {
     dispatch(getHelp(responder));
-    
-    // dispatch(updateBeacon({ isAssigned: false }));
     dispatch(updateBeacon({ location: null}))
+    // dispatch(updateBeacon({ isAssigned: false }));
+    
   }
 });
 
