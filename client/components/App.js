@@ -28,6 +28,10 @@ class App extends React.Component {
   }
 
   componentWillUpdate(nextProps, nextState) {
+    // update userLoaction on redux Store
+    // get nearbyResponders
+    // if (nextProps.token)
+      // then update responder info in DB
     if (nextProps.token !== this.props.token) {
       if (this.props.intervalID && !nextProps.token) {
         clearInterval(this.props.intervalID);

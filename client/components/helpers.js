@@ -4,7 +4,7 @@ import { AsyncStorage } from 'react-native';
 import SocketIOClient from 'socket.io-client';
 import { store } from '../index';
 import { url } from './config';
-import { updateBeacon, acceptBeacon, updateLocation } from '../actions/actions';
+import { updateBeacon, acceptBeacon, updateUser, updateMyResponder, updateLocation } from '../actions/actions';
 
 export const decode = (t, e) => {
   // transforms something like this geocFltrhVvDsEtA}ApSsVrDaEvAcBSYOS_@...
@@ -61,19 +61,98 @@ export const getToken =  async () => AsyncStorage.getItem('id_token');
 
 export const socket = SocketIOClient(url);
 
-socket.on('newBeacon', (activeBeacon) => { 
-  console.log('+++helpers.js - rcvd newBeacon: ', activeBeacon);
+export const startLocationUpdate = (token) => {
+  const chatroom = store.getState().myBeacon.chatRoom || store.getState().myResponder.chatRoom;
+  if (chatroom !== null) {
+    const emitLocChange = ({ coords }) => {
+      console.log(coords.latitude);
+      socket.emit('update location', chatroom, [coords.latitude, coords.longitude]);
+    };
+    navigator.geolocation.getCurrentPosition(emitLocChange, error => console.log('error watching position', error), { maximumAge: 1000 });
+  } else {
+    let counter = 0;
+    return () => {
+      console.log(counter++);
+      console.log('intervalCB looping');
+      const locChange = ({ coords }) => {
+        console.log(coords.latitude);
+        store.dispatch(updateLocation([coords.latitude, coords.longitude], token));
+      };
+      navigator.geolocation.getCurrentPosition(locChange, error => console.log('error watching position', error), { maximumAge: 1000 });
+    };
+  }
+};
+
+socket.on('newBeacon', (currentSession) => { 
+  console.log('+++helpers.js - newBeacon - currentSession: ', currentSession);
   store.dispatch(updateBeacon({
-    chatRoom: activeBeacon.id, 
-    location: activeBeacon.loc, 
+    UID: currentSession.chatRoom,
+    isAssigned: false,
+    isCompleted: false,
+    location: currentSession.beaconLocation, 
     region: {
-      latitude: activeBeacon.loc[0], 
-      longitude: activeBeacon.loc[1], 
+      latitude: currentSession.beaconLocation[0],
+      longitude: currentSession.beaconLocation[1],
       latitudeDelta: 0.0922,
       longitudeDelta: 0.0421,
-    }
+    },
   }));
 });
+
+socket.on('verifyBeacon', (currentSession) => {
+  console.log('+++helpers.js - verifyBeacon - currentSession: ', currentSession);
+
+  if(currentSession.responder === socket.id) {
+    store.dispatch(updateBeacon({
+      isAssigned: true,
+      // isCompleted: false,
+      // location: currentSession.beaconLocation,
+      chatRoom: currentSession.chatRoom, 
+      chatMessages: currentSession.chatMessages, 
+    }))  
+  } else {
+    store.dispatch(updateBeacon({
+      // isAssigned: false,
+      location: null,
+    }))  
+  }
+
+  console.log('+++helpers.js - verifyBeacon - myBeacon: ', store.getState().myBeacon);
+})
+
+socket.on('verifyResponder', (currentSession) => {
+  console.log('+++helpers.js - verifyResponder - currentSession: ', currentSession);
+
+  store.dispatch(updateMyResponder({ 
+    name: currentSession.responderName,
+    location: currentSession.responderLocation,
+    chatRoom: currentSession.chatRoom,
+    chatMessages: currentSession.chatMessages,
+   }));
+  console.log('+++helpers.js - verifyBeacon - myResponder: ', store.getState().myResponder);
+})
+
+socket.on('updateBeacon', (currentSession) => {
+  console.log('+++helpers.js - updateBeacon - currentSession: ', currentSession);
+
+  store.dispatch(updateMyResponder({
+    reAssigned: true,
+    name: null,
+    location: null,
+    chatRoom: null,
+    chatMessages: null,
+  }))
+  console.log('+++helpers.js - updateBeacon - myResponder: ', store.getState().myResponder);
+})
+
+socket.on('cancelMission', () => {
+  console.log('+++helpers.js - cancelMission');
+
+  store.dispatch(updateBeacon({
+    isAssigned: false,
+    isCompleted: true,
+  }))
+})
 
 socket.on('render all messages', (messages) => {
   console.log('+++render all messages listening: ', messages);
@@ -82,16 +161,25 @@ socket.on('render all messages', (messages) => {
   }))
 });
 
+socket.on('missionComplete', () => {
+  console.log('+++helpers.js - missionComplete');
 
-export const startLocationUpdate = (token) => {
-  let counter = 0;
-  return () => {
-    console.log(counter++);
-    console.log('intervalCB looping')
-    const locChange = ({ coords }) => {
-      console.log(coords.latitude)
-      store.dispatch(updateLocation([coords.latitude, coords.longitude], token))
-    };
-    navigator.geolocation.getCurrentPosition(locChange, error => console.log('error watching position', error), { maximumAge: 1000 });
-  };
-}
+  store.dispatch(updateMyResponder({
+    missionComplete: true,
+  }))
+
+  console.log('+++helpers.js - missionComplete - myResponder: ', store.getState().myResponder);
+});
+
+socket.on('update location', (chatroom, location) => {
+  if (store.getState().user.isBeacon) {
+    store.dispatch(updateMyResponder({
+      location,
+    }));
+  } else {
+    store.dispatch(updateBeacon({
+      location,
+    }));
+  }
+});
+
