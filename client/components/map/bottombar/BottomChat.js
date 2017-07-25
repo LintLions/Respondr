@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import {
   View,
   Keyboard,
+  Text,
 } from 'react-native';
 import { connect } from 'react-redux';
 import styles from '../../../styles/styles';
@@ -51,11 +52,12 @@ class BottomChat extends React.Component {
       messages: GiftedChat.append(previousState.messages, messages),
     }));
     console.log('+++messages in onSend: ', messages);
-
-    let eachMessage = {
-      ...messages[0], 
-      chatRoom: this.props.chatRoom,
+    const chatRoom = this.props.chatRoomBeacon || this.props.chatRoomResponder
+    const eachMessage = {
+      chatMessages: messages,
+     chatRoom,
     };
+    console.log("each message is ", eachMessage);
     socket.emit('new message', eachMessage);
   }
 
@@ -79,7 +81,8 @@ class BottomChat extends React.Component {
 }
 
 const mapStateToProps = (state) => ({
-  chatRoom: state.myBeacon.chatRoom,
+  chatRoomBeacon: state.myBeacon.chatRoom,
+  chatRoomResponder: state.myResponder.chatRoom,
   messages: state.myBeacon.chatMessages,
   name: state.responder.fullName,
   socket: state.user.socket,

@@ -9,10 +9,8 @@ import {
 import MapView from 'react-native-maps';
 import TopBar from './topbar/topBar';
 import BottomNav from './bottombar/BottomNav';
-import BottomChat from './bottombar/BottomChat';
 import HelpButton from './bottombar/helpButton';
 import AngelStatusIcon from './bottombar/AngelStatusIcon';
-import Chat from './bottombar/Chat';
 import styles from '../../styles/styles';
 import { animate } from '../../actions/actions';
 
@@ -118,7 +116,7 @@ class MapPage extends Component {
             />
           }
         </View>
-        <View style={[styles.container]}>
+        <View>
           {!this.props.isLoggedIn &&
           <HelpButton />}
         </View>

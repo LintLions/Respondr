@@ -187,9 +187,10 @@ websocket.on('connection', (socket) => {
   })
 
   socket.on('new message', (eachMessage) => {
-    console.log('+++in socket.js - new message - message: ', eachMessage.message);
+    console.log('+++in socket.js - activeBeaconSession: ', eachMessage.chatMessages[0]);
+
     const activeBeaconSession = activeBeaconSessions[eachMessage.chatRoom];
-    activeBeaconSession.chatMessages.unshift(eachMessage);
+    activeBeaconSession.chatMessages.unshift(eachMessage.chatMessages[0]);
     console.log('+++in socket.js - PUSH - messages: ', activeBeaconSession.chatMessages);
     websocket.to(activeBeaconSession.beacon).emit('render all messages', activeBeaconSession.chatMessages);
     websocket.to(activeBeaconSession.responder).emit('render all messages', activeBeaconSession.chatMessages);
