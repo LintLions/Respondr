@@ -63,17 +63,6 @@ export const socket = SocketIOClient(url);
 
 
 export const startLocationUpdate = (token) => {
-  // console.log('looping')
-  // if (chatroom) {
-  //   console.log('in a chatroom!!')
-  //   return () => {
-  //     const emitLocChange = ({ coords }) => {
-  //     console.log('emitLocChange!: ', coords.latitude);
-  //     socket.emit('update location', chatroom, [coords.latitude, coords.longitude]);
-  //   };
-  //   navigator.geolocation.getCurrentPosition(emitLocChange, error => console.log('error watching position', error), { maximumAge: 1000 });
-  //   }
-  // } else {
     let counter = 0;
     return () => {
       // console.log(counter++);
