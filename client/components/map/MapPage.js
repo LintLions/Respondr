@@ -28,8 +28,6 @@ class MapPage extends Component {
       const id = nextProps.responders[i].id;
       if (this.state.markers[id] !== undefined) {
         if (this.state.markers[id].coordinates.latitude._value !== nextProps.responders[i].currentLocation[0] || this.state.markers[id].coordinates.longitude._value !== nextProps.responders[i].currentLocation[1]) {
-          console.log("this.state.markers[id].coordinates.latitude._value ", this.state.markers[id].coordinates.latitude._value);
-          console.log("nextProps.responders[i].currentLocation[0]", nextProps.responders[i].currentLocation[0]);
           this.state.markers[id].coordinates.timing({
             ...nextProps.responders[i].currentLocation,
             duration: 500,
