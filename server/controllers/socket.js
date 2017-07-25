@@ -70,7 +70,7 @@ websocket.on('connection', (socket) => {
     console.log('+++socket.js - getHelp (server rcvd help request) - beacon: ', beacon); 
     
     let currentSession = {};
-    let currentLocation;
+    let currentLocation = [];
 
     if(beacon.UID) { 
       currentSession = activeBeaconSessions[beacon.UID];
@@ -87,9 +87,13 @@ websocket.on('connection', (socket) => {
       currentLocation = [currentSession.beaconLocation[0], currentSession.beaconLocation[1]];
     } else { 
       currentSession = new ActiveBeaconSession(UID, beacon.socket, beacon.location); 
+
+      // currentLocation = [beacon.location[0], beacon.location[1]];
+      currentLocation[0] = currentSession.beaconLocation[0];
+      currentLocation[1] = currentSession.beaconLocation[1];
+
       activeBeaconSessions[UID++] = currentSession; 
-      console.log('+++socket.js - getHelp - currentSession(NEW): ', currentSession);
-      currentLocation = [beacon.location[0], beacon.location[1]];
+      console.log('+++socket.js - getHelp - currentSession(NEW): ', currentSession);      
     }
 
     db
@@ -183,9 +187,10 @@ websocket.on('connection', (socket) => {
   })
 
   socket.on('new message', (eachMessage) => {
-    console.log('+++in socket.js - new message - message: ', eachMessage.message);
+    console.log('+++in socket.js - activeBeaconSession: ', eachMessage.chatMessages[0]);
+
     const activeBeaconSession = activeBeaconSessions[eachMessage.chatRoom];
-    activeBeaconSession.chatMessages.unshift(eachMessage);
+    activeBeaconSession.chatMessages.unshift(eachMessage.chatMessages[0]);
     console.log('+++in socket.js - PUSH - messages: ', activeBeaconSession.chatMessages);
     websocket.to(activeBeaconSession.beacon).emit('render all messages', activeBeaconSession.chatMessages);
     websocket.to(activeBeaconSession.responder).emit('render all messages', activeBeaconSession.chatMessages);

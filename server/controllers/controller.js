@@ -6,7 +6,7 @@ const db = require('../db/db');
 const config = require('../config');
 const jwt = require('jsonwebtoken');
 const bcrypt = require('bcrypt-nodejs');
-const radius = 3000;
+const radius = 30000;
 const LATITUDE_DELTA = 0.0015;
 const LONGITUDE_DELTA = 0.0015;
 
@@ -293,10 +293,7 @@ exports.deleteBeacon = function (req, res) {
 
 exports.switchAvailability = function (req, res) {
   console.log("Req.boyd is in swtichAvailability is ", req.body);
-  dynamicResponder.update(
-    { available: req.body[0] },
-    { where: { id: req.body[1] } }
-  )
+  dynamicResponder.update({ available: req.body[0] }, { where: { id: req.body[1] } })
   .then(() => {
     res.status(200).send('Availability Switched');
   });
