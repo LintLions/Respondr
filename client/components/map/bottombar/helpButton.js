@@ -70,8 +70,7 @@ class HelpButton extends Component {
           </TouchableHighlight>     
         </View>
       );
-    } 
-    else if(this.props.isBeacon) {
+    } else if(this.props.isBeacon) {
       if(!this.props.foundResponder) {
         if(this.props.reAssigned) {
           helpStatus = (<Text style={styles.prompt}>Your responder couldn't make it anymore, but we're looking for new help for you, hold tight...</Text>); 
@@ -84,9 +83,9 @@ class HelpButton extends Component {
             <Text style={styles.prompt}>Your responder is on his/her way!</Text>
             <Text style={styles.prompt}>ETA: ______ minutes</Text>
             <Text style={styles.prompt}>Chat with your responder below:</Text>
-            <View style={styles.container}>
+            <View style={styles.beaconChatContainer}>
               {this.props.isBeacon &&
-                <View>
+                <View style={[styles.container, styles.layoutTest]}>
                   <BottomChat />
                 </View>
               }
@@ -97,9 +96,13 @@ class HelpButton extends Component {
     }
    
     return (
-      <View style={styles.container}>
-        {helpButton}
-        {helpStatus}
+      <View>
+        <View>
+          {helpButton}
+        </View>
+        <View>
+          {helpStatus}
+        </View>
       </View>
     );
   }

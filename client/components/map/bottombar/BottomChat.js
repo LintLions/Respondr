@@ -15,6 +15,7 @@ class BottomChat extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
+      messages: [],
       messages: [
         {
           _id: 1,
@@ -51,8 +52,8 @@ class BottomChat extends React.Component {
     }));
     console.log('+++messages in onSend: ', messages);
 
-    var eachMessage = {
-      ...messages[0],
+    let eachMessage = {
+      ...messages[0], 
       chatRoom: this.props.chatRoom,
     };
     socket.emit('new message', eachMessage);
@@ -60,7 +61,7 @@ class BottomChat extends React.Component {
 
   render() {
     return (
-      <View style={this.state.style}>
+      <View style={styles.box1}>
         <GiftedChat
           isAnimated={false}
           messages={this.props.messages}
@@ -89,6 +90,8 @@ const mapDispatchToProps = (dispatch) => ({
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(BottomChat);
+
+// <View style={this.state.style}>
 
 // sendMessage() {
 //     var eachMessage = {
