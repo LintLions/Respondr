@@ -61,8 +61,44 @@ export const getToken =  async () => AsyncStorage.getItem('id_token');
 
 export const socket = SocketIOClient(url);
 
+<<<<<<< Updated upstream
 socket.on('newBeacon', (activeBeacon) => { 
   console.log('+++helpers.js - rcvd newBeacon: ', activeBeacon);
+=======
+export const startLocationUpdate = (token) => {
+  // console.log('looping')
+  // if (chatroom) {
+  //   console.log('in a chatroom!!')
+  //   return () => {
+  //     const emitLocChange = ({ coords }) => {
+  //     console.log('emitLocChange!: ', coords.latitude);
+  //     socket.emit('update location', chatroom, [coords.latitude, coords.longitude]);
+  //   };
+  //   navigator.geolocation.getCurrentPosition(emitLocChange, error => console.log('error watching position', error), { maximumAge: 1000 });
+  //   }
+  // } else {
+    let counter = 0;
+    return () => {
+      // console.log(counter++);
+        const chatroom = store.getState().myBeacon.chatRoom || store.getState().myResponder.chatRoom;
+
+      console.log('intervalCB looping');
+      const locChange = ({ coords }) => {
+        // console.log(coords.latitude);
+        if (chatroom) {
+          console.log(chatroom)
+          socket.emit('update location', chatroom, [coords.latitude, coords.longitude])
+        }
+        store.dispatch(updateLocation([coords.latitude, coords.longitude], token));
+      };
+      navigator.geolocation.getCurrentPosition(locChange, error => console.log('error watching position', error), { maximumAge: 1000 });
+    };
+  
+};
+
+socket.on('newBeacon', (currentSession) => { 
+  console.log('+++helpers.js - newBeacon - currentSession: ', currentSession);
+>>>>>>> Stashed changes
   store.dispatch(updateBeacon({
     chatRoom: activeBeacon.id, 
     location: activeBeacon.loc, 

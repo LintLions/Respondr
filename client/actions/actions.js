@@ -108,7 +108,9 @@ export const updateLocation = (location, token) => (dispatch) => {
   dispatch(getCurrentLocation(location));
   dispatch(getResponders(location));
   const beaconLocation = store.getState().myBeacon.location;
-  if (beaconLocation) {
+  const beaconisAssigned = store.getState().myBeacon.isAssigned
+  const responderLocation = store.getState().myResponder.location
+  if ((beaconLocation && beaconisAssigned) || responderLocation) {
     dispatch(drawRoute());
   }
 }
@@ -215,7 +217,8 @@ export const drawRoute = latLong => (dispatch) => {
   const origin = `${store.getState().user.location[0]},${store.getState().user.location[1]}`;
   const dest = latLong 
     ? `${latLong[0]},${latLong[1]}`
-    : store.getState().myBeacon.location.join(',');
+    : store.getState().myBeacon.location ? store.getState().myBeacon.location.join(',')
+    : store.getState().myResponder.location.join(',');
   const googleUrl = `https://maps.googleapis.com/maps/api/directions/json?origin=${origin}&destination=${dest}&key=${APIKEY}&mode=${mode}`;
   console.log('googleUrl in drawRoute is: ', googleUrl)
   fetch(googleUrl)
@@ -285,7 +288,7 @@ export const getRespondersSucceed = responders => ({
 });
 
 export const getResponders = location => (dispatch) => {
-  console.log("In get responders currentLoc is ", location);
+  // console.log("In get responders currentLoc is ", location);
   const body = JSON.stringify({
     location,
   });
