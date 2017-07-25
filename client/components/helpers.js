@@ -4,7 +4,7 @@ import { AsyncStorage } from 'react-native';
 import SocketIOClient from 'socket.io-client';
 import { store } from '../index';
 import { url } from './config';
-import { updateBeacon, acceptBeacon, updateUser, updateMyResponder, updateLocation } from '../actions/actions';
+import { updateBeacon, acceptBeacon, updateUser, updateMyResponder, updateLocation, updateRoute } from '../actions/actions';
 
 export const decode = (t, e) => {
   // transforms something like this geocFltrhVvDsEtA}ApSsVrDaEvAcBSYOS_@...
@@ -161,6 +161,7 @@ socket.on('cancelMission', () => {
     isAssigned: false,
     isCompleted: true,
   }))
+  store.dispatch(updateRoute(null))
 })
 
 socket.on('render all messages', (messages) => {
@@ -178,6 +179,7 @@ socket.on('missionComplete', () => {
   }))
 
   console.log('+++helpers.js - missionComplete - myResponder: ', store.getState().myResponder);
+  store.dispatch(updateRoute(null))
 });
 
 socket.on('update location', (chatroom, location) => {
