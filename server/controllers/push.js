@@ -1,24 +1,23 @@
 const PushNotifications = require('node-pushnotifications');
 
-// const apnProvider = new apn.Provider();
+const processKey = [
+  process.env.APP_KEY1,
+  process.env.APP_KEY2,
+  process.env.APP_KEY3,
+].join('\n');
 
-// const settings = {
-//   // ANDROID SETTINGS
-//   // gcm: {
-//   //   id: null,
-//   // },
-
-//   // APPLE SETTINGS
-//   apn: {
-//     token: {
-//       key: '../../private/key.p12',
-//       keyId: process.env.APP_KEY,
-//       teamId: process.env.APP_TEAM,
-//     },
-//   },
-// };
-
-const push = new PushNotifications();
+const push = new PushNotifications({
+  apn: {
+    token: {
+      key: processKey,
+      // key: keyP8,
+      keyId: process.env.APP_KEYID,
+      teamId: process.env.APP_TEAM,
+    },
+    // cert: certPem,
+    // key: keyPem,
+  },
+});
 
 const data = {
   title: 'New push notification', // REQUIRED
@@ -64,3 +63,4 @@ module.exports = { push, data, apnData };
 // push.send(registrationIds, data)
 //     .then((results) => { ... })
 //     .catch((err) => { ... });
+

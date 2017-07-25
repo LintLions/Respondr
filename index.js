@@ -14,7 +14,8 @@ const port = process.env.PORT || 3000;
 const { server } = require('./server/controllers/socket.js');
 
 
-const deviceToken = 'da8194613f804c50f8d23fbbcb530568e5d88b79d24fa8b6b484a604db97c067';
+const deviceTokens = ['da8194613f804c50f8d23fbbcb530568e5d88b79d24fa8b6b484a604db97c067'];
+// const deviceToken = '6185a90be174514adaccdb1aa47b30e29a84bc69';
 // const note = new apn.Notification();
 
 // note.expiry = Math.floor(Date.now() / 1000) + 5; // 5 seconds
@@ -36,17 +37,10 @@ app.get('', (req, res, next) => {
   res.send('HEY');
   next();
 });
-app.get('/pushtest', (req, res, next) => {
-  // Push.push.send('da8194613f804c50f8d23fbbcb530568e5d88b79d24fa8b6b484a604db97c067', Push.apn);
-  Push.push.send(deviceToken, Push.apnData)
-    .then((results) => {
-      console.log('RESULTS', results);
-      return res.send(results);
-    })
-    .catch((err) => {
-      console.log('err', err);
-      return res.send(err);
-    });
+app.get('/pushtest', (req, res) => {
+  Push.push.send(deviceTokens, Push.apnData)
+    .then(results => res.send(results))
+    .catch(err => res.send(err));
 });
 
 server.listen(port);

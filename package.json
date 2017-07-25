@@ -8,7 +8,7 @@
     "server": "nodemon index.js",
     "test": "jest",
     "start": "node index.js",
-    "postinstall": "remotedev-debugger --hostname localhost --port 8082 --runserver --injectserver"
+    "redux": "remotedev-debugger --hostname localhost --port 8082 --runserver --injectserver"
   },
   "dependencies": {
     "apn": "^2.1.5",
