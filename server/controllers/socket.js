@@ -2,8 +2,8 @@ const app = require('../../index.js');
 const server = require('http').createServer(app);
 const socketio = require('socket.io');
 const db = require('../db/db');
-const radius = 30000;
 
+const radius = 3000;
 const dynamicResponder = require('../db/models/dynamicResponders');
 const beacon = require('../db/models/beacons');
 
@@ -47,10 +47,10 @@ websocket.on('connection', (socket) => {
 
   socket.on('update location', (chatroom, location) => {
     const activeBeaconSession = activeBeaconSessions[chatroom];
-
-    socket.to(activeBeaconSession.beacon).emit('update location', chatroom, location);
-    socket.to(activeBeaconSession.responder).emit('update location', chatroom, location);
-
+    if (activeBeaconSession) {
+      socket.to(activeBeaconSession.beacon).emit('update location', chatroom, location);
+      socket.to(activeBeaconSession.responder).emit('update location', chatroom, location);
+    }
   });
 
   socket.on('disconnect', () => {
