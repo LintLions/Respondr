@@ -92,7 +92,7 @@ class MapPage extends Component {
             />
           }
         </View>
-        <View>
+        <View style={[styles.container]}>
           {!this.props.isLoggedIn &&
           <HelpButton />}
         </View>

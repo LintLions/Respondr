@@ -70,7 +70,7 @@ websocket.on('connection', (socket) => {
     console.log('+++socket.js - getHelp (server rcvd help request) - beacon: ', beacon); 
     
     let currentSession = {};
-    let currentLocation;
+    let currentLocation = [];
 
     if(beacon.UID) { 
       currentSession = activeBeaconSessions[beacon.UID];
@@ -87,9 +87,13 @@ websocket.on('connection', (socket) => {
       currentLocation = [currentSession.beaconLocation[0], currentSession.beaconLocation[1]];
     } else { 
       currentSession = new ActiveBeaconSession(UID, beacon.socket, beacon.location); 
+
+      // currentLocation = [beacon.location[0], beacon.location[1]];
+      currentLocation[0] = currentSession.beaconLocation[0];
+      currentLocation[1] = currentSession.beaconLocation[1];
+
       activeBeaconSessions[UID++] = currentSession; 
-      console.log('+++socket.js - getHelp - currentSession(NEW): ', currentSession);
-      currentLocation = [beacon.location[0], beacon.location[1]];
+      console.log('+++socket.js - getHelp - currentSession(NEW): ', currentSession);      
     }
 
     db
