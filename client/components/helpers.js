@@ -62,6 +62,7 @@ export const getToken =  async () => AsyncStorage.getItem('id_token');
 export const socket = SocketIOClient(url);
 
 export const startLocationUpdate = (token) => {
+  console.log("in startLocationUpdate");
   const chatroom = store.getState().myBeacon.chatRoom || store.getState().myResponder.chatRoom;
   if (chatroom !== null) {
     const emitLocChange = ({ coords }) => {

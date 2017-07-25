@@ -2,7 +2,7 @@ const app = require('../../index.js');
 const server = require('http').createServer(app);
 const socketio = require('socket.io');
 const db = require('../db/db');
-const radius = 3000;
+const radius = 30000;
 
 const dynamicResponder = require('../db/models/dynamicResponders');
 const beacon = require('../db/models/beacons');
