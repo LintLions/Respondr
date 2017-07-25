@@ -26,23 +26,10 @@ class App extends React.Component {
     };
   }
 
-
   componentDidMount() {
-    // const locChange = ({ coords }) => {
-    //   AsyncStorage.getItem('id_token', (err, value) => {
-    //     if (err) {
-    //       console.error('error getting session from phone storage ', err);
-    //     }
-    //     this.props.setLocation([coords.latitude, coords.longitude], value);
-    //     this.props.getResponders([coords.latitude, coords.longitude]);
-    //   });
-    // };
-    this.props.getUserWithTokenAndSocket();
     PushNotificationIOS.requestPermissions();
-    // navigator.geolocation.watchPosition(locChange,
-    //   error => console.log('error watching position', error),
-    //   { timeout: 5 * 1000, enableHighAccuracy: true });
-    // window.setInterval(function() { navigator.geolocation.getCurrentPosition(locChange)}, 5000);
+    setInterval(() => {}, 1000);
+    this.props.getUserWithTokenAndSocket();
   }
 
   componentWillUpdate(nextProps, nextState) {
@@ -50,12 +37,11 @@ class App extends React.Component {
     // get nearbyResponders
     // if (nextProps.token)
       // then update responder info in DB
-    
     if (nextProps.token !== this.props.token) {
       if (this.props.intervalID && !nextProps.token) {
         clearInterval(this.props.intervalID);
       }
-      if (nextProps.token) { 
+      if (nextProps.token) {
         this.state.interval = setInterval(startLocationUpdate(nextProps.token), 5000);
         clearInterval(this.props.intervalID);
         this.props.updateIntervalID(this.state.interval);
@@ -63,17 +49,13 @@ class App extends React.Component {
         this.state.interval = setInterval(startLocationUpdate(), 5000);
         clearInterval(this.props.intervalID);
         this.props.updateIntervalID(this.state.interval);
-      }  
+      }
     } else if (nextProps.socket !== this.props.socket) {
-        this.state.interval = setInterval(startLocationUpdate(), 5000);
-        clearInterval(this.props.intervalID);
-        this.props.updateIntervalID(this.state.interval);
+      this.state.interval = setInterval(startLocationUpdate(), 5000);
+      clearInterval(this.props.intervalID);
+      this.props.updateIntervalID(this.state.interval);
     }
   }
-  // componentWillUnmount() {
-  //   clearInterval(this.props.intervalID);
-  //   clearInterval(this.state.interval);
-  // }
 // App mounts
 // Getuserwithtokenandsocket dispatches,
 
@@ -100,6 +82,7 @@ const mapStateToProps = state => ({
   token: state.responder.token,
   intervalID: state.responder.intervalID,
   socket: state.user.socket,
+  beaconLocation: state.myBeacon.location,
 });
 
 const mapDispatchToProps = dispatch => ({

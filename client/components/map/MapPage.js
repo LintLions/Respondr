@@ -22,14 +22,13 @@ class MapPage extends Component {
     super(props);
   }
 
-
   render() {
     return (
       <View style={styles.container}>
         <MapView
-          region={this.props.region}
+          // region={this.props.region}
           style={styles.map}
-          showsUserLocation
+          showsUserLocation={true}
           followsUserLocation
           showsPointsOfInterest={false}
           showsMyLocationButton
@@ -97,19 +96,15 @@ class MapPage extends Component {
           {!this.props.isLoggedIn &&
           <HelpButton />}
         </View>
-        <View
-          style={[styles.column, styles.bottom]}
-        >
+
+        <View style={[styles.column, styles.bottom]}>
           {this.props.beaconLocation &&
             <BottomNav />
           }
         </View>
 
-        {this.props.isBeacon && 
-            <View style={styles.box3}>
-              <BottomChat />
-            </View>
-        }
+
+
       </View>
     );
   }
@@ -124,6 +119,8 @@ const mapStateToProps = state => ({
   userLocation: state.user.location,
   beaconLocation: state.myBeacon.location,
   responders: state.user.responders,
+  isAssigned: state.myBeacon.isAssigned,
+  // beaconChatRoom: state.myBeacon.chatRoom,
 });
 const mapDispatchToProps = dispatch => ({
   animate: (location) => {
@@ -133,3 +130,18 @@ const mapDispatchToProps = dispatch => ({
 const MapPageConnected = connect(mapStateToProps, mapDispatchToProps)(MapPage);
 
 export default MapPageConnected;
+
+
+        // {this.props.isBeacon && 
+        //     <View style={styles.box3}>
+        //       <BottomChat />
+        //     </View>
+        // }
+
+        //         <View style={[styles.container]}>
+        //   {this.props.isBeacon &&
+        //     <View style={[styles.container]}>
+        //       <BottomChat />
+        //     </View>
+        //   }
+        // </View>

@@ -6,7 +6,7 @@
     "ios": "react-native run-ios",
     "bundle": "node node_modules/react-native/local-cli/cli.js start",
     "server": "nodemon index.js",
-    "test": "jest",
+    "test": "",
     "start": "node index.js",
     "redux": "remotedev-debugger --hostname localhost --port 8082 --runserver --injectserver"
   },
