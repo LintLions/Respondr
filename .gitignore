@@ -8,6 +8,10 @@ dist/
 # PRIVATES
 .env
 **/client/components/config.js
+private/
+**/*.pem
+**/*.p8
+**/*.p12
 
 # Xcode
 !**/*.xcodeproj

@@ -7,7 +7,7 @@ import styles from '../../../styles/styles';
 import HelpRequest from './HelpRequest';
 import HelpRequestAccepted from './HelpRequestAccepted';
 import HelpRequestNotNeeded from './HelpRequestNotNeeded';
-import { updateBeacon, updateUser, getHelpAgain, missionComplete } from '../../../actions/actions';
+import { updateBeacon, updateUser, getHelpAgain, missionComplete, updateRoute } from '../../../actions/actions';
 
 
 class BottomBarAngel extends Component {
