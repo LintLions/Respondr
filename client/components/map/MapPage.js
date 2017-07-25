@@ -43,7 +43,7 @@ class MapPage extends Component {
         <MapView
           // region={this.props.region}
           style={styles.map}
-          showsUserLocation
+          showsUserLocation={true}
           followsUserLocation
           showsPointsOfInterest={false}
           showsMyLocationButton
