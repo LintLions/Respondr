@@ -1,6 +1,6 @@
 'use strict';
 
-import { getHelp, cancelHelp, updateHelp, deleteSession } from '../../../actions/actions'
+import { getHelp, cancelHelp, updateHelp, deleteSession, updateRoute } from '../../../actions/actions'
 
 import { connect } from 'react-redux';
 import React, { Component } from 'react'
@@ -122,6 +122,7 @@ const mapDispatchToProps = (dispatch) => ({
   handleCancelButtonPress: (beacon) => {
     dispatch(cancelHelp());
     dispatch(deleteSession(beacon));
+    dispatch(updateRoute(null))
   },
   handleStillNeedHelp: (beacon) => {
     dispatch(deleteSession(beacon));

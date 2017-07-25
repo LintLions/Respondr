@@ -4,7 +4,7 @@ import { AsyncStorage } from 'react-native';
 import SocketIOClient from 'socket.io-client';
 import { store } from '../index';
 import { url } from './config';
-import { updateBeacon, acceptBeacon, updateUser, updateMyResponder, updateLocation } from '../actions/actions';
+import { updateBeacon, acceptBeacon, updateUser, updateMyResponder, updateLocation, updateRoute } from '../actions/actions';
 
 export const decode = (t, e) => {
   // transforms something like this geocFltrhVvDsEtA}ApSsVrDaEvAcBSYOS_@...
@@ -61,26 +61,35 @@ export const getToken =  async () => AsyncStorage.getItem('id_token');
 
 export const socket = SocketIOClient(url);
 
+
 export const startLocationUpdate = (token) => {
-  const chatroom = store.getState().myBeacon.chatRoom || store.getState().myResponder.chatRoom;
-  if (chatroom !== null) {
-    const emitLocChange = ({ coords }) => {
-      console.log(coords.latitude);
-      socket.emit('update location', chatroom, [coords.latitude, coords.longitude]);
-    };
-    navigator.geolocation.getCurrentPosition(emitLocChange, error => console.log('error watching position', error), { maximumAge: 1000 });
-  } else {
+  // console.log('looping')
+  // if (chatroom) {
+  //   console.log('in a chatroom!!')
+  //   return () => {
+  //     const emitLocChange = ({ coords }) => {
+  //     console.log('emitLocChange!: ', coords.latitude);
+  //     socket.emit('update location', chatroom, [coords.latitude, coords.longitude]);
+  //   };
+  //   navigator.geolocation.getCurrentPosition(emitLocChange, error => console.log('error watching position', error), { maximumAge: 1000 });
+  //   }
+  // } else {
     let counter = 0;
     return () => {
-      console.log(counter++);
+      // console.log(counter++);
+        const chatroom = store.getState().myBeacon.chatRoom || store.getState().myResponder.chatRoom;
+
       console.log('intervalCB looping');
       const locChange = ({ coords }) => {
-        console.log(coords.latitude);
+        // console.log(coords.latitude);
+        if (chatroom) {
+          console.log(chatroom)
+          socket.emit('update location', chatroom, [coords.latitude, coords.longitude])
+        }
         store.dispatch(updateLocation([coords.latitude, coords.longitude], token));
       };
       navigator.geolocation.getCurrentPosition(locChange, error => console.log('error watching position', error), { maximumAge: 1000 });
     };
-  }
 };
 
 socket.on('newBeacon', (currentSession) => { 
@@ -152,6 +161,7 @@ socket.on('cancelMission', () => {
     isAssigned: false,
     isCompleted: true,
   }))
+  store.dispatch(updateRoute(null))
 })
 
 socket.on('render all messages', (messages) => {
@@ -169,6 +179,7 @@ socket.on('missionComplete', () => {
   }))
 
   console.log('+++helpers.js - missionComplete - myResponder: ', store.getState().myResponder);
+  store.dispatch(updateRoute(null))
 });
 
 socket.on('update location', (chatroom, location) => {
