@@ -6,12 +6,16 @@ import { startLocationUpdate } from './helpers';
 import { getUserWithTokenAndSocket, getCurrentLocation, getResponders, updateLocation, updateIntervalID } from '../actions/actions';
 import MapPage from './map/MapPage';
 import SignUpPage from './signup/signUpPage';
+import MyProfile from './map/bottombar/MyProfile';
+import MyProfileEdit from './map/bottombar/MyProfileEdit';
 
 export const Navigator = StackNavigator({
   Home: { screen: MapPage, navigationOptions: {
     header: null },
   },
   Signup: { screen: SignUpPage },
+  Profile: { screen: MyProfile},
+  ProfileEdit: { screen: MyProfileEdit},
 });
 
 class App extends React.Component {
