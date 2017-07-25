@@ -34,9 +34,14 @@ export const animate = location => (dispatch) => {
 };
 
 export const updateBeacon = options => ({
-  type: 'UPDATE_BEACON',
+  type: 'UPDATE_MY_BEACON',
   options,
 });
+
+export const updateMyResponder = options => ({
+  type: 'UPDATE_MY_RESPONDER',
+  options,
+})
 
 export const updateUser = options => ({
   type: 'UPDATE_USER',
@@ -56,31 +61,33 @@ export const updateHelp = () => ({
   isBeacon: true,
 });
 
-export const getHelp = () => (dispatch) => {
-  const activeBeaconSocketID = store.getState().user.socket;
-  const activeBeaconLoc = store.getState().user.location;
-  console.log('+++actions.js - getHelp - activeBeaconSocketId: ', activeBeaconSocketID);
-  console.log('+++actions.js - getHelp - activeBeaconLoc: ', activeBeaconLoc);
+export const getHelp = (beacon) => (dispatch) => {
+  console.log('+++actions.js - getHelp - beacon: ', beacon);
 
-  const activeBeacon = {
-    id: activeBeaconSocketID, 
-    loc: activeBeaconLoc
-  }
-  socket.emit('getHelp', activeBeacon);
-
-  dispatch(updateHelp());
+  socket.emit('getHelp', beacon);
+  
 };
 
-export const acceptBeacon = () => (dispatch) => {
-  console.log('+++in actions.js - acceptBeacon');
-  const isBeaconTaken = store.getState().myBeacon.isAssigned;
-  const chatRoom = store.getState().myBeacon.chatRoom;
-  if(!isBeaconTaken) {
-    socket.emit('acceptBeacon', chatRoom);
-    dispatch(updateBeacon({ isAssigned: true }));
-  } else {
-    dispatch(updateBeacon({ location: null, completed: true }));
-  }
+export const getHelpAgain = (responder) => (dispatch) => {
+  console.log('+++actions.js - getHelp - responder: ', responder);
+
+  socket.emit('getHelp', responder);
+  
+  dispatch(updateBeacon({
+    UID: null,
+    location: null,
+    isAssigned: false,
+    isCompleted: false, 
+    chatRoom: null,
+    chatMessages: [],
+    region: null,
+  }))
+}
+
+export const acceptBeacon = (responder) => (dispatch) => { //  (dispatch) =>
+  console.log('+++in actions.js - acceptBeacon - responder: ', responder);
+
+  socket.emit('acceptBeacon', responder); 
 }
 
 export const getCurrentLocation = location => ({
@@ -118,6 +125,21 @@ export const cancelHelp = () => ({
   type: 'CANCEL_HELP',
   isBeacon: false,
 });
+
+export const deleteSession = (beacon) => (dispatch) => {
+  console.log('+++in actions.js - deleteSession - beacon: ', beacon);
+  
+  dispatch(updateMyResponder({
+    name: null,
+    location: null,
+    chatRoom: null,
+    chatMessages: [],
+    reAssigned: false,
+    missionComplete: false,
+  }))
+  
+  socket.emit('deleteSession', beacon);
+}
 
 export const logInSuccess = (userData) => {
   console.log('userData in logInSuccess: ', userData);
@@ -202,8 +224,7 @@ export const getUserWithTokenAndSocket = () => (dispatch) => {
       }
       // Set property on store that is the return of startLocationUpdate.
       // on log in, call clear interval with this return val, and run startLocationUpdate with new token val
-
-    })
+    });
   });
 };
 
@@ -220,11 +241,11 @@ export const drawRoute = latLong => (dispatch) => {
     : store.getState().myBeacon.location ? store.getState().myBeacon.location.join(',')
     : store.getState().myResponder.location.join(',');
   const googleUrl = `https://maps.googleapis.com/maps/api/directions/json?origin=${origin}&destination=${dest}&key=${APIKEY}&mode=${mode}`;
-  console.log('googleUrl in drawRoute is: ', googleUrl)
+  console.log('+++actions.js - drawRoute - googleUrl: ', googleUrl)
   fetch(googleUrl)
     .then(response => response.json())
     .then((responseJson) => {
-      console.log('responsein DrawRoute: ', responseJson)
+      console.log('+++actions.js - drawRoute - responseJson: ', responseJson)
       if (responseJson.routes.length) {
         dispatch(updateRoute(decode(responseJson.routes[0].overview_polyline.points)));
       }
@@ -307,6 +328,11 @@ export const getResponders = location => (dispatch) => {
     .catch(e => console.warn(e));
 };
 
+export const missionComplete = (responder) => (dispatch) => {
+  console.log('+++in actions.js - missionComplete')
+  
+  socket.emit('missionComplete', responder);
+}
 
 export const changeAvailability = available => ({
   type: 'CHANGE_AVAILABILITY',

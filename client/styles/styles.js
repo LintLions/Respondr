@@ -60,6 +60,18 @@ var styles = StyleSheet.create({
     fontWeight: 'bold',
     color: 'white',
   },
+  goodButton: {
+    height: 150,
+    width: 150, 
+    borderRadius: 75,
+    justifyContent: 'center', 
+    alignItems: 'center',
+    margin: 30,
+    
+    backgroundColor: '#48BBEC',
+    borderRadius: 75,
+    
+  },
   // =============================
   icon:{
     borderRadius:10,
