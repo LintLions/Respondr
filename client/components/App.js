@@ -1,17 +1,25 @@
-import { AsyncStorage } from 'react-native';
 import { connect } from 'react-redux';
 import React from 'react';
+import { PushNotificationIOS } from 'react-native';
 import { StackNavigator, addNavigationHelpers } from 'react-navigation';
 import { startLocationUpdate } from './helpers';
-import { getUserWithTokenAndSocket, getCurrentLocation, getResponders, updateLocation, updateIntervalID } from '../actions/actions';
+import { getUserWithTokenAndSocket, getResponders, updateLocation, updateIntervalID } from '../actions/actions';
 import MapPage from './map/MapPage';
 import SignUpPage from './signup/signUpPage';
+import MyProfile from './map/bottombar/MyProfile';
+import MyProfileEdit from './map/bottombar/MyProfileEdit';
+import PushNotification from './Push';
 
 export const Navigator = StackNavigator({
-  Home: { screen: MapPage, navigationOptions: {
-    header: null },
+  Home: {
+    screen: MapPage,
+    navigationOptions: {
+      header: null,
+    },
   },
   Signup: { screen: SignUpPage },
+  Profile: { screen: MyProfile},
+  ProfileEdit: { screen: MyProfileEdit},
 });
 
 class App extends React.Component {
@@ -23,7 +31,8 @@ class App extends React.Component {
   }
 
   componentDidMount() {
-    setInterval(() => {} ,1000);
+    PushNotificationIOS.requestPermissions();
+    setInterval(() => {}, 1000);
     this.props.getUserWithTokenAndSocket();
   }
 

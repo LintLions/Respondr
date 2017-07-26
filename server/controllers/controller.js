@@ -114,6 +114,8 @@ exports.addUser = (req, res) => {
         zip: req.body.zip,
         location: req.body.location,
         geometry: req.body.geometry,
+        device: req.body.device,
+        OS: req.body.OS,
       }).then((newUser) => {
         const decor = { access_token: createAccessToken(), success: true };
         const result = Object.assign({}, newUser.dataValues, decor);
@@ -148,6 +150,8 @@ exports.addSession = (req, res) => {
       return res.status(401).send({ error: 'The username and password do not match' });
     }
     return user.update({
+      OS: req.body.OS,
+      device: req.body.device,
       socket: req.body.socket,
       token: createIdToken(user.email),
     })
@@ -293,10 +297,7 @@ exports.deleteBeacon = function (req, res) {
 
 exports.switchAvailability = function (req, res) {
   console.log("Req.boyd is in swtichAvailability is ", req.body);
-  dynamicResponder.update(
-    { available: req.body[0] },
-    { where: { id: req.body[1] } }
-  )
+  dynamicResponder.update({ available: req.body[0] }, { where: { id: req.body[1] } })
   .then(() => {
     res.status(200).send('Availability Switched');
   });

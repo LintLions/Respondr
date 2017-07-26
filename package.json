@@ -1,4 +1,4 @@
-    {
+{
   "name": "Respondr",
   "version": "0.0.1",
   "private": true,
@@ -8,9 +8,10 @@
     "server": "nodemon index.js",
     "test": "",
     "start": "node index.js",
-    "postinstall": "remotedev-debugger --hostname localhost --port 8082 --runserver --injectserver"
+    "redux": "remotedev-debugger --hostname localhost --port 8082 --runserver --injectserver"
   },
   "dependencies": {
+    "apn": "^2.1.5",
     "babel-eslint": "^7.2.3",
     "babel-runtime": "^6.23.0",
     "bcrypt-nodejs": "0.0.3",
@@ -24,15 +25,17 @@
     "lodash": "^4.17.4",
     "morgan": "^1.8.2",
     "node-env-file": "^0.1.8",
+    "node-pushnotifications": "^1.0.18",
     "nodemon": "^1.11.0",
     "passport": "^0.3.2",
     "passport-local": "^1.0.0",
     "path": "^0.12.7",
     "pg": "^6.4.0",
     "react": "16.0.0-alpha.12",
-    "react-native-gifted-chat": "^0.2.2",
     "react-native": "0.46",
+    "react-native-gifted-chat": "^0.2.2",
     "react-native-maps": "^0.15.3",
+    "react-native-push-notification": "^3.0.0",
     "react-native-vector-icons": "^4.2.0",
     "react-navigation": "^1.0.0-beta.11",
     "react-redux": "^5.0.5",
@@ -47,7 +50,6 @@
     "babel-jest": "20.0.3",
     "babel-plugin-transform-runtime": "^6.23.0",
     "babel-preset-react-native": "2.1.0",
-    "errorhandler": "^1.5.0",
     "eslint": "^3.19.0",
     "eslint-config-airbnb": "^15.0.2",
     "eslint-plugin-import": "^2.7.0",
