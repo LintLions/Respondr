@@ -356,3 +356,22 @@ export const switchAvailability = (availability, id) => (dispatch) => {
   .catch(e => console.warn("error updating availabity ", e));
 };
 
+export const editProfile = (userData) => (dispatch) => {
+  console.log('+++actions.js - editProfile - userData: ', userData);
+
+  socket.emit('editProfile', userData);
+
+  let updatedStates = {};
+  for (var key in userData) {
+    if(userData[key] !== '' && key !== 'socket') {
+      updatedStates[key] = userData[key];
+    }
+  }
+
+  dispatch(updateResponder(updatedStates));
+}
+
+export const updateResponder = options => ({
+  type: 'UPDATE_RESPONDER',
+  options,
+});

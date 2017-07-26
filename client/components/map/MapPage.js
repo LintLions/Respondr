@@ -5,7 +5,9 @@ import {
   KeyboardAvoidingView,
   TouchableOpacity,
   Text,
+  Button
 } from 'react-native';
+import { StackNavigator } from 'react-navigation';
 import MapView from 'react-native-maps';
 import TopBar from './topbar/topBar';
 import BottomNav from './bottombar/BottomNav';
@@ -40,6 +42,7 @@ class MapPage extends Component {
   }
 
   render() {
+    const { navigate } = this.props.navigation;
     return (
       <View style={styles.container}>
         <MapView
@@ -111,9 +114,17 @@ class MapPage extends Component {
             <Text>Animate</Text>
           </TouchableOpacity>
           {this.props.isLoggedIn &&
+            <View>  
             <AngelStatusIcon
               // switchIsOn={this.state.switchIsOn} handleSwitchIsOn={this.handleSwitchIsOn}
             />
+            <Button
+              title="My Profile"
+              onPress={() =>
+                navigate('Profile')
+              }
+            />
+            </View>
           }
         </View>
         <View>

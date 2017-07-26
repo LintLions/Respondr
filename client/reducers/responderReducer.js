@@ -20,10 +20,8 @@ const initState = {
 
 const responderReducer = (state = initState, action) => {
   switch (action.type) {
-    // case 'GET_HELP':
-    //   return { ...state, isBeacon:true };
-    // case 'CANCEL_HELP':
-    //   return { ...state, isBeacon:false };
+    case 'UPDATE_RESPONDER': 
+      return { ...state, ...action.options}
     case 'CHANGE_AVAILABILITY':
       return { ...state,
         available: action.available,
