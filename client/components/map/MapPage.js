@@ -11,10 +11,8 @@ import { StackNavigator } from 'react-navigation';
 import MapView from 'react-native-maps';
 import TopBar from './topbar/topBar';
 import BottomNav from './bottombar/BottomNav';
-import BottomChat from './bottombar/BottomChat';
 import HelpButton from './bottombar/helpButton';
 import AngelStatusIcon from './bottombar/AngelStatusIcon';
-import Chat from './bottombar/Chat';
 import styles from '../../styles/styles';
 import { animate } from '../../actions/actions';
 
@@ -22,6 +20,25 @@ import { animate } from '../../actions/actions';
 class MapPage extends Component {
   constructor(props) {
     super(props);
+    this.state = {
+      markers: {},
+    };
+  }
+
+  componentWillReceiveProps(nextProps) {
+    for (let i = 0; i < nextProps.responders.length; i++) {
+      const id = nextProps.responders[i].id;
+      if (this.state.markers[id] !== undefined) {
+        if (this.state.markers[id].coordinates.latitude._value !== nextProps.responders[i].currentLocation[0] || this.state.markers[id].coordinates.longitude._value !== nextProps.responders[i].currentLocation[1]) {
+          console.log("this.state.markers[id].coordinates.latitude._value ", this.state.markers[id].coordinates.latitude._value);
+          console.log("nextProps.responders[i].currentLocation[0]", nextProps.responders[i].currentLocation[0]);
+          this.state.markers[id].coordinates.timing({
+            ...nextProps.responders[i].currentLocation,
+            duration: 500,
+          }).start();
+        }
+      }
+    }
   }
 
   render() {
@@ -31,29 +48,36 @@ class MapPage extends Component {
         <MapView
           // region={this.props.region}
           style={styles.map}
-          showsUserLocation
+          showsUserLocation={true}
           followsUserLocation
           showsPointsOfInterest={false}
           showsMyLocationButton
           showsBuildings
         >
-        
           {this.props.responders && this.props.responders.map((marker) => {
-            const coordinates = {
-              latitude: marker.currentLocation[0],
-              longitude: marker.currentLocation[1],
-            };
-            if (marker.mobility === 1) {      
+            if (marker.mobility === 1) {
+              const newMarker = {
+                id: marker.id,
+                coordinates: new MapView.AnimatedRegion({
+                  latitude: marker.currentLocation[0],
+                  longitude: marker.currentLocation[1],
+                }),
+              };
+              this.state.markers[marker.id] = newMarker;
               return (
-                <MapView.Marker
+                <MapView.Marker.Animated
                   key={marker.id}
-                  coordinate={coordinates}
+                  coordinate={this.state.markers[marker.id].coordinates}
                   title={marker.fullName}
                   description={marker.organization}
                   image={require('../../styles/assets/wings.png')}
                 />
               );
             }
+            const coordinates = {
+              latitude: marker.currentLocation[0],
+              longitude: marker.currentLocation[1],
+            };
             return (
               <MapView.Marker
                 key={marker.id}
@@ -113,9 +137,6 @@ class MapPage extends Component {
             <BottomNav />
           }
         </View>
-
-
-
       </View>
     );
   }
@@ -133,9 +154,10 @@ const mapStateToProps = state => ({
   isAssigned: state.myBeacon.isAssigned,
   // beaconChatRoom: state.myBeacon.chatRoom,
 });
+
 const mapDispatchToProps = dispatch => ({
   animate: (location) => {
-    dispatch(animate(location)); //setTimeout && animate w/ component will receive props?
+    dispatch(animate(location));
   },
 });
 const MapPageConnected = connect(mapStateToProps, mapDispatchToProps)(MapPage);

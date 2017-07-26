@@ -193,7 +193,6 @@ const mapStateToProps = (state) => ({
 const mapDispatchToProps = (dispatch) => ({
   handleEdit: (userData) => {
     dispatch(editProfile(userData));
-    // dispatch(updateState(userData));
   },
   goHome: () => {
     dispatch(NavigationActions.navigate({ routeName: 'Home' }));

@@ -2,8 +2,8 @@ const app = require('../../index.js');
 const server = require('http').createServer(app);
 const socketio = require('socket.io');
 const db = require('../db/db');
-const radius = 3000;
 
+const radius = 3000;
 const dynamicResponder = require('../db/models/dynamicResponders');
 const beacon = require('../db/models/beacons');
 
@@ -47,10 +47,10 @@ websocket.on('connection', (socket) => {
 
   socket.on('update location', (chatroom, location) => {
     const activeBeaconSession = activeBeaconSessions[chatroom];
-
-    socket.to(activeBeaconSession.beacon).emit('update location', chatroom, location);
-    socket.to(activeBeaconSession.responder).emit('update location', chatroom, location);
-
+    if (activeBeaconSession) {
+      socket.to(activeBeaconSession.beacon).emit('update location', chatroom, location);
+      socket.to(activeBeaconSession.responder).emit('update location', chatroom, location);
+    }
   });
 
   socket.on('disconnect', () => {
@@ -187,9 +187,10 @@ websocket.on('connection', (socket) => {
   })
 
   socket.on('new message', (eachMessage) => {
-    console.log('+++in socket.js - new message - message: ', eachMessage.message);
+    console.log('+++in socket.js - activeBeaconSession: ', eachMessage.chatMessages[0]);
+
     const activeBeaconSession = activeBeaconSessions[eachMessage.chatRoom];
-    activeBeaconSession.chatMessages.unshift(eachMessage);
+    activeBeaconSession.chatMessages.unshift(eachMessage.chatMessages[0]);
     console.log('+++in socket.js - PUSH - messages: ', activeBeaconSession.chatMessages);
     websocket.to(activeBeaconSession.beacon).emit('render all messages', activeBeaconSession.chatMessages);
     websocket.to(activeBeaconSession.responder).emit('render all messages', activeBeaconSession.chatMessages);
