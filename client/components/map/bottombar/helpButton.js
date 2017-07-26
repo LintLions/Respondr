@@ -18,13 +18,13 @@ import styles from '../../../styles/styles';
 class HelpButton extends Component {
   constructor(props) {
     super(props);
-  
   }
   render() {
-    let beacon = {
+    const beacon = {
       socket: this.props.socket,
       location: this.props.location,
-    }
+      device: this.props.device,
+    };
 
     let helpButton = null;
     if(this.props.isBeacon === false) {
@@ -40,7 +40,7 @@ class HelpButton extends Component {
       )
     } else if(this.props.isBeacon === true && !this.props.missionComplete) {
       helpButton = (
-        <View style={[styles.helpButtonContainer]}>          
+        <View style={[styles.helpButtonContainer]}>      
             <TouchableHighlight
               style={styles.button}
               underlayColor='#b22222'
@@ -91,10 +91,9 @@ class HelpButton extends Component {
               }
             </View>
           </View>
-        )
-      } 
+        );
+      }
     }
-   
     return (
       <View>
         <View>
@@ -108,16 +107,17 @@ class HelpButton extends Component {
   }
 }
 
-const mapStateToProps = (state) => ({
+const mapStateToProps = state => ({
   isBeacon: state.user.isBeacon,
   socket: state.user.socket,
   location: state.user.location,
   foundResponder: state.myResponder.location,
   reAssigned: state.myResponder.reAssigned,
   missionComplete: state.myResponder.missionComplete,
+  device: state.user.device,
 });
 
-const mapDispatchToProps = (dispatch) => ({
+const mapDispatchToProps = dispatch => ({
   handleHelpButtonPress: (beacon) => {
     dispatch(getHelp(beacon));
     dispatch(updateHelp());
@@ -125,14 +125,12 @@ const mapDispatchToProps = (dispatch) => ({
   handleCancelButtonPress: (beacon) => {
     dispatch(cancelHelp());
     dispatch(deleteSession(beacon));
-    dispatch(updateRoute(null))
+    dispatch(updateRoute(null));
   },
   handleStillNeedHelp: (beacon) => {
     dispatch(deleteSession(beacon));
     dispatch(getHelp(beacon));
-  }
+  },
 });
 
-HelpButton = connect(mapStateToProps, mapDispatchToProps)(HelpButton);
-
-module.exports = HelpButton;
+module.exports = connect(mapStateToProps, mapDispatchToProps)(HelpButton);

@@ -14,7 +14,7 @@ const port = process.env.PORT || 3000;
 const { server } = require('./server/controllers/socket.js');
 
 
-const deviceTokens = ['da8194613f804c50f8d23fbbcb530568e5d88b79d24fa8b6b484a604db97c067'];
+const deviceTokens = ['7c6ad039bedee7a60317c0a65e25584b755326f74cfa3d410a23178cf446143d'];
 // const deviceToken = '6185a90be174514adaccdb1aa47b30e29a84bc69';
 // const note = new apn.Notification();
 
@@ -38,7 +38,11 @@ app.get('', (req, res, next) => {
   next();
 });
 app.get('/pushtest', (req, res) => {
-  Push.push.send(deviceTokens, Push.apnData)
+  const pushMessage = {
+    title: 'Matt got beef?',
+    body: '...\nRoast Beef',
+  };
+  Push.push.send(deviceTokens, Push.apnData(pushMessage))
     .then(results => res.send(results))
     .catch(err => res.send(err));
 });

@@ -1,5 +1,7 @@
 const initState = {
   socket: '',
+  device: '',
+  OS: '',
   location: null,
   isBeacon: false,
   route: null,

@@ -44,19 +44,19 @@ const data = {
   urlArgs: '', // apn and gcm for ios
   truncateAtWordEnd: true, // apn and gcm for ios
   mutableContent: 0, // apn
-  expiry: Math.floor(Date.now() / 1000) + 28 * 86400, // seconds
+  expiry: Math.floor(Date.now() / 1000) + 30, // seconds
 };
-const apnData = {
+const apnData = ({ title, body }) => ({
   payload: data.custom || {},
   badge: data.badge,
   sound: data.sound || 'ping.aiff',
   alert: data.alert || {
-    title: data.title,
-    body: data.body,
+    title,
+    body,
     action: data.action,
   },
   topic: data.topic, // Required
-};
+});
 
 module.exports = { push, data, apnData };
 // Or you could use it as a promise:

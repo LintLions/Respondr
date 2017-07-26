@@ -34,6 +34,8 @@ class SignUpPage extends Component {
     super(props);
     this.state = {
       socket: this.props.socket,
+      device: this.props.device,
+      OS: this.props.OS,
       email: '',
       firstName: '',
       lastName: '',
@@ -148,6 +150,8 @@ class SignUpPage extends Component {
 const mapStatetoProps = state => ({
   nav: state.nav,
   socket: state.user.socket,
+  device: state.user.device,
+  OS: state.user.OS,
 });
 const mapDispatchToProps = dispatch => ({
   handleSignUp: (userData) => {
