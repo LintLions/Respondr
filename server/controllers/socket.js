@@ -72,7 +72,7 @@ websocket.on('connection', (socket) => {
     console.log('+++socket.js - getHelp (server rcvd help request) - beacon: ', beacon); 
     
     let currentSession = {};
-    let currentLocation;
+    let currentLocation = [];
 
     if(beacon.UID) { 
       currentSession = activeBeaconSessions[beacon.UID];
@@ -89,9 +89,13 @@ websocket.on('connection', (socket) => {
       currentLocation = [currentSession.beaconLocation[0], currentSession.beaconLocation[1]];
     } else { 
       currentSession = new ActiveBeaconSession(UID, beacon.socket, beacon.location); 
+
+      // currentLocation = [beacon.location[0], beacon.location[1]];
+      currentLocation[0] = currentSession.beaconLocation[0];
+      currentLocation[1] = currentSession.beaconLocation[1];
+
       activeBeaconSessions[UID++] = currentSession; 
-      console.log('+++socket.js - getHelp - currentSession(NEW): ', currentSession);
-      currentLocation = [beacon.location[0], beacon.location[1]];
+      console.log('+++socket.js - getHelp - currentSession(NEW): ', currentSession);      
     }
 
     db
@@ -185,9 +189,10 @@ websocket.on('connection', (socket) => {
   })
 
   socket.on('new message', (eachMessage) => {
-    console.log('+++in socket.js - new message - message: ', eachMessage.message);
+    console.log('+++in socket.js - activeBeaconSession: ', eachMessage.chatMessages[0]);
+
     const activeBeaconSession = activeBeaconSessions[eachMessage.chatRoom];
-    activeBeaconSession.chatMessages.unshift(eachMessage);
+    activeBeaconSession.chatMessages.unshift(eachMessage.chatMessages[0]);
     console.log('+++in socket.js - PUSH - messages: ', activeBeaconSession.chatMessages);
     websocket.to(activeBeaconSession.beacon).emit('render all messages', activeBeaconSession.chatMessages);
     websocket.to(activeBeaconSession.responder).emit('render all messages', activeBeaconSession.chatMessages);
@@ -207,6 +212,87 @@ websocket.on('connection', (socket) => {
     socket.emit('render all messages', activeBeaconSession.messages);
   });
 
+  socket.on('editProfile', (userData) => {
+    console.log('+++socket.js - editProfile - userData: ', userData)
+
+    dynamicResponder.findOne({where: {socket: userData.socket}, })
+      .then((responder) => {
+        console.log('+++socket.js - editProfile - findOne responder?: ', responder)
+        for (var key in userData) {
+          if(userData[key] !== '' && key !== 'socket') {
+            console.log('+++socket.js - editProfile - userData[key]: ', key, userData[key])
+            responder[key] = userData[key]
+            responder.save()
+            .then((updatedResponder) => {
+              console.log('+++socket.js - editProfile - updatedResponder: ', updatedResponder)
+            })         
+          } 
+        }        
+      }
+      )    
+    
+    // dynamicResponder.findOne({where: {socket: userData.socket}, })
+    //   .then((responder) => {
+    //     console.log('+++socket.js - editProfile - findOne responder?: ', responder)
+    //     for (var key in userData) {
+    //       if(userData[key] !== '' && key !== 'socket') {
+    //         console.log('+++socket.js - editProfile - userData[key]: ', key, userData[key])
+    //         responder.update({
+    //           key: userData[key]
+    //         }).then((updatedResponder) => {
+    //           console.log('+++socket.js - editProfile - updatedResponder: ', updatedResponder)
+    //         })         
+    //       } 
+    //     }        
+    //   }
+    //   )
+
+    // for (var key in userData) {
+    //   if(userData[key] !== '' && key !== 'socket') {
+    //     console.log('+++socket.js - editProfile - userData[key]: ', key, userData[key])
+    //     dynamicResponder.update({
+    //       key: userData[key],
+    //     }, {
+    //       where: {socket: userData.socket},
+    //       returning: true,
+    //       plain: true
+    //     }).then((updatedResponder) => {
+    //       console.log('+++socket.js - editProfile - updatedResponder: ', updatedResponder)
+    //     })         
+    //   } 
+    // }
+
+    // dynamicResponder.update({
+    //   organization: userData.organization,
+    // }, {
+    //   where: {socket: userData.socket},
+    //   returning: true,
+    //   plain: true
+    // }).then((updatedResponder) => {
+    //   console.log('+++socket.js - editProfile - updatedResponder: ', updatedResponder)
+    // }) 
+  });
+
+  //   dynamicResponder.findAll()
+  //   .then((responders) => {
+  //     if (Array.isArray(responders)) {
+  //       responders.forEach((responder) => {                    
+  //         if(responder.socket === userData.socket) {  
+  //           console.log('+++socket.js - editProfile - responder: ', responder);
+  //           // websocket.to(responder.socket).emit('cancelMission');
+  //         }
+  //       });
+  //     } else if (responders) {
+  //       console.log(responders.id);
+  //       if(responder.socket === userData.socket) {  
+  //         console.log('+++socket.js - editProfile - responder: ', responder);
+  //         // websocket.to(responders.socket).emit('cancelMission');
+  //       }
+  //     } else {
+  //       console.log('no responder for gethelp');
+  //     }
+  //   }); 
+  // })
 });
 
 module.exports = {
