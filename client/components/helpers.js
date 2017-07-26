@@ -4,9 +4,9 @@ import { AsyncStorage } from 'react-native';
 import SocketIOClient from 'socket.io-client';
 import { store } from '../index';
 import { url } from './config';
-import { updateBeacon, acceptBeacon, updateUser, updateMyResponder, updateLocation, updateRoute } from '../actions/actions';
+import { updateBeacon, logInSuccess, updateUser, updateMyResponder, updateLocation, updateRoute } from '../actions/actions';
 
-export const updateToken =  async (value) => {
+export const updateToken = async (value) => {
   try {
     await AsyncStorage.setItem('id_token', value);
   } catch (error) {
@@ -14,7 +14,7 @@ export const updateToken =  async (value) => {
   }
 };
 
-export const getToken =  async () => AsyncStorage.getItem('id_token');
+export const getToken = async () => AsyncStorage.getItem('id_token');
 
 export const startLocationUpdate = (token) => {
   // console.log('looping')
@@ -49,6 +49,18 @@ export const startLocationUpdate = (token) => {
 // SOCKET ----------------------
 
 export const socket = SocketIOClient(url);
+socket.on('updateUser', (data) => {
+  console.log('socket.on updateUser in actions.js is ', data);
+  if (data.email) {
+    store.dispatch(updateUser({ socket: data.socket }));
+    store.dispatch(logInSuccess(data));
+  } else {
+    console.log(data);
+    store.dispatch(updateUser(data)); // {socket: ________}
+  }
+  // Set property on store that is the return of startLocationUpdate.
+  // on log in, call clear interval with this return val, and run startLocationUpdate with new token val
+});
 socket.on('newBeacon', (currentSession) => { 
   console.log('+++helpers.js - newBeacon - currentSession: ', currentSession);
   store.dispatch(updateBeacon({

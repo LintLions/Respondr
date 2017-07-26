@@ -150,11 +150,13 @@ export const logInSuccess = (userData) => {
 };
 
 export const logIn = (options) => {
-  const socketID = store.getState().user.socket;
+  const user = store.getState().user;
   const body = JSON.stringify({
     email: options.email,
     password: options.password,
-    socket: socketID,
+    socket: user.socket,
+    device: user.device,
+    OS: user.OS,
   });
   return (dispatch) => {
     fetch(`${url}/users/sessions/create`, {
@@ -205,6 +207,7 @@ export const updateIntervalID = intervalID => ({
 
 export const getUserWithTokenAndSocket = () => (dispatch) => {
   AsyncStorage.getItem('id_token', (err, value) => {
+    const user = store.getState().user;
     if (err) {
       console.error('error getting session from phone storage ', err);
     }

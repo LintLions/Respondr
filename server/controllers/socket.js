@@ -37,7 +37,9 @@ websocket.on('connection', (socket) => {
     dynamicResponder.find({ where: options.query })
       .then((responder) => {
         if (responder) {
-          responder.update({ socket: socket.id })
+          const updateOptions = { socket: socket.id };
+          Object.assign(updateOptions, options.update);
+          responder.update(updateOptions)
             .then(updatedResponder => socket.emit('updateUser', updatedResponder));
         } else {
           socket.emit('updateUser', { socket: socket.id });
