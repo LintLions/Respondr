@@ -27,13 +27,27 @@ class MyProfile extends Component {
 
     const { navigate } = this.props.navigation;
     
+    let privacy;
+    if(this.props.privacy) {
+      privacy = 'private';
+    } else {
+      privacy = 'public';
+    }
+    
+    let mobility;
+    if(this.props.mobility === 1) {
+      mobility = 'dynamic individual';
+    } else {
+      mobility = 'static storefront';
+    }
+    
     return (
       <View style={[styles.container]}>     
-        <Text style={styles.prompt}>{this.props.fullName}</Text>
+        <Text style={styles.prompt}>{this.props.firstName} {this.props.lastName}</Text>
         <Text style={styles.prompt}>organization: {this.props.organization}</Text>
-        <Text style={styles.prompt}>email: {this.props.email}</Text>
         <Text style={styles.prompt}>phone: {this.props.phone}</Text>
-        <Text style={styles.prompt}>city: {this.props.city}</Text>
+        <Text style={styles.prompt}>email: {this.props.email}</Text>
+        <Text style={styles.prompt}>privacy setting: {privacy}</Text>
         <Button
           title="Edit Profile"
           onPress={() =>
@@ -46,11 +60,16 @@ class MyProfile extends Component {
 }
 
 const mapStateToProps = (state) => ({
-  fullName: state.responder.fullName,
+  firstName: state.responder.firstName,
+  lastName: state.responder.lastName,
+
   organization: state.responder.organization,
-  email: state.responder.email,
   phone: state.responder.phone,
-  city: state.responder.city,
+  email: state.responder.email,
+  
+  privacy: state.responder.privacy,
+
+  socket: state.user.socket,
 });
 
 const mapDispatchToProps = (dispatch) => ({

@@ -141,18 +141,3 @@ const mapDispatchToProps = dispatch => ({
 const MapPageConnected = connect(mapStateToProps, mapDispatchToProps)(MapPage);
 
 export default MapPageConnected;
-
-
-        // {this.props.isBeacon && 
-        //     <View style={styles.box3}>
-        //       <BottomChat />
-        //     </View>
-        // }
-
-        //         <View style={[styles.container]}>
-        //   {this.props.isBeacon &&
-        //     <View style={[styles.container]}>
-        //       <BottomChat />
-        //     </View>
-        //   }
-        // </View>
