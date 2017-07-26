@@ -65,7 +65,6 @@ export const getHelp = (beacon) => (dispatch) => {
   console.log('+++actions.js - getHelp - beacon: ', beacon);
 
   socket.emit('getHelp', beacon);
-  
 };
 
 export const getHelpAgain = (responder) => (dispatch) => {
@@ -207,7 +206,6 @@ export const updateIntervalID = intervalID => ({
 
 export const getUserWithTokenAndSocket = () => (dispatch) => {
   AsyncStorage.getItem('id_token', (err, value) => {
-    const user = store.getState().user;
     if (err) {
       console.error('error getting session from phone storage ', err);
     }
@@ -215,18 +213,6 @@ export const getUserWithTokenAndSocket = () => (dispatch) => {
       query: {
         token: value,
       },
-    });
-    socket.on('updateUser', (data) => {
-      console.log('socket.on updateUser in actions.js is ', data);
-      if (data.email) {
-        dispatch(updateUser({ socket: data.socket }));
-        dispatch(logInSuccess(data));
-      } else {
-        console.log(data);
-        dispatch(updateUser(data)); // {socket: ________}
-      }
-      // Set property on store that is the return of startLocationUpdate.
-      // on log in, call clear interval with this return val, and run startLocationUpdate with new token val
     });
   });
 };

@@ -2,6 +2,7 @@ const app = require('../../index.js');
 const server = require('http').createServer(app);
 const socketio = require('socket.io');
 const db = require('../db/db');
+const Push = require('./push');
 
 const radius = 3000;
 const dynamicResponder = require('../db/models/dynamicResponders');
@@ -12,7 +13,7 @@ const websocket = socketio(server);
 let UID = 1; // unique ID for each activeBeaconSession
 
 class ActiveBeaconSession {
-  constructor(UID, socket, location) {
+  constructor({ socket, location, device }) {
     this.chatRoom = UID;
     this.chatMessages = [];
     this.beacon = socket;
@@ -21,6 +22,8 @@ class ActiveBeaconSession {
     this.responderName = null;
     this.responderLocation = [];
     this.blacklist = [];
+    this.beaconDevice = device;
+    this.responderDevice = null;
   }
 }
 
@@ -84,11 +87,12 @@ websocket.on('connection', (socket) => {
       
       // to update beacon after mission canceled
       websocket.to(currentSession.beacon).emit('updateBeacon', currentSession);
+      // TODO PUSH matching info
       console.log('+++socket.js - getHelp - currentSession.beacon(CANCELED): ', currentSession.beacon);
 
       currentLocation = [currentSession.beaconLocation[0], currentSession.beaconLocation[1]];
-    } else { 
-      currentSession = new ActiveBeaconSession(UID, beacon.socket, beacon.location); 
+    } else {
+      currentSession = new ActiveBeaconSession(beacon);
 
       // currentLocation = [beacon.location[0], beacon.location[1]];
       currentLocation[0] = currentSession.beaconLocation[0];
@@ -99,25 +103,33 @@ websocket.on('connection', (socket) => {
     }
 
     db
-    .query(`select "socket", st_distance_sphere(geometry, ST_MakePoint(${currentLocation[0]}, ${currentLocation[1]})) from "dynamicResponders" WHERE ST_DWithin(geometry, ST_MakePoint(${currentLocation[0]}, ${currentLocation[1]})::geography, ${radius}) AND available = TRUE ORDER BY geometry <-> 'Point(${currentLocation[0]} ${currentLocation[1]})'::geometry`)
+    .query(`select "socket", "device", st_distance_sphere(geometry, ST_MakePoint(${currentLocation[0]}, ${currentLocation[1]})) from "dynamicResponders" WHERE ST_DWithin(geometry, ST_MakePoint(${currentLocation[0]}, ${currentLocation[1]})::geography, ${radius}) AND available = TRUE ORDER BY geometry <-> 'Point(${currentLocation[0]} ${currentLocation[1]})'::geometry`)
     .then((responders) => {
-      console.log("responders are ", responders);
-        if (Array.isArray(responders[0])) {
-          responders[0].forEach((responder) => {
-            console.log('+++responder.socket: ', responder.socket);
-            if (responder.socket !== currentSession.beacon && currentSession.blacklist.indexOf(responder.socket) === -1) { // OR responder.socket !== activeBeacon.id ???
-              socket.to(responder.socket).emit('newBeacon', currentSession);
-            }
-          });
-        } else if (responders) {
-          console.log(responders.id);
-          if(responder.socket !== currentSession.beacon && currentSession.blacklist.indexOf(responder.socket) === -1) {  
-            socket.to(responders.socket).emit('newBeacon', currentSession);
+      console.log('responders are ', responders);
+      const pushMessage = {
+        title: 'Someone Needs Help',
+        body: 'Touch here to open the app for more info',
+      };
+      if (Array.isArray(responders[0])) {
+        responders[0].forEach((responder) => {
+          console.log('+++responder.socket: ', responder.socket);
+          if (responder.socket !== currentSession.beacon && currentSession.blacklist.indexOf(responder.socket) === -1) {
+            Push.push.send(responder.device, Push.apnData(pushMessage))
+              .catch(err => console.error(err));
+            socket.to(responder.socket).emit('newBeacon', currentSession);
           }
-        } else {
-          console.log('no responder for gethelp');
+        });
+      } else if (responders) {
+        console.log(responders.id);
+        if (responders[0].socket !== currentSession.beacon && currentSession.blacklist.indexOf(responders[0].socket) === -1) {
+          Push.push.send(responders[0].device, Push.apnData(pushMessage))
+            .catch(err => console.error(err));
+          socket.to(responders.socket).emit('newBeacon', currentSession);
         }
-      });
+      } else {
+        console.log('no responder for gethelp');
+      }
+    });
   });
 
   socket.on('acceptBeacon', (responder) => {
