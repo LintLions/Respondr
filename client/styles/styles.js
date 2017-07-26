@@ -4,6 +4,19 @@ import { StyleSheet } from 'react-native';
 */
 
 var styles = StyleSheet.create({
+  ring: {
+    width: 100,
+    height: 100,
+    borderRadius: 50,
+    backgroundColor: "rgba(180,4,4,0.5)",
+    position: "absolute",
+    borderWidth: 1,
+    borderColor: "rgba(180,4,4,0.5)",
+  },
+  markerWrap: {
+    alignItems: "center",
+    justifyContent: "center",
+  },
   map: {
     ...StyleSheet.absoluteFillObject
   },

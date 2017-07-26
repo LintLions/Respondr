@@ -5,6 +5,9 @@ import {
   KeyboardAvoidingView,
   TouchableOpacity,
   Text,
+  Animated,
+  Image,
+  Easing,
 } from 'react-native';
 import MapView from 'react-native-maps';
 import TopBar from './topbar/topBar';
@@ -13,17 +16,21 @@ import HelpButton from './bottombar/helpButton';
 import AngelStatusIcon from './bottombar/AngelStatusIcon';
 import styles from '../../styles/styles';
 import { animate } from '../../actions/actions';
+import heart from '../../styles/assets/heart.png'
 
 
 class MapPage extends Component {
   constructor(props) {
     super(props);
+    this.animatedValue = new Animated.Value(0);
+    this.springValue = new Animated.Value(0.3);
     this.state = {
       markers: {},
     };
   }
-
+  
   componentWillReceiveProps(nextProps) {
+    //animate dynamicResponders
     for (let i = 0; i < nextProps.responders.length; i++) {
       const id = nextProps.responders[i].id;
       if (this.state.markers[id] !== undefined) {
@@ -35,6 +42,21 @@ class MapPage extends Component {
         }
       }
     }
+    //animate beacon marker
+  }
+  spring() {
+    //sproing effect on heart icon
+    this.springValue.setValue(0.3);
+    Animated.spring(
+      this.springValue,
+      {
+        toValue: 1,
+        friction: 1,
+        tension: 1,
+      },
+    ).start(() => this.spring());
+
+    //
   }
 
   render() {
@@ -86,12 +108,19 @@ class MapPage extends Component {
 
           {this.props.beaconLocation
             ? <MapView.Marker
-              coordinate={{
-                latitude: this.props.beaconLocation[0],
-                longitude: this.props.beaconLocation[1],
-              }}
-              image={require('../../styles/assets/heart.png')}
-            />
+                coordinate={{
+                  latitude: this.props.beaconLocation[0],
+                  longitude: this.props.beaconLocation[1],
+                }}>
+                <Animated.View style={styles.markerWrap}> 
+                  <Animated.View style={styles.ring} />
+                    <Animated.Image
+                      onLoad={this.spring.bind(this)}
+                      style={{ transform: [{scale: this.springValue}] }}
+                      source={heart}
+                    />  
+                </Animated.View>
+              </MapView.Marker>
             : null
           }
           <MapView.Polyline
