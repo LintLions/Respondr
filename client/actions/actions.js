@@ -65,7 +65,6 @@ export const getHelp = (beacon) => (dispatch) => {
   console.log('+++actions.js - getHelp - beacon: ', beacon);
 
   socket.emit('getHelp', beacon);
-  
 };
 
 export const getHelpAgain = (responder) => (dispatch) => {
@@ -150,11 +149,13 @@ export const logInSuccess = (userData) => {
 };
 
 export const logIn = (options) => {
-  const socketID = store.getState().user.socket;
+  const user = store.getState().user;
   const body = JSON.stringify({
     email: options.email,
     password: options.password,
-    socket: socketID,
+    socket: user.socket,
+    device: user.device,
+    OS: user.OS,
   });
   return (dispatch) => {
     fetch(`${url}/users/sessions/create`, {
@@ -212,18 +213,6 @@ export const getUserWithTokenAndSocket = () => (dispatch) => {
       query: {
         token: value,
       },
-    });
-    socket.on('updateUser', (data) => {
-      console.log('socket.on updateUser in actions.js is ', data);
-      if (data.email) {
-        dispatch(updateUser({ socket: data.socket }));
-        dispatch(logInSuccess(data));
-      } else {
-        console.log(data);
-        dispatch(updateUser(data)); // {socket: ________}
-      }
-      // Set property on store that is the return of startLocationUpdate.
-      // on log in, call clear interval with this return val, and run startLocationUpdate with new token val
     });
   });
 };

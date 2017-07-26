@@ -1,10 +1,32 @@
 import PushNotification from 'react-native-push-notification';
+import { AsyncStorage } from 'react-native';
+import { store } from '../index';
+import { socket } from './helpers';
+import { updateUser } from '../actions/actions';
 
 PushNotification.configure({
 
   // (optional) Called when Token is generated (iOS and Android)
-  onRegister: (token) => {
-    console.log('TOKEN:', token);
+  onRegister: (tokenInfo) => {
+    console.log('TOKEN:', tokenInfo);
+    store.dispatch(updateUser({
+      device: tokenInfo.token,
+      OS: tokenInfo.os,
+    }));
+    AsyncStorage.getItem('id_token', (err, value) => {
+      if (err) {
+        console.error('error getting session from phone storage ', err);
+      }
+      socket.emit('updateUser', {
+        query: {
+          token: value,
+        },
+        update: {
+          device: tokenInfo.token,
+          OS: tokenInfo.os,
+        },
+      });
+    });
   },
 
   // (required) Called when a remote or local notification is opened or received
