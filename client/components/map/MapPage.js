@@ -2,15 +2,12 @@ import { connect } from 'react-redux';
 import React, { Component } from 'react';
 import {
   View,
-  KeyboardAvoidingView,
   TouchableOpacity,
   Text,
   Animated,
-  Image,
   Easing,
   Button,
 } from 'react-native';
-import { StackNavigator } from 'react-navigation';
 import MapView from 'react-native-maps';
 import TopBar from './topbar/topBar';
 import BottomNav from './bottombar/BottomNav';
@@ -18,19 +15,19 @@ import HelpButton from './bottombar/helpButton';
 import AngelStatusIcon from './bottombar/AngelStatusIcon';
 import styles from '../../styles/styles';
 import { animate } from '../../actions/actions';
-import heart from '../../styles/assets/heart.png'
+import heart from '../../styles/assets/heart.png';
 
 
 class MapPage extends Component {
   constructor(props) {
     super(props);
     this.animatedValue = new Animated.Value(0);
-    this.springValue = new Animated.Value(0.3);
+    this.scaleValue = new Animated.Value(0);
     this.state = {
       markers: {},
     };
   }
-  
+
   componentWillReceiveProps(nextProps) {
     //animate dynamicResponders
     for (let i = 0; i < nextProps.responders.length; i++) {
@@ -46,19 +43,17 @@ class MapPage extends Component {
     }
     //animate beacon marker
   }
-  spring() {
-    //sproing effect on heart icon
-    this.springValue.setValue(0.3);
-    Animated.spring(
-      this.springValue,
+  beat() {
+    //heartbeat effect on heart icon
+    this.scaleValue.setValue(0);
+    Animated.timing(
+      this.scaleValue,
       {
         toValue: 1,
-        friction: 1,
-        tension: 1,
+        duration: 1500,
+        easing: Easing.easeInOutBack,
       },
-    ).start(() => this.spring());
-
-    //
+    ).start(() => this.beat());
   }
 
   render() {
@@ -69,10 +64,8 @@ class MapPage extends Component {
           // region={this.props.region}
           style={styles.map}
           showsUserLocation={true}
-          followsUserLocation
           showsPointsOfInterest={false}
           showsMyLocationButton
-          showsBuildings
         >
           {this.props.responders && this.props.responders.map((marker) => {
             if (marker.mobility === 1) {
@@ -108,22 +101,43 @@ class MapPage extends Component {
               />
             );
           })}
+          {//if you are the beacon
 
+          }
+          {
+            this.props.isBeacon ?
+              <MapView.Marker
+                coordinate={{
+                    latitude: this.props.beaconLocation[0],
+                    longitude: this.props.beaconLocation[1],
+                }}>
+                <Animated.View style={styles.markerWrap}>
+                   <Animated.View style={styles.ring}/>
+                </Animated.View>
+              </MapView.Marker>
+              : null  
+          }
           {this.props.beaconLocation
             ? <MapView.Marker
                 coordinate={{
                   latitude: this.props.beaconLocation[0],
                   longitude: this.props.beaconLocation[1],
                 }}>
-                <Animated.View style={styles.markerWrap}> 
-                  <Animated.View style={styles.ring} />
-                    <Animated.Image
-                      onLoad={this.spring.bind(this)}
-                      style={{ transform: [{scale: this.springValue}] }}
-                      source={heart}
-                    />  
-                </Animated.View>
-              </MapView.Marker>
+              <Animated.View style={styles.markerWrap}>
+                  <Animated.Image
+                    onLoad={this.beat.bind(this)}
+                    style={{
+                      transform: [{scale: this.scaleValue.interpolate({
+                        inputRange: [0, .125, .25, .375, .5, .626, .75, .875, 1],
+                        outputRange: [1, .97, .9, 1.1, .9, 1.1, 1.03, 1.02, 1],
+                      }),
+                      },
+                      ],
+                    }}
+                    source={heart}
+                  />
+              </Animated.View>
+            </MapView.Marker>
             : null
           }
           <MapView.Polyline
