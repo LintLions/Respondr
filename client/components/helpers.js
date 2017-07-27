@@ -119,8 +119,9 @@ socket.on('cancelMission', () => {
 
   store.dispatch(updateBeacon({
     isAssigned: false,
-    isCompleted: true,
+    isCompleted: true,  
   }))
+
   store.dispatch(updateRoute(null))
 })
 

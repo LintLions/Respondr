@@ -320,8 +320,19 @@ export const getResponders = location => (dispatch) => {
 
 export const missionComplete = (responder) => (dispatch) => {
   console.log('+++in actions.js - missionComplete')
+
+  dispatch(updateBeacon({ 
+    UID: null, 
+    location: null,
+    isAssigned: false,
+    isCompleted: false,
+    chatRoom: null,
+    chatMessages: [], // individual msgs live on component's lcoal state 
+    region: null,
+  }));
   
   socket.emit('missionComplete', responder);
+
 }
 
 export const changeAvailability = available => ({
