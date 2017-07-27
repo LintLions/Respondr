@@ -243,28 +243,6 @@ export const drawRoute = latLong => (dispatch) => {
 
 export const signUp = userData => (dispatch) => {
   console.log("userData in signUp: ", userData);
-  if (userData.mobility) {
-    const re = / /g
-    const address = userData.address.replace(re, '+');
-    const city = userData.city.replace(re, '+');
-    const state = userData.state.replace(re, '+');
-    const googleUrl = `https://maps.googleapis.com/maps/api/geocode/json?address=${address},+${city},+${state}&key=${GEOAPIKEY}`;
-    console.log('googleUrl is ', googleUrl);
-    fetch(googleUrl)
-    .then(results => results.json())
-    .then((location) => {
-      console.log('signup location is ', location.results[0].geometry.location);
-      userData.location = [location.results[0].geometry.location.lat, location.results[0].geometry.location.lng],
-      userData.geometry = {
-        type:'Point',
-        coordinates:[location.results[0].geometry.location.lat, location.results[0].geometry.location.lng],
-      };
-      signUpPost(userData);
-    });
-
-  } else {
-    signUpPost(userData);
-  }
 
   const signUpPost = (userData) => {
     var userData = JSON.stringify(userData);
@@ -290,6 +268,29 @@ export const signUp = userData => (dispatch) => {
     })
     .done();
   }  
+    
+  if (userData.mobility) {
+    const re = / /g
+    const address = userData.address.replace(re, '+');
+    const city = userData.city.replace(re, '+');
+    const state = userData.state.replace(re, '+');
+    const googleUrl = `https://maps.googleapis.com/maps/api/geocode/json?address=${address},+${city},+${state}&key=${GEOAPIKEY}`;
+    console.log('googleUrl is ', googleUrl);
+    fetch(googleUrl)
+    .then(results => results.json())
+    .then((location) => {
+      console.log('signup location is ', location.results[0].geometry.location);
+      userData.location = [location.results[0].geometry.location.lat, location.results[0].geometry.location.lng],
+      userData.geometry = {
+        type:'Point',
+        coordinates:[location.results[0].geometry.location.lat, location.results[0].geometry.location.lng],
+      };
+      signUpPost(userData);
+    });
+
+  } else {
+    signUpPost(userData);
+  }
 };
 
 export const getRespondersSucceed = responders => ({
@@ -319,8 +320,19 @@ export const getResponders = location => (dispatch) => {
 
 export const missionComplete = (responder) => (dispatch) => {
   console.log('+++in actions.js - missionComplete')
+
+  dispatch(updateBeacon({ 
+    UID: null, 
+    location: null,
+    isAssigned: false,
+    isCompleted: false,
+    chatRoom: null,
+    chatMessages: [], // individual msgs live on component's lcoal state 
+    region: null,
+  }));
   
   socket.emit('missionComplete', responder);
+
 }
 
 export const changeAvailability = available => ({

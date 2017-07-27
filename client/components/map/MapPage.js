@@ -203,6 +203,7 @@ const mapStateToProps = state => ({
   isAssigned: state.myBeacon.isAssigned,
   responderLocation: state.myResponder.location,
   // beaconChatRoom: state.myBeacon.chatRoom,
+  UID: state.myBeacon.UID,
 });
 
 const MapPageConnected = connect(mapStateToProps)(MapPage);

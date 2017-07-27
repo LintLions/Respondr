@@ -81,7 +81,6 @@ class HelpButton extends Component {
         helpStatus = (
           <View>
             <Text style={styles.prompt}>Your responder is on his/her way!</Text>
-            <Text style={styles.prompt}>ETA: ______ minutes</Text>
             <Text style={styles.prompt}>Chat with your responder below:</Text>
             <View style={styles.beaconChatContainer}>
               {this.props.isBeacon &&
