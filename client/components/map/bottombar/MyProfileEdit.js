@@ -66,6 +66,7 @@ class MyProfileEdit extends Component {
     };
     this.onPrivacyChange = (e) => {
       const privacy = e.nativeEvent.selectedSegmentIndex;
+      console.log('+++MyProfileEdit - privacy: ', privacy);
       this.setState({ privacy });
     };
     this.onMobilityChange = (e) => {
@@ -164,7 +165,7 @@ class MyProfileEdit extends Component {
             style={styles.toggle}
             values={['Public', 'Private']}
             selectedIndex={this.props.privacy}
-            onChange={this.props.onPrivacyChange}
+            onChange={(event) => this.setState({privacy: event.nativeEvent.selectedSegmentIndex})}
           />                   
         </View>      
 
