@@ -7,7 +7,8 @@ import {
   StyleSheet,
   FlatList,
   Button,
-  TextInput
+  TextInput,
+  SegmentedControlIOS,
 } from 'react-native';
 import { StackNavigator, NavigationActions } from 'react-navigation';
 import { drawRoute, updateBeacon, acceptBeacon, updateUser, editProfile, updateState } from '../../../actions/actions';
@@ -158,14 +159,14 @@ class MyProfileEdit extends Component {
         </View>  
 
         <View>
-          <Text>Privacy: </Text>
-          <TextInput
-            style={{height: 40, borderColor: 'gray', borderWidth: 1}}
-            placeholder={this.props.state}
-            onChangeText={(state) => this.setState({state})}
-            value={this.state.state}
-          />    
-        </View>    
+          <Text>Privacy: </Text>        
+          <SegmentedControlIOS
+            style={styles.toggle}
+            values={['Public', 'Private']}
+            selectedIndex={this.props.privacy}
+            onChange={this.props.onPrivacyChange}
+          />                   
+        </View>      
 
         <Button
           title="Done"
