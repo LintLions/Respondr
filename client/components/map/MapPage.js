@@ -109,7 +109,7 @@ class MapPage extends Component {
             );
           })}
 
-          {this.props.beaconLocation
+          {this.props.beaconLocation && this.props.UID
             ? <MapView.Marker
                 coordinate={{
                   latitude: this.props.beaconLocation[0],
@@ -180,6 +180,7 @@ const mapStateToProps = state => ({
   responders: state.user.responders,
   isAssigned: state.myBeacon.isAssigned,
   // beaconChatRoom: state.myBeacon.chatRoom,
+  UID: state.myBeacon.UID,
 });
 
 const mapDispatchToProps = dispatch => ({
