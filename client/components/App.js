@@ -33,7 +33,7 @@ class App extends React.Component {
   componentDidMount() {
     PushNotificationIOS.requestPermissions();
     setInterval(() => {}, 1000);
-    this.props.getUserWithTokenAndSocket();
+    this.props.getUserWithTokenAndSocket(); // do not need this if Push Notification is working (b/c PN already does that)
   }
 
   componentWillUpdate(nextProps, nextState) {
