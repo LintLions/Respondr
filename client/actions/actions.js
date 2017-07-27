@@ -98,6 +98,7 @@ export const getCurrentLocation = location => ({
 // App will mount and dispatches the getCurrentLocation action that updates userlocation in the redux store
 export const updateLocation = (location, token) => (dispatch) => {
   if (token) {
+    console.log('location in updateLocation is: ', location)
     const body = JSON.stringify({
       location,
       token,
