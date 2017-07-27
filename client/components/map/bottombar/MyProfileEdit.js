@@ -160,7 +160,7 @@ class MyProfileEdit extends Component {
         </View>  
 
         <View>
-          <Text>Privacy: </Text>        
+          <Text>Privacy Setting: </Text>        
           <SegmentedControlIOS
             style={styles.toggle}
             values={['Public', 'Private']}
