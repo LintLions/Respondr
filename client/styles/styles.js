@@ -4,6 +4,12 @@ import { StyleSheet } from 'react-native';
 */
 
 var styles = StyleSheet.create({
+  splash: {
+    backgroundColor:'#fff',
+    flex:1,
+    justifyContent: 'space-around',
+
+  },
   ring: {
     width: 100,
     height: 100,
