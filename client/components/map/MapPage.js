@@ -2,169 +2,192 @@ import { connect } from 'react-redux';
 import React, { Component } from 'react';
 import {
   View,
-  KeyboardAvoidingView,
   TouchableOpacity,
   Text,
   Animated,
-  Image,
   Easing,
   Button,
 } from 'react-native';
-import { StackNavigator } from 'react-navigation';
 import MapView from 'react-native-maps';
 import TopBar from './topbar/topBar';
 import BottomNav from './bottombar/BottomNav';
 import HelpButton from './bottombar/helpButton';
 import AngelStatusIcon from './bottombar/AngelStatusIcon';
 import styles from '../../styles/styles';
-import { animate } from '../../actions/actions';
-import heart from '../../styles/assets/heart.png'
-
+import heart from '../../styles/assets/heart.png';
+import Splash from './splashPage';
+import DynamicMarker from './dynamicMarker';
+import StaticMarker from './staticMarker';
 
 class MapPage extends Component {
   constructor(props) {
     super(props);
     this.animatedValue = new Animated.Value(0);
-    this.springValue = new Animated.Value(0.3);
+    this.scaleValue = new Animated.Value(0); //used in heartbeat animation on beacon
     this.state = {
-      markers: {},
+      region: {
+        latitude: null,
+        longitude: null,
+        latitudeDelta: null,
+        longitudeDelta: null,
+      },
     };
-  }
-  
-  componentWillReceiveProps(nextProps) {
-    //animate dynamicResponders
-    for (let i = 0; i < nextProps.responders.length; i++) {
-      const id = nextProps.responders[i].id;
-      if (this.state.markers[id] !== undefined) {
-        if (this.state.markers[id].coordinates.latitude._value !== nextProps.responders[i].currentLocation[0] || this.state.markers[id].coordinates.longitude._value !== nextProps.responders[i].currentLocation[1]) {
-          this.state.markers[id].coordinates.timing({
-            ...nextProps.responders[i].currentLocation,
-            duration: 500,
-          }).start();
-        }
-      }
+    this.mapRef = null;
+    this.onRegionChange = (region) => {
+      this.setState({ region });
     }
-    //animate beacon marker
   }
-  spring() {
-    //sproing effect on heart icon
-    this.springValue.setValue(0.3);
-    Animated.spring(
-      this.springValue,
+
+  componentWillReceiveProps(nextProps) {
+    //set region to user's location on load
+    if (this.state.region.latitude === null && nextProps.userLocation[0]) {
+      console.log("ruhroh")
+      this.setRegion(nextProps.userLocation[0], nextProps.userLocation[1], 0.01051737,  0.01051737);
+    }
+//snaps to responder location
+    if (this.props.responderLocation && this.props.responderLocation[0]) {
+      this.mapRef.fitToCoordinates(
+      [{ latitude: this.props.userLocation[0], longitude: this.props.userLocation[1] },
+      { latitude: this.props.responderLocation[0], longitude: this.props.responderLocation[1] }],
+      { edgePadding:
+        { top: 50, right: 50, bottom: 50, left: 50 },
+          animated: false,
+      });
+    }
+//snap to beacon location
+    if (this.props.beaconLocation) {
+       this.mapRef.fitToCoordinates(
+          [{ latitude: this.props.userLocation[0], longitude: this.props.userLocation[1] },
+          { latitude: this.props.beaconLocation[0], longitude: this.props.beaconLocation[1] }],
+          { edgePadding: { top: 50, right: 50, bottom: 50, left: 50 },
+            animated: true })}
+  } //end constructor
+
+  setRegion(lat, lng, latdelta, lngdelta) {
+    this.setState({ region: {
+      latitude: lat,
+      longitude: lng,
+      latitudeDelta: latdelta,
+      longitudeDelta: lngdelta,
+      },
+    });
+  }
+
+  //heartbeat effect on heart icon
+  beat() {
+    this.scaleValue.setValue(0);
+    Animated.timing(
+      this.scaleValue,
       {
         toValue: 1,
-        friction: 1,
-        tension: 1,
+        duration: 1500,
+        easing: Easing.easeInOutBack,
       },
-    ).start(() => this.spring());
-
-    //
+    ).start(() => this.beat());
   }
 
   render() {
     const { navigate } = this.props.navigation;
     return (
-      <View style={styles.container}>
+    <View style={styles.container}>
+      { !this.props.userLocation ?
+
+        <Splash beat={this.beat} scaleValue={this.scaleValue} />
+
+       :
+      <View style={styles.container}>   
         <MapView
-          // region={this.props.region}
+          ref={(ref) => { this.mapRef = ref }}
+          region={this.state.region}
           style={styles.map}
-          showsUserLocation={true}
-          followsUserLocation
+          showsUserLocation
           showsPointsOfInterest={false}
           showsMyLocationButton
-          showsBuildings
+          onRegionChange={this.onRegionChange}
         >
-          {this.props.responders && this.props.responders.map((marker) => {
-            if (marker.mobility === 1) {
-              const newMarker = {
-                id: marker.id,
-                coordinates: new MapView.AnimatedRegion({
-                  latitude: marker.currentLocation[0],
-                  longitude: marker.currentLocation[1],
-                }),
-              };
-              this.state.markers[marker.id] = newMarker;
-              return (
-                <MapView.Marker.Animated
-                  key={marker.id}
-                  coordinate={this.state.markers[marker.id].coordinates}
-                  title={marker.fullName}
-                  description={marker.organization}
-                  image={require('../../styles/assets/wings.png')}
-                />
-              );
-            }
-            const coordinates = {
-              latitude: marker.currentLocation[0],
-              longitude: marker.currentLocation[1],
-            };
-            return (
-              <MapView.Marker
-                key={marker.id}
-                coordinate={coordinates}
-                title={marker.fullName}
-                description={marker.organization}
-                image={require('../../styles/assets/beacon-static.png')}
-              />
-            );
-          })}
-
-          {this.props.beaconLocation && this.props.UID
-            ? <MapView.Marker
-                coordinate={{
-                  latitude: this.props.beaconLocation[0],
-                  longitude: this.props.beaconLocation[1],
-                }}>
-                <Animated.View style={styles.markerWrap}> 
-                  <Animated.View style={styles.ring} />
-                    <Animated.Image
-                      onLoad={this.spring.bind(this)}
-                      style={{ transform: [{scale: this.springValue}] }}
-                      source={heart}
-                    />  
-                </Animated.View>
-              </MapView.Marker>
-            : null
-          }
-          <MapView.Polyline
-            coordinates={this.props.coords}
-            strokeWidth={4}
-            strokeColor="black"
-          />
-        </MapView>
-        <View style={[styles.row]}>
-          <TopBar />
-          <TouchableOpacity
-            onPress={() => this.props.animate(this.props.userLocation)}
-            style={[styles.bubble, styles.button]}
+        {this.props.responders && this.props.responders.map((marker) => {
+          if (marker.mobility === 1) {
+            return(
+              <DynamicMarker marker={marker}/>
+            )
+          } return(
+              <StaticMarker marker={marker}/>
+            )
+        })}
+        {
+          this.props.isBeacon ? //if this person is a beacon render beacon marker
+            <MapView.Marker
+              coordinate={{
+                  latitude: this.props.userLocation[0],
+                  longitude: this.props.userLocation[1],
+              }}
+            >
+              <Animated.View style={styles.markerWrap}>
+                 <Animated.View style={styles.ring}/>
+              </Animated.View>
+            </MapView.Marker>
+            : null  
+        }
+        {this.props.beaconLocation ? //if this person has accepted a beacon render beacon
+          <MapView.Marker
+              coordinate={{
+                latitude: this.props.beaconLocation[0],
+                longitude: this.props.beaconLocation[1],
+              }}
           >
-            <Text>Animate</Text>
-          </TouchableOpacity>
-          {this.props.isLoggedIn &&
-            <View>  
-            <AngelStatusIcon
-              // switchIsOn={this.state.switchIsOn} handleSwitchIsOn={this.handleSwitchIsOn}
-            />
-            <Button
-              title="My Profile"
-              onPress={() =>
-                navigate('Profile')
-              }
-            />
-            </View>
-          }
-        </View>
-        <View>
-          {!this.props.isLoggedIn &&
-          <HelpButton />}
-        </View>
-
-        <View style={[styles.column, styles.bottom]}>
-          {this.props.beaconLocation &&
-            <BottomNav />
-          }
-        </View>
+            <Animated.View style={styles.markerWrap}>
+                <Animated.Image
+                  onLoad={this.beat.bind(this)}
+                  style={{
+                    transform: [{scale: this.scaleValue.interpolate({
+                      inputRange: [0, .125, .25, .375, .5, .626, .75, .875, 1],
+                      outputRange: [1, .97, .9, 1.1, .9, 1.1, 1.03, 1.02, 1],
+                    }),
+                    },
+                    ],
+                  }}
+                  source={heart}
+                />
+            </Animated.View>
+          </MapView.Marker>
+           : null
+      } 
+        <MapView.Polyline
+          coordinates={this.props.coords}
+          strokeWidth={4}
+          strokeColor="black"
+        />
+      </MapView>
+      <View style={[styles.row]}>
+        
+        <TopBar />
+        {this.props.isLoggedIn &&
+          <View>  
+          <AngelStatusIcon
+            // switchIsOn={this.state.switchIsOn} handleSwitchIsOn={this.handleSwitchIsOn}
+          />
+          <Button
+            title="My Profile"
+            onPress={() =>
+              navigate('Profile')
+            }
+          />
+          </View>
+        }
       </View>
+      <View>
+        {!this.props.isLoggedIn &&
+        <HelpButton />}
+      </View>
+
+      <View style={[styles.column, styles.bottom]}>
+        {this.props.beaconLocation &&
+          <BottomNav />
+        }
+      </View> 
+    </View>  
+    }
+  </View>
     );
   }
 }
@@ -179,15 +202,11 @@ const mapStateToProps = state => ({
   beaconLocation: state.myBeacon.location,
   responders: state.user.responders,
   isAssigned: state.myBeacon.isAssigned,
+  responderLocation: state.myResponder.location,
   // beaconChatRoom: state.myBeacon.chatRoom,
   UID: state.myBeacon.UID,
 });
 
-const mapDispatchToProps = dispatch => ({
-  animate: (location) => {
-    dispatch(animate(location));
-  },
-});
-const MapPageConnected = connect(mapStateToProps, mapDispatchToProps)(MapPage);
+const MapPageConnected = connect(mapStateToProps)(MapPage);
 
 export default MapPageConnected;

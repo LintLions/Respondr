@@ -78,10 +78,10 @@ websocket.on('connection', (socket) => {
 
     if(beacon.UID) { 
       currentSession = activeBeaconSessions[beacon.UID];
-      blacklistedResponder = currentSession.responder
+      blacklistedResponder = currentSession.responder;
       currentSession.responder = null,
       currentSession.responderLocation = [],
-      currentSession.blacklist.push(blacklistedResponder)
+      currentSession.blacklist.push(blacklistedResponder);
       console.log('+++socket.js - getHelp - currentSession(CANCELED): ', currentSession);
       
       // to update beacon after mission canceled
@@ -113,11 +113,15 @@ websocket.on('connection', (socket) => {
       };
       if (Array.isArray(responders[0])) {
         responders[0].forEach((responder) => {
-          console.log('+++responder.socket: ', responder.socket);
+          console.log('+++responder.socket: ', responder);
           if (responder.socket !== currentSession.beacon && currentSession.blacklist.indexOf(responder.socket) === -1) {
-            Push.push.send(responder.device, Push.apnData(pushMessage))
-              .catch(err => console.error(err));
-            socket.to(responder.socket).emit('newBeacon', currentSession);
+            let timeOut = (responder.st_distance_sphere * 35 * 1000) / radius;
+            setTimeout(() => {
+              console.log("in setTimeout, timeout is ", timeOut);
+              Push.push.send(responder.device, Push.apnData(pushMessage))
+                .catch(err => console.error(err));
+              socket.to(responder.socket).emit('newBeacon', currentSession);
+            }, timeOut);
           }
         });
       } else if (responders) {
