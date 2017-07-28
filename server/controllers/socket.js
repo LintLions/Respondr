@@ -157,14 +157,14 @@ websocket.on('connection', (socket) => {
       // inform REMAINING RESPONDERS that the beacon is ALREADY taken
       dynamicResponder.findAll()
         .then((responders) => {
-          if(Array.isArray(resopnders[0])) {
-            responders[0].forEach((responder) => {
+          if(Array.isArray(responders)) {
+            responders.forEach((responder) => {
               if(responder.socket !== activeBeaconSessions[UID].responder) {
                 websocket.to(responder.socket).emit('verifyBeacon', activeBeaconSessions[UID]);
               }
             })
           } else if(responders) {
-            if(responders[0].socket !== activeBeaconSessions[UID].responder) {
+            if(responders.socket !== activeBeaconSessions[UID].responder) {
               websocket.to(responders[0].socket).emit('verifyBeacon', activeBeaconSessions[UID]);
             }            
           }

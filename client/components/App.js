@@ -9,7 +9,6 @@ import SignUpPage from './signup/signUpPage';
 import MyProfile from './map/bottombar/MyProfile';
 import MyProfileEdit from './map/bottombar/MyProfileEdit';
 import PushNotification from './Push';
-
 import BackgroundGeolocation from 'react-native-background-geolocation';
 
 export const Navigator = StackNavigator({

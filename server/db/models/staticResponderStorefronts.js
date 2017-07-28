@@ -15,6 +15,9 @@ const staticResponderStorefront = db.define('staticResponderStorefront', {
   password: {
     type: Sequelize.STRING,
   },
+  street: {
+    type: Sequelize.STRING,
+  },
   city: {
     type: Sequelize.STRING,
   },
@@ -22,6 +25,9 @@ const staticResponderStorefront = db.define('staticResponderStorefront', {
     type: Sequelize.STRING,
   },
   zip: {
+    type: Sequelize.STRING,
+  },
+  phone: {
     type: Sequelize.STRING,
   },
   Location: {
