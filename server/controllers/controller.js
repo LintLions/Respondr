@@ -65,7 +65,7 @@ exports.addUser = (req, res) => {
   if (!userScheme.username || !req.body.password) {
     return res.status(400).send({ error: 'You must send the username and the password' });
   }
-  if (req.body.mobility === 0) {
+  if (req.body.mobility === 1) {
     dynamicResponder.findOne({ where: userScheme.userSearch }).then((user) => {
       if (user) {
         return res.status(400).send({ error: 'A user with that username already exists' });
@@ -78,6 +78,7 @@ exports.addUser = (req, res) => {
         email: req.body.email,
         password: dynamicResponder.generateHash(req.body.password),
         privacy: !!req.body.privacy,
+        mobility: req.body.mobility,
         fullName: `${req.body.firstName} ${req.body.lastName}`,
         token: createIdToken(req.body.email),
         socket: req.body.socket,
@@ -94,7 +95,7 @@ exports.addUser = (req, res) => {
       console.log(err);
       res.sendStatus(500);
     });
-  } else if (req.body.mobility === 1) {
+  } else if (req.body.mobility === 0) {
     staticResponder.findOne({ where: userScheme.userSearch }).then((user) => {
       if (user) {
         return res.status(400).send({ error: 'A user with that username already exists' });
@@ -111,6 +112,7 @@ exports.addUser = (req, res) => {
         address: req.body.address,
         city: req.body.city,
         state: req.body.state,
+        mobility: req.body.mobility,
         zip: req.body.zip,
         location: req.body.location,
         geometry: req.body.geometry,
@@ -211,8 +213,15 @@ exports.updateLocation = function (req, res) {
     if (user) {
       console.log('token in updateLocationController is: ', user.token);
       // console.log('user.geometry in updateLocationController is: ', user.geometry)
+      if (user.geometry) {
       user.geometry.coordinates[0] = req.body.location[0];
       user.geometry.coordinates[1] = req.body.location[1];
+    } else {
+      user.geometry = {
+        'type': 'Point',
+        'coordinates': [req.body.location[0], req.body.location[1]], 
+      }
+    }
       return user.update({
         currentLocation: req.body.location,
         geometry: user.geometry,

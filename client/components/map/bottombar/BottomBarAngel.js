@@ -70,6 +70,7 @@ const mapDispatchToProps = (dispatch) => ({
   
   handleCancelMission: (responder) => {
     dispatch(getHelpAgain(responder));
+    dispatch(updateRoute(null))
   },
 });
 
