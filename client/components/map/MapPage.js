@@ -2,11 +2,9 @@ import { connect } from 'react-redux';
 import React, { Component } from 'react';
 import {
   View,
-  TouchableOpacity,
-  Text,
   Animated,
   Easing,
-  Button,
+  Dimensions,
 } from 'react-native';
 import MapView from 'react-native-maps';
 import TopBar from './topbar/topBar';
@@ -18,19 +16,24 @@ import heart from '../../styles/assets/heart.png';
 import Splash from './splashPage';
 import DynamicMarker from './dynamicMarker';
 import StaticMarker from './staticMarker';
+import HopeCircle from './hopeCircle';
+
+const { width, height } = Dimensions.get('window');
+const ASPECT_RATIO = width / height;
 
 class MapPage extends Component {
   constructor(props) {
     super(props);
-    this.animatedValue = new Animated.Value(0);
     this.scaleValue = new Animated.Value(0); //used in heartbeat animation on beacon
+    this.duration = 1000;
     this.state = {
       region: {
-        latitude: null,
-        longitude: null,
-        latitudeDelta: null,
-        longitudeDelta: null,
+        latitude: 40.697222,
+        longitude: -73.934465,
+        latitudeDelta: 0.0922,
+        longitudeDelta: 0.0922 * ASPECT_RATIO,
       },
+      follow: true,
     };
     this.mapRef = null;
     this.onRegionChange = (region) => {
@@ -40,11 +43,13 @@ class MapPage extends Component {
 
   componentWillReceiveProps(nextProps) {
     //set region to user's location on load
-    if (this.state.region.latitude === null && nextProps.userLocation && nextProps.userLocation[0]) {
-      console.log("ruhroh")
-      this.setRegion(nextProps.userLocation[0], nextProps.userLocation[1], 0.01051737,  0.01051737);
+    console.log('+MapPage - nextProps: ', nextProps);
+    if (this.state.region.latitude === null && nextProps.userLocation[0]) {
+      console.log("ruhroh");
+      //this.setRegion(nextProps.userLocation[0], nextProps.userLocation[1], 0.01051737,  0.01051737);
+      this.setState({ follow: false });
     }
-//snaps to responder location
+    //snaps to responder location
     if (this.props.responderLocation && this.props.responderLocation[0]) {
       this.mapRef.fitToCoordinates(
       [{ latitude: this.props.userLocation[0], longitude: this.props.userLocation[1] },
@@ -54,7 +59,7 @@ class MapPage extends Component {
           animated: false,
       });
     }
-//snap to beacon location
+    //snap to beacon location
     if (this.props.beaconLocation) {
        this.mapRef.fitToCoordinates(
           [{ latitude: this.props.userLocation[0], longitude: this.props.userLocation[1] },
@@ -86,6 +91,7 @@ class MapPage extends Component {
     ).start(() => this.beat());
   }
 
+
   render() {
     const { navigate } = this.props.navigation;
     return (
@@ -95,40 +101,34 @@ class MapPage extends Component {
         <Splash beat={this.beat} scaleValue={this.scaleValue} />
 
        :
-      <View style={styles.container}>   
+      <View style={styles.container}>
         <MapView
           ref={(ref) => { this.mapRef = ref }}
+          followsUserLocation = {this.state.follow}
           region={this.state.region}
           style={styles.map}
           showsUserLocation
           showsPointsOfInterest={false}
           showsMyLocationButton
           onRegionChange={this.onRegionChange}
+
         >
         {this.props.responders && this.props.responders.map((marker) => {
           if (marker.mobility === 1) {
             return(
-              <DynamicMarker marker={marker}/>
+              <DynamicMarker key={marker.fullName} marker={marker}/>
             )
           } return(
-              <StaticMarker marker={marker}/>
+              <StaticMarker key={marker.id} marker={marker}/>
             )
-        })}
+        })
+      }
         {
           this.props.isBeacon ? //if this person is a beacon render beacon marker
-            <MapView.Marker
-              coordinate={{
-                  latitude: this.props.userLocation[0],
-                  longitude: this.props.userLocation[1],
-              }}
-            >
-              <Animated.View style={styles.markerWrap}>
-                 <Animated.View style={styles.ring}/>
-              </Animated.View>
-            </MapView.Marker>
-            : null  
+          <HopeCircle userLocation={this.props.userLocation}/>
+            : null
         }
-        {this.props.beaconLocation ? //if this person has accepted a beacon render beacon
+        {this.props.beaconLocation && this.props.UID ? //if this person has accepted a beacon render beacon
           <MapView.Marker
               coordinate={{
                 latitude: this.props.beaconLocation[0],
@@ -166,16 +166,10 @@ class MapPage extends Component {
           <AngelStatusIcon
             // switchIsOn={this.state.switchIsOn} handleSwitchIsOn={this.handleSwitchIsOn}
           />
-          <Button
-            title="My Profile"
-            onPress={() =>
-              navigate('Profile')
-            }
-          />
           </View>
         }
       </View>
-      <View>
+      <View style={[styles.bottom]}>
         {!this.props.isLoggedIn &&
         <HelpButton />}
       </View>

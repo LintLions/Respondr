@@ -5,9 +5,11 @@ import { Modal,
   TouchableHighlight,
   TouchableWithoutFeedback,
   View,
+  Button,
   AlertIOS,
   AsyncStorage } from 'react-native';
 import { connect } from 'react-redux';
+import { NavigationActions } from 'react-navigation';
 import Icon from 'react-native-vector-icons/Entypo';
 import Login from './login';
 import Signup from './signup';
@@ -57,12 +59,19 @@ class TopBar extends Component {
               <TouchableWithoutFeedback>
                 <View style={styles.loginModalInner}>
                   {this.props.isLoggedIn &&
-                  <View style={styles.container}>
-                    <TouchableHighlight 
+                  <View>
+                    <Button
+                      title="Logout"
                       onPress={this.logout}
-                    >
-                      <Text>Logout</Text>
-                    </TouchableHighlight>
+                   />
+                  
+                    <Button
+                      title="My Profile"
+                      onPress={() => {
+                        this.setModalVisible(false);
+                        this.props.profileScreen();
+                      }}
+                    />
                   </View>
                   }
                   {!this.props.isLoggedIn &&
@@ -117,7 +126,11 @@ const mapDispatchToProps = (dispatch) => ({
   logout: () => {
     dispatch(logOut());
   },
+  profileScreen: () => {
+    dispatch(NavigationActions.navigate({ routeName: 'Profile' }));
+  },
 });
+
 
 const TopBarConnected = connect(mapStateToProps, mapDispatchToProps)(TopBar);
 

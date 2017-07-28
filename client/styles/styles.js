@@ -4,10 +4,13 @@ import { StyleSheet } from 'react-native';
 */
 
 var styles = StyleSheet.create({
+  splash: {
+    backgroundColor:'#fff',
+    flex:1,
+    justifyContent: 'space-around',
+
+  },
   ring: {
-    width: 100,
-    height: 100,
-    borderRadius: 50,
     backgroundColor: "rgba(63,150,191,0.5)",
     position: "absolute",
     borderWidth: 1,
@@ -57,8 +60,8 @@ var styles = StyleSheet.create({
     margin: 30,
   },
   helpButton: {
-    height: 150,
-    width: 150, 
+    height: 100,
+    width: 100, 
     borderRadius: 75,
     justifyContent: 'center', 
     alignItems: 'center',
@@ -69,13 +72,13 @@ var styles = StyleSheet.create({
     
   },
   helpButtonText: {
-    fontSize: 25,
+    fontSize: 20,
     fontWeight: 'bold',
     color: 'white',
   },
   goodButton: {
-    height: 150,
-    width: 150, 
+    height: 100,
+    width: 100, 
     borderRadius: 75,
     justifyContent: 'center', 
     alignItems: 'center',
@@ -155,6 +158,19 @@ var styles = StyleSheet.create({
     alignSelf: 'stretch',
     justifyContent: 'center'
   },
+  cancelButton: {
+    padding: 4,
+    height: 36,
+    flex: 1,
+    // flexDirection: 'row',
+    backgroundColor: '#48BBEC',
+    borderColor: '#48BBEC',
+    borderWidth: 1,
+    borderRadius: 8,
+    margin: 10,
+    alignSelf: 'stretch',
+    justifyContent: 'center'
+  },  
   buttonText: {
     fontSize: 18,
     color: 'white',
@@ -207,7 +223,7 @@ var styles = StyleSheet.create({
   },
   box1: {
     flex: 1,
-    height: 222,
+    height: 222, 
     padding: 20,
     justifyContent: 'center',
     borderWidth: 1,
@@ -280,6 +296,15 @@ var styles = StyleSheet.create({
     // justifyContent: 'center', 
     // alignItems: 'center',
     margin: 10,
+  },
+  beaconContainer: {
+    flex: 1,
+    height: 222, 
+    padding: 20,
+    justifyContent: 'center',
+    borderWidth: 1,
+    borderColor: '#999999',
+    backgroundColor: 'rgba(255, 255, 255, 0.8)'
   },
 });
 
