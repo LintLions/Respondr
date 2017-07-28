@@ -3,7 +3,6 @@ const server = require('http').createServer(app);
 const socketio = require('socket.io');
 const db = require('../db/db');
 const Push = require('./push');
-
 const radius = 3000;
 const dynamicResponder = require('../db/models/dynamicResponders');
 const beacon = require('../db/models/beacons');
@@ -97,6 +96,8 @@ websocket.on('connection', (socket) => {
       // currentLocation = [beacon.location[0], beacon.location[1]];
       currentLocation[0] = currentSession.beaconLocation[0];
       currentLocation[1] = currentSession.beaconLocation[1];
+      console.log('+++socket.js - getHelp - currentLocation[0]: ', currentLocation[0]);
+      console.log('+++socket.js - getHelp - currentLocation[0]: ', currentLocation[0]);      
 
       activeBeaconSessions[UID++] = currentSession; 
       console.log('+++socket.js - getHelp - currentSession(NEW): ', currentSession);      

@@ -63,7 +63,7 @@ class BottomChat extends React.Component {
 
   render() {
     return (
-      <View style={styles.box1}>
+      <View style={this.state.style}> 
         <GiftedChat
           isAnimated={false}
           messages={this.props.messages}

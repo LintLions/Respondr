@@ -7,7 +7,8 @@ import {
   StyleSheet,
   FlatList,
   Button,
-  TextInput
+  TextInput,
+  SegmentedControlIOS,
 } from 'react-native';
 import { StackNavigator, NavigationActions } from 'react-navigation';
 import { drawRoute, updateBeacon, acceptBeacon, updateUser, editProfile, updateState } from '../../../actions/actions';
@@ -65,6 +66,7 @@ class MyProfileEdit extends Component {
     };
     this.onPrivacyChange = (e) => {
       const privacy = e.nativeEvent.selectedSegmentIndex;
+      console.log('+++MyProfileEdit - privacy: ', privacy);
       this.setState({ privacy });
     };
     this.onMobilityChange = (e) => {
@@ -158,14 +160,14 @@ class MyProfileEdit extends Component {
         </View>  
 
         <View>
-          <Text>Privacy: </Text>
-          <TextInput
-            style={{height: 40, borderColor: 'gray', borderWidth: 1}}
-            placeholder={this.props.state}
-            onChangeText={(state) => this.setState({state})}
-            value={this.state.state}
-          />    
-        </View>    
+          <Text>Privacy Setting: </Text>        
+          <SegmentedControlIOS
+            style={styles.toggle}
+            values={['Public', 'Private']}
+            selectedIndex={this.props.privacy}
+            onChange={(event) => this.setState({privacy: event.nativeEvent.selectedSegmentIndex})}
+          />                   
+        </View>      
 
         <Button
           title="Done"

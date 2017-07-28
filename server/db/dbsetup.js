@@ -9,18 +9,20 @@ const test = require('../../testData.js');
 
 const stores = test.map(place => ({
   fullName: place.FacilityName,
-  street: place.Address2 ? `${place.Address} ${place.Address2}`,
-  Location: [place.latitude, place.longitude],
+  street: place.Address2 ? `${place.Address} ${place.Address2}` : place.Address,
+  location: [place.Latitude, place.Longitude],
   zip: place.ZipCode,
   phone: place.Phone,
   state: 'NY',
-  public: true,
+  privacy: false,
+  geometry: {type: 'Point', coordinates: [''+place.Latitude, ''+place.Longitude] },
+  modbility: 1,
 }));
 console.log('test', Array.isArray(stores));
 
-dynamicResponder.sync({ force: true })
+dynamicResponder.sync()
   .then(() => staticResponderIndividual.sync({ force: true }))
-  .then(() => staticResponderStorefront.sync({ force: true }))
+  .then(() => staticResponderStorefront.sync())
   .then(() => beacon.sync({ force: true }))
-  .then(() => staticResponderStorefront.bulkCreate(stores))
+  .then(() => staticResponderIndividual.bulkCreate(stores))
   .then(msg => console.log(msg));
