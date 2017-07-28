@@ -43,7 +43,9 @@ class App extends React.Component {
     PushNotificationIOS.requestPermissions();
     setInterval(() => {}, 1000);
     this.props.getUserWithTokenAndSocket();
-    BackgroundGeolocation.on('location', this.props.setLocation(location, this.props.token));
+    if (AppState.currentState ==='background') {
+      BackgroundGeolocation.on('location', this.props.setLocation(location, this.props.token));
+    }
     // AppState.addEventListener('change', this.backgroundLocation)
     
     

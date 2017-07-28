@@ -270,7 +270,7 @@ export const signUp = userData => (dispatch) => {
     .done();
   }  
     
-  if (userData.mobility) {
+  if (userData.mobility === 0) {
     const re = / /g
     const address = userData.address.replace(re, '+');
     const city = userData.city.replace(re, '+');
