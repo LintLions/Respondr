@@ -12,6 +12,7 @@ import {
 } from 'react-native';
 import MapView from 'react-native-maps';
 import BottomChat from './BottomChat';
+import BottomNav from './BottomNav';
 
 import styles from '../../../styles/styles';
 
@@ -29,7 +30,7 @@ class HelpButton extends Component {
     let helpButton = null;
     if(this.props.isBeacon === false) {
       helpButton = (
-        <View style={[styles.helpButtonContainer]}>
+        <View>
           <TouchableHighlight
             style={[styles.helpButton]}
             underlayColor='#48BBEC'
@@ -40,9 +41,9 @@ class HelpButton extends Component {
       )
     } else if(this.props.isBeacon === true && !this.props.missionComplete) {
       helpButton = (
-        <View style={[styles.helpButtonContainer]}>      
+        <View>      
             <TouchableHighlight
-              style={styles.button}
+              style={styles.cancelButton}
               underlayColor='#b22222'
               onPress={() => this.props.handleCancelButtonPress(beacon)}>
               <Text style={styles.buttonText}>Cancel Help Request</Text>
@@ -56,6 +57,7 @@ class HelpButton extends Component {
       helpStatus = (
         <View>
           <Text style={styles.prompt}>Your responder marked the mission as COMPLETE, are you good?</Text> 
+          <View style={styles.row}>  
           <TouchableHighlight
             style={[styles.goodButton]}
             underlayColor='#48BBEC'
@@ -68,6 +70,7 @@ class HelpButton extends Component {
             onPress={() => this.props.handleStillNeedHelp(beacon)}>
             <Text style={styles.helpButtonText}>HELP</Text>
           </TouchableHighlight>     
+          </View>
         </View>
       );
     } else if(this.props.isBeacon) {
@@ -81,10 +84,10 @@ class HelpButton extends Component {
         helpStatus = (
           <View>
             <Text style={styles.prompt}>Your responder is on his/her way!</Text>
-            <Text style={styles.prompt}>Chat with your responder below:</Text>
+            
             <View style={styles.beaconChatContainer}>
               {this.props.isBeacon &&
-                <View style={[styles.container, styles.layoutTest]}>
+                <View style={[styles.container]}>
                   <BottomChat />
                 </View>
               }
