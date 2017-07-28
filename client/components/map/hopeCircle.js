@@ -45,6 +45,14 @@ class HopeCircle extends Component {
           easing: Easing.easeOut,
         },
       ), 
+      Animated.timing(
+        this.animatedValue,
+        {
+          toValue: 300,
+          duration: 3000,
+          easing: Easing.easeOut,
+        },
+      ), 
     ])
     .start();
   }
