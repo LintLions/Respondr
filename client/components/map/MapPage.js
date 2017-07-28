@@ -42,7 +42,7 @@ class MapPage extends Component {
     //set region to user's location on load
     if (this.state.region.latitude === null && nextProps.userLocation[0]) {
       console.log("ruhroh")
-      this.setRegion(nextProps.userLocation[0], nextProps.userLocation[1], 0.000122, 0.00421);
+      this.setRegion(nextProps.userLocation[0], nextProps.userLocation[1], 0.01051737,  0.01051737);
     }
 //snaps to responder location
     if (this.props.responderLocation && this.props.responderLocation[0]) {
@@ -159,6 +159,7 @@ class MapPage extends Component {
         />
       </MapView>
       <View style={[styles.row]}>
+        
         <TopBar />
         {this.props.isLoggedIn &&
           <View>  
