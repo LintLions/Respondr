@@ -24,7 +24,7 @@ class StaticScreen extends Component {
             onChange={this.props.screenProps.onMobilityChange}
           />
         </View>
-        {this.props.screenProps.state.mobility === 1 &&
+        {this.props.screenProps.state.mobility === 0 &&
           <View>
             <View>
               <Text style={styles.bold}>Be a fixed point on the map</Text>
@@ -78,7 +78,7 @@ class StaticScreen extends Component {
             </View>
           </View>
            }
-        { this.props.screenProps.state.mobility === 0 &&
+        { this.props.screenProps.state.mobility === 1 &&
           <View>
             <Text style={styles.bold}>Be Mobile</Text>
             <Text style={styles.explainer}>
