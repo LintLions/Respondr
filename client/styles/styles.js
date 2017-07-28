@@ -11,9 +11,6 @@ var styles = StyleSheet.create({
 
   },
   ring: {
-    width: 100,
-    height: 100,
-    borderRadius: 50,
     backgroundColor: "rgba(63,150,191,0.5)",
     position: "absolute",
     borderWidth: 1,
