@@ -14,7 +14,7 @@ const port = process.env.PORT || 3000;
 const { server } = require('./server/controllers/socket.js');
 
 
-const deviceTokens = ['7c6ad039bedee7a60317c0a65e25584b755326f74cfa3d410a23178cf446143d'];
+const deviceTokens = ['4a725266f78910fed6e12e998d70dc99997ee841a154811ae7c8a516c4666d56'];
 // const deviceToken = '6185a90be174514adaccdb1aa47b30e29a84bc69';
 // const note = new apn.Notification();
 

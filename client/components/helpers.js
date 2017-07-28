@@ -30,6 +30,7 @@ export const startLocationUpdate = (token) => {
           socket.emit('update location', chatroom, [coords.latitude, coords.longitude])
         }
         store.dispatch(updateLocation([coords.latitude, coords.longitude], token));
+        console.log('+++helpers.js - startLocationUpdate - coords: ', [coords.latitude, coords.longitude]);
       };
       navigator.geolocation.getCurrentPosition(locChange, error => console.log('error watching position', error), { maximumAge: 1000 });
     };
@@ -50,6 +51,7 @@ socket.on('updateUser', (data) => {
   // Set property on store that is the return of startLocationUpdate.
   // on log in, call clear interval with this return val, and run startLocationUpdate with new token val
 });
+
 socket.on('newBeacon', (currentSession) => { 
   console.log('+++helpers.js - newBeacon - currentSession: ', currentSession);
   store.dispatch(updateBeacon({
@@ -117,8 +119,9 @@ socket.on('cancelMission', () => {
 
   store.dispatch(updateBeacon({
     isAssigned: false,
-    isCompleted: true,
+    isCompleted: true,  
   }))
+
   store.dispatch(updateRoute(null))
 })
 

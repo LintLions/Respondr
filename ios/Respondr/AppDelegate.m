@@ -34,8 +34,7 @@
   [self.window makeKeyAndVisible];
   return YES;
 }
-
-     // Required to register for notifications
+   // Required to register for notifications
    - (void)application:(UIApplication *)application didRegisterUserNotificationSettings:(UIUserNotificationSettings *)notificationSettings
    {
     [RCTPushNotificationManager didRegisterUserNotificationSettings:notificationSettings];
@@ -61,5 +60,4 @@
    {
     [RCTPushNotificationManager didReceiveLocalNotification:notification];
    }
-
 @end
