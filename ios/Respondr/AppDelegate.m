@@ -13,8 +13,6 @@
 #import <React/RCTRootView.h>
 #import <React/RCTPushNotificationManager.h>
 
-
-
 @implementation AppDelegate
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
