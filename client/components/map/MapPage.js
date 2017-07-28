@@ -16,6 +16,7 @@ import heart from '../../styles/assets/heart.png';
 import Splash from './splashPage';
 import DynamicMarker from './dynamicMarker';
 import StaticMarker from './staticMarker';
+import HopeCircle from './hopeCircle';
 
 const { width, height } = Dimensions.get('window');
 const ASPECT_RATIO = width / height;
@@ -23,8 +24,8 @@ const ASPECT_RATIO = width / height;
 class MapPage extends Component {
   constructor(props) {
     super(props);
-    this.animatedValue = new Animated.Value(0);
     this.scaleValue = new Animated.Value(0); //used in heartbeat animation on beacon
+    this.duration = 1000;
     this.state = {
       region: {
         latitude: 40.697222,
@@ -90,6 +91,7 @@ class MapPage extends Component {
     ).start(() => this.beat());
   }
 
+
   render() {
     const { navigate } = this.props.navigation;
     return (
@@ -99,7 +101,7 @@ class MapPage extends Component {
         <Splash beat={this.beat} scaleValue={this.scaleValue} />
 
        :
-      <View style={styles.container}>   
+      <View style={styles.container}>
         <MapView
           ref={(ref) => { this.mapRef = ref }}
           followsUserLocation = {this.state.follow}
@@ -123,17 +125,8 @@ class MapPage extends Component {
       }
         {
           this.props.isBeacon ? //if this person is a beacon render beacon marker
-            <MapView.Marker
-              coordinate={{
-                  latitude: this.props.userLocation[0],
-                  longitude: this.props.userLocation[1],
-              }}
-            >
-              <Animated.View style={styles.markerWrap}>
-                 <Animated.View style={styles.ring}/>
-              </Animated.View>
-            </MapView.Marker>
-            : null  
+          <HopeCircle userLocation={this.props.userLocation}/>
+            : null
         }
         {this.props.beaconLocation && this.props.UID ? //if this person has accepted a beacon render beacon
           <MapView.Marker
