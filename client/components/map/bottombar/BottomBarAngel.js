@@ -24,12 +24,11 @@ class BottomBarAngel extends Component {
     console.log('+++in BottomBarAngel.js - isAssigned: ', this.props.isAssigned);
     
     let Page = null;
-    if (this.props.isCompleted) {
+    if(this.props.UID && this.props.isCompleted) {
       Page = <HelpRequestNotNeeded />
-    } else 
-    if (!this.props.isAssigned) { 
+    } else if (this.props.UID && !this.props.isAssigned) { 
       Page = <HelpRequest />;
-    } else if (this.props.isAssigned) { 
+    } else if (this.props.UID && this.props.isAssigned) { 
       Page = <HelpRequestAccepted
         UID={this.props.UID}
         responderId={this.props.responderId}
@@ -66,11 +65,12 @@ const mapStateToProps = (state) => ({
 const mapDispatchToProps = (dispatch) => ({
   handleHelpRequestComplete: (responder) => {
     dispatch(missionComplete(responder));
-    dispatch(updateBeacon({ location: null, isCompleted: true }));
+    // dispatch(updateBeacon({ location: null, isCompleted: true }));
   },
   
   handleCancelMission: (responder) => {
     dispatch(getHelpAgain(responder));
+    dispatch(updateRoute(null))
   },
 });
 

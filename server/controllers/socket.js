@@ -78,10 +78,10 @@ websocket.on('connection', (socket) => {
 
     if(beacon.UID) { 
       currentSession = activeBeaconSessions[beacon.UID];
-      blacklistedResponder = currentSession.responder
+      blacklistedResponder = currentSession.responder;
       currentSession.responder = null,
       currentSession.responderLocation = [],
-      currentSession.blacklist.push(blacklistedResponder)
+      currentSession.blacklist.push(blacklistedResponder);
       console.log('+++socket.js - getHelp - currentSession(CANCELED): ', currentSession);
       
       // to update beacon after mission canceled
@@ -113,11 +113,15 @@ websocket.on('connection', (socket) => {
       };
       if (Array.isArray(responders[0])) {
         responders[0].forEach((responder) => {
-          console.log('+++responder.socket: ', responder.socket);
+          console.log('+++responder.socket: ', responder);
           if (responder.socket !== currentSession.beacon && currentSession.blacklist.indexOf(responder.socket) === -1) {
-            Push.push.send(responder.device, Push.apnData(pushMessage))
-              .catch(err => console.error(err));
-            socket.to(responder.socket).emit('newBeacon', currentSession);
+            let timeOut = (responder.st_distance_sphere * 35 * 1000) / radius;
+            setTimeout(() => {
+              console.log("in setTimeout, timeout is ", timeOut);
+              Push.push.send(responder.device, Push.apnData(pushMessage))
+                .catch(err => console.error(err));
+              socket.to(responder.socket).emit('newBeacon', currentSession);
+            }, timeOut);
           }
         });
       } else if (responders) {
@@ -125,7 +129,7 @@ websocket.on('connection', (socket) => {
         if (responders[0].socket !== currentSession.beacon && currentSession.blacklist.indexOf(responders[0].socket) === -1) {
           Push.push.send(responders[0].device, Push.apnData(pushMessage))
             .catch(err => console.error(err));
-          socket.to(responders.socket).emit('newBeacon', currentSession);
+          socket.to(responders[0].socket).emit('newBeacon', currentSession);
         }
       } else {
         console.log('no responder for gethelp');
@@ -133,20 +137,42 @@ websocket.on('connection', (socket) => {
     });
   });
 
-  socket.on('acceptBeacon', (responder) => {
+  socket.on('acceptBeacon', (responder) => { // UID, responderId, responderLocation 
     console.log('+++in socket.js - acceptBeacon - responder: ', responder);
 
-    if(!activeBeaconSessions[responder.UID].responder) {
+    const UID = responder.UID;
+
+    if(!activeBeaconSessions[UID].responder) {
       // this is when the beacon HAS NOT BEEN taken yet
-      activeBeaconSessions[responder.UID].responder = responder.responderId;
-      activeBeaconSessions[responder.UID].responderLocation = responder.responderLocation;
-      console.log('+++in socket.js - acceptBeacon - activeBeaconSessions[responder.UID]', activeBeaconSessions[responder.UID]);
+      activeBeaconSessions[UID].responder = responder.responderId;
+      activeBeaconSessions[UID].responderLocation = responder.responderLocation;
+      console.log('+++in socket.js - acceptBeacon - activeBeaconSessions[UID]', activeBeaconSessions[UID]);
       
-      socket.emit('verifyBeacon', activeBeaconSessions[responder.UID]);
-      websocket.to(activeBeaconSessions[responder.UID].beacon).emit('verifyResponder', activeBeaconSessions[responder.UID]);
+      // inform RESPONDER that the beacon is assigned 
+      socket.emit('verifyBeacon', activeBeaconSessions[UID]);
+      
+      // inform BEACON that a responder is assigned 
+      websocket.to(activeBeaconSessions[UID].beacon).emit('verifyResponder', activeBeaconSessions[UID]);
+
+      // inform REMAINING RESPONDERS that the beacon is ALREADY taken
+      dynamicResponder.findAll()
+        .then((responders) => {
+          if(Array.isArray(resopnders[0])) {
+            responders[0].forEach((responder) => {
+              if(responder.socket !== activeBeaconSessions[UID].responder) {
+                websocket.to(responder.socket).emit('verifyBeacon', activeBeaconSessions[UID]);
+              }
+            })
+          } else if(responders) {
+            if(responders[0].socket !== activeBeaconSessions[UID].responder) {
+              websocket.to(responders[0].socket).emit('verifyBeacon', activeBeaconSessions[UID]);
+            }            
+          }
+        })
+
     } else {
       // this is when the beacon is ALREADY taken 
-      socket.emit('verifyBeacon', activeBeaconSessions[responder.UID]);
+      socket.emit('verifyBeacon', activeBeaconSessions[UID]);
     }
   })
 
@@ -242,7 +268,7 @@ websocket.on('connection', (socket) => {
           } 
         }        
       }
-      )    
+    )    
     
     // dynamicResponder.findOne({where: {socket: userData.socket}, })
     //   .then((responder) => {

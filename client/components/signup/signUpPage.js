@@ -81,7 +81,7 @@ class SignUpPage extends Component {
       this.setState({ privacy });
     };
     this.onMobilityChange = (e) => {
-      const mobility = e.nativeEvent.selectedSegmentIndex;
+      const mobility = Number(!e.nativeEvent.selectedSegmentIndex);
       console.log("mobility is ", mobility);
       this.setState({ mobility });
     };
