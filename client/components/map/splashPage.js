@@ -5,12 +5,13 @@ import {
 } from 'react-native';
 import logo from '../../styles/assets/med_logo.png';
 import icon from '../../styles/assets/appIconMedium.png';
+import styles from '../../styles/styles';
 
 class Splash extends Component {
  
   render() {
     return ( 
-    <View>
+    <View style={styles.splash}>
       <Animated.Image
         onLoad={this.props.beat()}
         style={{
@@ -25,7 +26,6 @@ class Splash extends Component {
       />
 
     <Animated.Image
-        onLoad={this.props.beat()}
         style={{
           transform: [{scale: this.props.scaleValue.interpolate({
             inputRange: [0, .125, .25, .375, .5, .626, .75, .875, 1],
