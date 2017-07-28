@@ -14,7 +14,6 @@ constructor(props){
  render() {
   return (
     <MapView.Marker
-      key={this.props.marker.id}
       coordinate={this.state.coordinates}
       title={this.props.marker.fullName}
       description={this.props.marker.organization}
