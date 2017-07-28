@@ -27,13 +27,16 @@
 - Node 0.10.x
 - Redis 2.6.x
 - Postgresql 9.1.x
-- etc
-- etc
+- React Native ^0.46.4,
+- React Native Maps ^0.15.3,
+- Redux ^3.7.1",
+- Redux Thunk ^2.2.0,
+- React Native Background Geolocation ^2.8.4,
+- Push Notification IoS,
 
 ## Development
 
 ### Installing Dependencies
---manually link repos?
 
 From within the root directory:
 
@@ -45,12 +48,12 @@ From within the root directory:
 
 ### Roadmap
 
-View the project roadmap [here](LINK_TO_PROJECT_ISSUES)
+View the project roadmap [here](https://github.com/LintLions/Respondr/issues)
 
 
 ## Contributing
 
-See [CONTRIBUTING.md](_CONTRIBUTING.md) for contribution guidelines.
+See [CONTRIBUTING.md](CONTRIBUTING.md) for contribution guidelines.
 
 # Project Name #
-
+Respondr
