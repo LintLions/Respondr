@@ -40,11 +40,11 @@ class MapPage extends Component {
 
   componentWillReceiveProps(nextProps) {
     //set region to user's location on load
+    console.log('+MapPage - nextProps: ', nextProps);
     if (this.state.region.latitude === null && nextProps.userLocation[0]) {
-      console.log("ruhroh")
       this.setRegion(nextProps.userLocation[0], nextProps.userLocation[1], 0.01051737,  0.01051737);
     }
-//snaps to responder location
+    //snaps to responder location
     if (this.props.responderLocation && this.props.responderLocation[0]) {
       this.mapRef.fitToCoordinates(
       [{ latitude: this.props.userLocation[0], longitude: this.props.userLocation[1] },
@@ -54,7 +54,7 @@ class MapPage extends Component {
           animated: false,
       });
     }
-//snap to beacon location
+    //snap to beacon location
     if (this.props.beaconLocation) {
        this.mapRef.fitToCoordinates(
           [{ latitude: this.props.userLocation[0], longitude: this.props.userLocation[1] },
@@ -108,10 +108,10 @@ class MapPage extends Component {
         {this.props.responders && this.props.responders.map((marker) => {
           if (marker.mobility === 1) {
             return(
-              <DynamicMarker marker={marker}/>
+              <DynamicMarker key={marker.fullName} marker={marker}/>
             )
           } return(
-              <StaticMarker marker={marker}/>
+              <StaticMarker key={marker.id} marker={marker}/>
             )
         })}
         {
@@ -175,7 +175,7 @@ class MapPage extends Component {
           </View>
         }
       </View>
-      <View>
+      <View style={[styles.bottom]}>
         {!this.props.isLoggedIn &&
         <HelpButton />}
       </View>
