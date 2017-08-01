@@ -3,8 +3,9 @@
 [![Commitizen friendly](https://img.shields.io/badge/commitizen-friendly-brightgreen.svg)](http://commitizen.github.io/cz-cli/)
 
 Respondr increases the effectiveness and extends the reach of trained people carrying Narcan / Naloxone by providing real time alerts and directions to nearby individuals witnessing an overdose.
-
-![](https://media.giphy.com/media/xT39DgfY2jHGPpTeuc/giphy.gif)
+<p align="center">
+  <img src="https://media.giphy.com/media/xT39DgfY2jHGPpTeuc/giphy.gif" />
+</p>
 
 ## Team
 
