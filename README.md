@@ -9,7 +9,7 @@ Respondr increases the effectiveness and extends the reach of trained people car
 
 ## Team
 
-  - __Product Owner__: Will Damon (wdamon)
+  - __Product Owner__: Will Damon [wdamon](https://github.com/wdamon)
   - __Scrum Master__: Ben Cooley
   - __Development Team Members__: Jenny Cheng, Matthew Smith
 
