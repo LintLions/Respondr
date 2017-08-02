@@ -3,12 +3,10 @@
 [![Commitizen friendly](https://img.shields.io/badge/commitizen-friendly-brightgreen.svg)](http://commitizen.github.io/cz-cli/)
 
 Respondr increases the effectiveness and extends the reach of trained people carrying Narcan / Naloxone by providing real time alerts and directions to nearby individuals witnessing an overdose.
-<p align="center">
-  <img src="https://media.giphy.com/media/xT39DgfY2jHGPpTeuc/giphy.gif" />
-</p>
 
 ## Team
 
+Made with love by:
   - __Product Owner__: Will Damon [wdamon](https://github.com/wdamon)
   - __Scrum Master__: Ben Cooley
   - __Development Team Members__: Jenny Cheng, Matthew Smith
@@ -24,8 +22,37 @@ Respondr increases the effectiveness and extends the reach of trained people car
 1. [Contributing](#contributing)
 
 ## Usage
+>Annonymous users can ask for help by pressing the help button at the bottom of the screen.
 
-> Users can click help button to emit a beacon to nearby logged and available responders. Users can sign up to be responders, toggle their privacy settings, or create a static marker on the map. Push notifications update logged in and available responders when a nearby beacon becomes active. Background location tracking is enabled. 
+<p align="center">
+  <img src="https://media.giphy.com/media/xT39DgfY2jHGPpTeuc/giphy.gif" />
+</p>
+
+>Users who are asking for help only share their location with our servers, protecting their privacy.
+
+>After requesting help a beacon is emitted from the user's location. Responders who are online and nearby are queried one at a time, ordered by their distance from their beacon, and asked if they are able to assist. 
+
+>Responders who say yes accept a beacon and are given direcitons to the beacons location. Their route is depicted on the app for both the responder and the beacon to see. The responder and the beacon and are able to chat in order to arrange for a drop off location. Responders are not given any personally identifying information for the beacon, only direction to the beacons location and a chat window. 
+
+>Responders are able to cancel a mission. If a responder cancels a mission a new beacon is emitted for other nearby responders. 
+
+>Beacons can cancel their help request at any time. And the responder is immediately notified.
+
+Responders can login or signup.
+![login](client/styles/assets/login.png) 
+![signup](client/styles/assets/signupStart.png)
+
+New responder can choose to be public ( and visible on the map to anyone with the app installed) or private and only visible when they are matched with the beacon. 
+![signupPrivacy](client/styles/assets/privacy.png)
+![signupPrivacy2](client/styles/assets/privacy2.png)
+
+Responders can update their profile preferences (including their setting privacy) at any time in the profile menu accessed from the menu button.
+
+Responders can also register as mobile or  static locations. 
+![signupMobility](client/styles/assets/dynamic.png)
+![signupStatic](client/styles/assets/static.png)
+
+Static markers are displayed on the map but cannot receive beacons.
 
 ## Requirements
 
