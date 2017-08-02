@@ -44,12 +44,14 @@ Responders can login or signup.
 ![signup](client/styles/assets/signupStart.png)
 
 New responder can choose to be public ( and visible on the map to anyone with the app installed) or private and only visible when they are matched with the beacon. 
+
 ![signupPrivacy](client/styles/assets/privacy.png)
 ![signupPrivacy2](client/styles/assets/privacy2.png)
 
 Responders can update their profile preferences (including their setting privacy) at any time in the profile menu accessed from the menu button.
 
 Responders can also register as mobile or  static locations. 
+
 ![signupMobility](client/styles/assets/dynamic.png)
 ![signupStatic](client/styles/assets/static.png)
 
