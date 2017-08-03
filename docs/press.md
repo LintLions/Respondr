@@ -2,7 +2,7 @@
   > Respondr increases the effectiveness and extends the reach of trained people carrying Narcan / Naloxone by providing real time alerts and directions to nearby individuals witnessing an overdose.
 
 ## Summary ##
-  > Opioid overdoses are one of the leading causes of death in North America and are projected to only increase over the next ten years. Emergency services are struggling to keep upwith this burgoining epidemic. 
+  > Opioid overdoses are one of the leading causes of death in North America and are projected to only increase over the next ten years. Emergency services are struggling to keep up with this burgeoning epidemic. 
 
   >Respondr starts with the premise that no one uses alone and that together members of effected communities (and no community is untouched by this epidemic) can save lives. 
 
