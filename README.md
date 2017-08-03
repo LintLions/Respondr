@@ -38,7 +38,7 @@ Made with love by:
 
 >Beacons can cancel their help request at any time. And the responder is immediately notified.
 
-##Responders can login or signup.
+## Responders can login or signup.
 
 ![login](client/styles/assets/login.png) 
 ![signup](client/styles/assets/signupStart.png)
