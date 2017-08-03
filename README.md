@@ -7,9 +7,10 @@ Respondr increases the effectiveness and extends the reach of trained people car
 ## Team
 
 Made with love by:
-  - __Product Owner__: Will Damon [wdamon](https://github.com/wdamon)
-  - __Scrum Master__: Ben Cooley
-  - __Development Team Members__: Jenny Cheng, Matthew Smith
+  - [Will Damon](https://github.com/wdamon)
+  - Ben Cooley
+  - Jenny Cheng
+  - Matthew Smith
 
 ## Table of Contents
 
@@ -71,7 +72,7 @@ Static markers are displayed on the map but cannot receive beacons.
 
 ## Development
 
-### Installing Dependencies
+## Installing Dependencies
 
 From within the root directory:
 
@@ -81,7 +82,7 @@ From within the root directory:
  - npm run server
  
 
-### Roadmap
+## Roadmap
 
 View the project roadmap [here](https://github.com/LintLions/Respondr/issues)
 
@@ -90,7 +91,7 @@ View the project roadmap [here](https://github.com/LintLions/Respondr/issues)
 
 See [CONTRIBUTING.md](CONTRIBUTING.md) for contribution guidelines.
 
-# Project Name #
+## Project Name
 Respondr
 
 ## License
