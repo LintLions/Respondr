@@ -50,7 +50,7 @@ Made with love by:
 
 Responders can update their profile preferences (including their setting privacy) at any time in the profile menu accessed from the menu button.
 
-##Responders can also register as mobile or  static locations. 
+## Responders can also register as mobile or  static locations. 
 
 ![signupMobility](client/styles/assets/dynamic.png)
 ![signupStatic](client/styles/assets/static.png)
