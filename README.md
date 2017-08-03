@@ -4,6 +4,8 @@
 
 Respondr increases the effectiveness and extends the reach of trained people carrying Narcan / Naloxone by providing real time alerts and directions to nearby individuals witnessing an overdose.
 
+# [View Our Press Release](https://lintlions.github.io/Respondr/docs/press.html) #
+
 ## Team
 
 Made with love by:
