@@ -53,14 +53,14 @@ Made with love by:
 ![signupPrivacy](client/styles/assets/privacy.png)
 ![signupPrivacy2](client/styles/assets/privacy2.png)
 
-Responders can update their profile preferences (including their setting privacy) at any time in the profile menu accessed from the menu button.
+>Responders can update their profile preferences (including their setting privacy) at any time in the profile menu accessed from the menu button.
 
 ## Responders can also register as mobile or  static locations. 
 
 ![signupMobility](client/styles/assets/dynamic.png)
 ![signupStatic](client/styles/assets/static.png)
 
-Static markers are displayed on the map but cannot receive beacons.
+>Static markers are displayed on the map but cannot receive beacons.
 
 ## Requirements
 
