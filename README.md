@@ -48,7 +48,7 @@ Made with love by:
 ![login](client/styles/assets/login.png) 
 ![signup](client/styles/assets/signupStart.png)
 
->New responder can choose to be public ( and visible on the map to anyone with the app installed) or private and only visible >when they are matched with the beacon. 
+>New responder can choose to be public ( and visible on the map to anyone with the app installed) or private and only visible  when they are matched with the beacon. 
 
 ![signupPrivacy](client/styles/assets/privacy.png)
 ![signupPrivacy2](client/styles/assets/privacy2.png)
