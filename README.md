@@ -33,11 +33,11 @@ Made with love by:
   <img src="https://media.giphy.com/media/xT39DgfY2jHGPpTeuc/giphy.gif" />
 </p>
 
->Users who are asking for help only share their location with our servers, protecting their privacy.
+>Users who ask for help only share their location with our servers, protecting their privacy.
 
->After requesting help a beacon is emitted from the user's location. Responders who are online and nearby are queried one at a time, ordered by their distance from their beacon, and asked if they are able to assist. 
+>After requesting help, a beacon is emitted from the user's location. Responders who are online and nearby are queried one at a time, ordered by the responder's distance from the beacon, and asked if they are able to assist. 
 
->Responders who say yes accept a beacon and are given direcitons to the beacons location. Their route is depicted on the app for both the responder and the beacon to see. The responder and the beacon and are able to chat in order to arrange for a drop off location. Responders are not given any personally identifying information for the beacon, only direction to the beacons location and a chat window. 
+>Responders who say yes accept a beacon and are given direcitons to the beacon's location. Their route is depicted on the app for both the responder and the beacon to see. The responder and the beacon and are then able to chat in order to arrange for a safe drop off location. Responders are not given any personally identifying information for the beacon. 
 
 >Responders are able to cancel a mission. If a responder cancels a mission a new beacon is emitted for other nearby responders. 
 
@@ -48,7 +48,7 @@ Made with love by:
 ![login](client/styles/assets/login.png) 
 ![signup](client/styles/assets/signupStart.png)
 
->New responder can choose to be public ( and visible on the map to anyone with the app installed) or private and only visible  when they are matched with the beacon. 
+>New responder can choose to be public (and visible on the map to anyone with the app installed) or private and only visible  when they are matched with the beacon. 
 
 ![signupPrivacy](client/styles/assets/privacy.png)
 ![signupPrivacy2](client/styles/assets/privacy2.png)
