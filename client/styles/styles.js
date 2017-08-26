@@ -4,6 +4,16 @@ import { StyleSheet } from 'react-native';
 */
 
 var styles = StyleSheet.create({
+  bubble: {
+    flex: 0,
+    flexDirection: 'row',
+    alignSelf: 'flex-start',
+    backgroundColor: '#FF5A5F',
+    padding: 2,
+    borderRadius: 3,
+    borderColor: '#D23F44',
+    borderWidth: 0.5,
+  },
   splash: {
     backgroundColor:'#fff',
     flex:1,

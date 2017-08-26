@@ -5,6 +5,7 @@ const initState = {
   location: null,
   isBeacon: false,
   route: null,
+  duration: null,
   responders: [],
 };
 const userReducer = (state = initState, action) => {
@@ -20,7 +21,8 @@ const userReducer = (state = initState, action) => {
     case 'UPDATE_RESPONDERS':
       return { ...state, responders: [...action.responders] };
     case 'UPDATE_ROUTE':
-      return { ...state, route: action.route };
+      console.log("update_route duration is, " + action.duration);
+      return { ...state, route: action.route, duration: action.duration };
     default:
       return state;
   }

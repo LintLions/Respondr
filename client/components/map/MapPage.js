@@ -5,6 +5,7 @@ import {
   Animated,
   Easing,
   Dimensions,
+  Text,
 } from 'react-native';
 import MapView from 'react-native-maps';
 import TopBar from './topbar/topBar';
@@ -136,6 +137,13 @@ class MapPage extends Component {
               }}
           >
             <Animated.View style={styles.markerWrap}>
+            {
+              this.props.duration ?
+              <View style={styles.bubble}>
+                <Text>{"ETA is " + this.props.duration}</Text>
+              </View>
+              : null
+            }
                 <Animated.Image
                   onLoad={this.beat.bind(this)}
                   style={{
@@ -197,6 +205,7 @@ const mapStateToProps = state => ({
   responders: state.user.responders,
   isAssigned: state.myBeacon.isAssigned,
   responderLocation: state.myResponder.location,
+  duration: state.user.duration,
   // beaconChatRoom: state.myBeacon.chatRoom,
   UID: state.myBeacon.UID,
 });

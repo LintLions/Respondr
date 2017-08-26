@@ -76,7 +76,7 @@ export const getHelpAgain = (responder) => (dispatch) => {
     UID: null,
     location: null,
     isAssigned: false,
-    isCompleted: false, 
+    isCompleted: false,
     chatRoom: null,
     chatMessages: [],
     region: null,
@@ -218,9 +218,10 @@ export const getUserWithTokenAndSocket = () => (dispatch) => {
   });
 };
 
-export const updateRoute = route => ({
+export const updateRoute = (route, duration) => ({
   type: 'UPDATE_ROUTE',
   route,
+  duration,
 });
 
 export const drawRoute = latLong => (dispatch) => {
@@ -235,9 +236,10 @@ export const drawRoute = latLong => (dispatch) => {
   fetch(googleUrl)
     .then(response => response.json())
     .then((responseJson) => {
-      console.log('+++actions.js - drawRoute - responseJson: ', responseJson)
+      console.log('+++actions.js - drawRoute - responseJson: ', responseJson);
+            console.log('+++actions.js - drawRoute - responseJson: ', responseJson.routes[0].legs[0].duration.text);
       if (responseJson.routes.length) {
-        dispatch(updateRoute(decode(responseJson.routes[0].overview_polyline.points)));
+        dispatch(updateRoute(decode(responseJson.routes[0].overview_polyline.points), responseJson.routes[0].legs[0].duration.text));
       }
     }).catch(e => console.warn(e));
 };
